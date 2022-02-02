@@ -1,0 +1,53 @@
+.enfrappe-panel {
+    height: 100vh;
+    overflow: auto;
+}
+
+.panel-heading {
+    margin-bottom: 0;
+    user-select: none;
+}
+
+.panel-subheading {
+    color: #999999;
+    margin-top: 0;
+    user-select: none;
+}
+
+.panel-subsection {
+    color: #999999;
+    user-select: none;
+}
+
+.panel-subsection-alt {
+    color: #000000;
+    user-select: none;
+}
+
+#panel-prototype {
+    position: relative;
+    background-image: url("/static/images/grid_bg.png");
+    background-repeat: repeat;
+    background-position: center;
+}
+
+#panel-main-container {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    flex-wrap: nowrap;
+}
+
+#panel-main-container #enfrappe-banner {
+    flex-shrink: 0;
+}
+
+#panel-main-container #application-details {
+    /* flex-grow: 1;
+    overflow: auto;
+    min-height: 2em; */
+}
+
+#panel-main-container #application-deployment {
+    flex-shrink: 0;
+}

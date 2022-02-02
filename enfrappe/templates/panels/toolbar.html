@@ -1,0 +1,13 @@
+{% if toolbar == "" %}
+<div class="no-component">
+    <h1>Toolbar</h1>
+    <p>No component is selected.</p>
+</div>
+{% else %}
+<h1 class="panel-heading">
+    Toolbar
+</h1>
+{% endif %}
+<div id="toolbar-workspace">
+    {{ toolbar | safe }}
+</div>

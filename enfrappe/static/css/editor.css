@@ -1,0 +1,11 @@
+.selected {
+    border-color: #323232 !important; 
+}
+
+.pcr-button {
+    border: 2px solid black;
+}
+
+#qrcode {
+    max-width: 350px;
+}

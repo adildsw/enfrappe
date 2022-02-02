@@ -1,0 +1,13 @@
+{% if properties == "" %}
+<div class="no-component">
+    <h1>Properties</h1>
+    <p>No component is selected.</p>
+</div>
+{% else %}
+<h1 class="panel-heading">
+    Properties
+</h1>
+{% endif %}
+<div id="component-workspace">
+    {{ properties | safe }}
+</div>

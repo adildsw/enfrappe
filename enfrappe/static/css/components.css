@@ -1,0 +1,13 @@
+.no-component {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #AAAAAA;
+    user-select: none;
+    text-align: center;
+}
+
+.no-component h1 {
+    margin-bottom: 0;
+}

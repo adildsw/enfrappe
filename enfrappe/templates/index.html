@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>enfrappe</title> 
+    
+    <link rel="stylesheet" href="static/css/lib/semantic.min.css">
+    <link rel="stylesheet" href="static/css/lib/monolith.min.css"/>
+    <script src="static/js/lib/jquery.min.js"></script>
+    <script src="static/js/lib/semantic.min.js"></script>
+    <script src="static/js/lib/draggable.bundle.min.js"></script>
+    <script src="static/js/lib/pickr.min.js"></script>
+    <script src="static/js/lib/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="/static/css/panels.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/prototype.css">
+    <link rel="stylesheet" href="/static/css/editor.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/images/favicon.svg" />
+
+    <script src="/static/js/panels/toolbar.js"></script>
+    <script src="/static/js/panels/component.js"></script>
+    <script src="/static/js/panels/prototype.js"></script>
+    <script src="/static/js/components/root.js"></script>
+    <script src="/static/js/editor.js"></script>
+    <script src="/static/js/loader.js"></script>
+    <script src="/static/js/builder.js"></script>
+</head>
+<body>
+    <div class="maincontainer">
+        <div id="app-grid" class="ui internally celled grid">
+            <div class="row">
+                <div class="three wide column enfrappe-panel" id="panel-toolbar"></div>
+                <div class="three wide column enfrappe-panel" id="panel-properties"></div>
+                <div class="six wide column enfrappe-panel" id="panel-prototype"></div>
+                <div class="four wide column enfrappe-panel" id="panel-main"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
