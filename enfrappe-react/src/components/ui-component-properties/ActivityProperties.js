@@ -6,15 +6,23 @@ import { useState } from 'react';
 
 const ActivityProperties = (props) => {
 
-    const [selectedColor, setSelectedColor] = useState({ hex: "#ffffff" });
+    const { activityManager, currentActivity } = props;
+    const { getActivity, activityEditor } = activityManager;
+    const activityData = getActivity(currentActivity);
+
+    // const [selectedColor, setSelectedColor] = useState({ hex: activityData.background });
     const [colorPickerDisplay, setColorPickerDisplay] = useState(false);
 
     const toggleColorPicker = () => {
         setColorPickerDisplay(!colorPickerDisplay);
     };
 
-    const onChangeMethod = (color) => {
-        setSelectedColor(color);
+    const onColorChange = (color) => {
+        // setSelectedColor(color);
+        activityEditor.editActivityBackground(currentActivity, color.hex);
+    };
+
+    const modifyActivityName = () => {
     };
 
     return (
@@ -23,8 +31,10 @@ const ActivityProperties = (props) => {
                 <Form.Field>
                     <Label className={'tucked-label'}>Activity Name</Label>
                     <Input 
+                        value={activityData.name}
                         action={{
-                            icon: 'cog',
+                            icon: 'refresh',
+                            onClick: modifyActivityName,
                         }}
                         placeholder='Actvity Name'
                         fluid
@@ -35,21 +45,21 @@ const ActivityProperties = (props) => {
                 <Form.Field>
                     <Label className={'tucked-label'}>Background Color</Label>
                     <Input 
+                        value={activityData.background}
                         action={{
                             icon: 'paint brush',
                             onClick: toggleColorPicker,
-                            style: {backgroundColor: selectedColor.hex, border: '1px solid #D4D4D4'},
+                            style: {backgroundColor: activityData.background, border: '1px solid #D4D4D4'},
                             
                         }}
                         placeholder='Background Color'
                         fluid
-                        value={selectedColor.hex}
                         readOnly
                     />
                     {colorPickerDisplay ? (
                         <div className={'color-picker-popover'}>
                             <div className={'color-picker-cover'} onClick={toggleColorPicker} />
-                            <SketchPicker color={selectedColor} onChange={onChangeMethod} disableAlpha/>
+                            <SketchPicker color={activityData.background} onChange={onColorChange} disableAlpha/>
                         </div>
                     ) : null}
                 </Form.Field>

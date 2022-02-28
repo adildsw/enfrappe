@@ -47,8 +47,8 @@ const Prototype = (props) => {
     )
 
     return (
-        <div className={'cancel-focus'} id='prototype-controls'>
-            <div className={'cancel-focus'} id='activity-selection-control'>
+        <div id='prototype-controls'>
+            <div id='activity-selection-control'>
                 <span>Activity: <Dropdown
                     placeholder='Select Activity'
                     inline
@@ -58,13 +58,13 @@ const Prototype = (props) => {
                 </span>
             </div>
 
-            <div className={'cancel-focus'} id='activities-list-div'>
-                <Activity name={currentActivity} activityManager={activityManager} />
+            <div id='activities-list-div'>
+                <Activity currentActivity={currentActivity} activityManager={activityManager} />
             </div>
 
-            <div className={'cancel-focus'} id='activity-navigation-controls'>
-                <Grid className={'cancel-focus'}>
-                    <Grid.Column className={'cancel-focus'} textAlign='center'>
+            <div id='activity-navigation-controls'>
+                <Grid>
+                    <Grid.Column textAlign='center'>
                         <Button.Group>
                             <Button
                                 icon='chevron left'
@@ -100,9 +100,11 @@ const Prototype = (props) => {
                                 icon='question' 
                                 onClick={() => { 
                                     // activityEditor.editActivityName('Main Activity', 'lmao this works?');
-                                    activityManager.getActivity('Main Activity').changeName('lmao this works?');
-                                    navigateToActivity('lmao this works?')
-                                    console.log("thy bidding is done");
+                                    // console.log(currentActivity);
+                                    // activityManager.getActivity('Main Activity').changeName('lmao this works?');
+                                    // navigateToActivity('lmao this works?')
+                                    // console.log("thy bidding is done");
+                                    console.log("thy haven't give me a bidding master");
                                 }}
                             />
                         </Button.Group>

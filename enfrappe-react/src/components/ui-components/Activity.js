@@ -4,6 +4,9 @@ import './Activity.css';
 
 const Activity = (props) => {
 
+    const { currentActivity, activityManager } = props;
+    const { getActivity } = activityManager;
+
     // Storing activity container dimension states
     const [{containerHeight, containerWidth}, setContainerDim] = useState({containerHeight: 0, containerWidth: 0});
 
@@ -24,7 +27,7 @@ const Activity = (props) => {
     }, []);
 
     return (
-        <div className={'enfrappe-ui-activity'} id='activity-container' style={{height: containerHeight, width: containerWidth}}>
+        <div className={'enfrappe-ui-activity'} id='activity-container' style={{height: containerHeight, width: containerWidth, background: getActivity(currentActivity).background}}>
         </div>
     );
 

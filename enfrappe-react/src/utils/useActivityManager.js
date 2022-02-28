@@ -8,8 +8,7 @@ const useActivityManager = () => {
         setActivityData({...activityData, [activityName]: {
             'name': activityName, 
             'background': '#ffffff', 
-            'data': {},
-            'changeName': (newName) => { editActivityBackground(activityName, newName); },
+            'data': {}
         }});
     }
 

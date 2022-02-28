@@ -26,13 +26,13 @@ const App = () => {
     const [currentSelected, setSelected] = useState('None');
 
     const manageSelection = (classNames) => {
-        if (classNames.includes('cancel-focus')) {
-            setSelected('None');
-        }
-        else if (classNames.includes('enfrappe-ui-')) {
+        if (classNames.includes('enfrappe-ui-')) {
             var comp = classNames.split(' ').filter((val) => (val.includes('enfrappe-ui-')))[0].split('-')[2];
             comp = comp.charAt(0).toUpperCase() + comp.substr(1).toLowerCase();
             setSelected(comp);
+        }
+        else {
+            setSelected('None');
         }
     }
 
@@ -43,9 +43,9 @@ const App = () => {
                     <Toolbar selected={currentSelected} />
                 </Grid.Column>
                 <Grid.Column width={3} id='panel-properties'>
-                    <Properties selected={currentSelected} activityManager={activityManager} />
+                    <Properties selectedComponent={currentSelected} activityManager={activityManager} currentActivity={currentActivity} />
                 </Grid.Column>
-                <Grid.Column width={6} className={'cancel-focus'} id='panel-prototype' onClick={(e) => { manageSelection(e.target.className) }}>
+                <Grid.Column width={6} id='panel-prototype' onClick={(e) => { manageSelection(e.target.className) }}>
                     <Prototype activityManager={activityManager} currentActivity={currentActivity} setCurrentActivity={setCurrentActivity} selected={currentSelected} />
                 </Grid.Column>
                 <Grid.Column width={4} id='panel-appdetails'>
