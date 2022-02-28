@@ -1,0 +1,34 @@
+#app-grid {
+    height: 100vh;
+}
+
+#panel-prototype {
+    position: relative;
+    clip-path: inset(0px);
+    background-image: url('./assets/grid_bg.png');
+    background-repeat: repeat;
+    background-position: center;
+}
+
+#panel-properties {
+    border-right: 1px solid #D4D4D4;
+}
+
+.panel-heading {
+    margin-bottom: 0;
+    user-select: none;
+}
+
+.panel-subheading {
+    color: #999999;
+    margin-top: 0;
+    user-select: none;
+}
+
+span {
+    user-select: none;
+}
+
+.label {
+    user-select: none;
+}

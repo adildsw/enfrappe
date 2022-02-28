@@ -1,0 +1,29 @@
+#prototype-controls {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+#activities-list-div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#activity-selection-control {
+    height: 10%;
+}
+
+#activity-selection-control span:not(.text) {
+    background: white;
+}
+
+#activity-navigation-controls {
+    height: 10%;
+}
+
+.selected-component {
+    border-color: #323232 !important; 
+}
