@@ -18,37 +18,48 @@ const App = () => {
 
     const activityManager = useActivityManager();
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_NAME);
+    const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': 'None'});
 
     useConstructor(() => {
         activityManager.addActivity(DEFAULT_ACTIVITY_NAME);
     });
 
-    const [currentSelected, setSelected] = useState('None');
-
-    const manageSelection = (classNames) => {
-        if (classNames.includes('enfrappe-ui-')) {
-            var comp = classNames.split(' ').filter((val) => (val.includes('enfrappe-ui-')))[0].split('-')[2];
+    const manageSelection = (selectedId, selectedClassNames) => {
+        console.log(selectedId, selectedClassNames);
+        if (selectedClassNames.includes('enfrappe-ui-')) {
+            var comp = selectedClassNames.split(' ').filter((val) => (val.includes('enfrappe-ui-')))[0].split('-')[2];
             comp = comp.charAt(0).toUpperCase() + comp.substr(1).toLowerCase();
-            setSelected(comp);
+            setSelectedComponent({'id': selectedId, 'type': comp});
         }
         else {
-            setSelected('None');
+            setSelectedComponent({'id': 'None', 'type': 'None'});
         }
     }
 
     return (
-        <Grid celled='internally' id='app-grid'>
-            <Grid.Row>
-                <Grid.Column width={3} id='panel-toolbar'>
-                    <Toolbar selected={currentSelected} />
+        <Grid celled='internally' id='app-grid' className={'fullscreen-div'}>
+            <Grid.Row id='app-grid-row'>
+                <Grid.Column width={3} id='panel-toolbar' className={'fullscreen-div'}>
+                    <Toolbar selectedComponent={selectedComponent} />
                 </Grid.Column>
-                <Grid.Column width={3} id='panel-properties'>
-                    <Properties selectedComponent={currentSelected} activityManager={activityManager} currentActivity={currentActivity} />
+                <Grid.Column width={3} id='panel-properties' className={'fullscreen-div'}>
+                    <Properties 
+                        selectedComponent={selectedComponent} 
+                        activityManager={activityManager} 
+                        currentActivity={currentActivity}
+                        setCurrentActivity={setCurrentActivity} 
+                    />
                 </Grid.Column>
-                <Grid.Column width={6} id='panel-prototype' onClick={(e) => { manageSelection(e.target.className) }}>
-                    <Prototype activityManager={activityManager} currentActivity={currentActivity} setCurrentActivity={setCurrentActivity} selected={currentSelected} />
+                <Grid.Column width={6} className={'fullscreen-div'} id='panel-prototype' onClick={(e) => { manageSelection(e.target.id, e.target.className) }}>
+                    <Prototype 
+                        activityManager={activityManager} 
+                        currentActivity={currentActivity} 
+                        setCurrentActivity={setCurrentActivity} 
+                        selectedComponent={selectedComponent} 
+                        setSelectedComponent={setSelectedComponent} 
+                    />
                 </Grid.Column>
-                <Grid.Column width={4} id='panel-appdetails'>
+                <Grid.Column width={4} id='panel-appdetails' className={'fullscreen-div'}>
                     <AppDetails />
                 </Grid.Column>
             </Grid.Row>

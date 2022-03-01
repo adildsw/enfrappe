@@ -1,5 +1,18 @@
-#app-grid {
+.fullscreen-div {
     height: 100vh;
+}
+
+.scrollable-div {
+    display: flex;
+    position: relative;
+    flex-direction: column; 
+    height: 100%;
+}
+
+.scrollable-section {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #panel-prototype {
@@ -31,4 +44,25 @@ span {
 
 .label {
     user-select: none;
+}
+
+.button-based-input-only > input {
+    pointer-events: none;
+}
+
+.centered-button-text > button {
+    text-align: center;
+    justify-content: center;
+}
+
+.selected-component {
+    border-color: #323232 !important; 
+}
+
+.tucked-label {
+    margin-bottom: -4px !important;
+}
+
+.super-tucked-label {
+    margin-bottom: -20px !important;
 }

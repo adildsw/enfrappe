@@ -1,4 +1,4 @@
-#activity-container {
+.enfrappe-ui-activity {
     position: relative;
     top: 50%;
     left: 50%;
@@ -10,6 +10,6 @@
     cursor: pointer;
 }
 
-#activity-container:hover {
+.enfrappe-ui-activity:hover {
     border-color: #BBBBBB;
 }

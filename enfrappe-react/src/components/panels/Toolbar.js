@@ -1,18 +1,24 @@
+import { Divider } from 'semantic-ui-react';
+
 import './Toolbar.css';
 
 const Toolbar = (props) => {
 
-    const { selected } = props;
+    const { selectedComponent } = props;
 
     return (
-        selected === 'None' ?
+        selectedComponent.type === 'None' ?
             <div id='toolbar-no-component'>
                 <h1>Toolbar</h1>
                 <p>No component is selected.</p>
             </div>
-            : <div>
-                <h1 className={'panel-heading'}>Toolbar</h1>
-                <h2 className={'panel-subheading'}>Components for {selected}</h2>
+            : <div className={'scrollable-div'}>
+                <div>
+                    <h1 className={'panel-heading'}>Toolbar</h1>
+                    <h3 className={'panel-subheading'}>Components for {selectedComponent.type}</h3>
+                </div>
+                <Divider />
+                <div className={'scrollable-section'}></div>
             </div>
     );
 }

@@ -1,4 +1,5 @@
-import { Button, Dropdown, Grid } from 'semantic-ui-react'
+import { useState } from 'react';
+import { Button, Dropdown, Grid, Modal, Header, Icon } from 'semantic-ui-react'
 
 import Activity from '../ui-components/Activity';
 
@@ -6,12 +7,14 @@ import './Prototype.css';
 
 const Prototype = (props) => {
 
-    const { activityManager, currentActivity, setCurrentActivity } = props;
-    const { addActivity, removeActivity, activityEditor, getAllActivityNames } = activityManager;
+    const { activityManager, currentActivity, setCurrentActivity, selectedComponent, setSelectedComponent } = props;
+    const { addActivity, deleteActivity, activityEditor, getAllActivityNames } = activityManager;
+
+    const [deleteActivityModalState, setDeleteActivityModalState] = useState(false);
 
     // Returns activity control button states
     const setControlButtonState = (buttonID) => {
-        if (buttonID === 'previous' || buttonID === 'remove') {
+        if (buttonID === 'previous' || buttonID === 'delete') {
             return getAllActivityNames().findIndex(activityName => activityName === currentActivity) === 0 ? true : false;
         } 
         else if (buttonID === 'next') {
@@ -38,6 +41,7 @@ const Prototype = (props) => {
         setCurrentActivity(activityName);
     }
 
+    // Generates activity dropdown items
     const generateDropdownItems = () => (
         activityManager.getAllActivityNames().map(activityName => (
             {'key' : activityName,
@@ -54,12 +58,12 @@ const Prototype = (props) => {
                     inline
                     value={currentActivity}
                     options={generateDropdownItems()}
-                    onChange={(e, data) => { setCurrentActivity(data.value); console.log(data.value); }} />
+                    onChange={(e, data) => { setCurrentActivity(data.value); setSelectedComponent({'id': 'None', 'type': 'None'}); }} />
                 </span>
             </div>
 
             <div id='activities-list-div'>
-                <Activity currentActivity={currentActivity} activityManager={activityManager} />
+                <Activity currentActivity={currentActivity} selectedComponent={selectedComponent} activityManager={activityManager} />
             </div>
 
             <div id='activity-navigation-controls'>
@@ -73,20 +77,22 @@ const Prototype = (props) => {
                             />
                             <Button 
                                 icon='trash' 
-                                disabled={setControlButtonState('remove')}
+                                disabled={setControlButtonState('delete')}
                                 onClick={() => { 
-                                    const activityToBeRemoved = currentActivity;
-                                    navigateToActivity('previous');
-                                    removeActivity(activityToBeRemoved); 
+                                    if (currentActivity !== 'Main Activity')
+                                        setDeleteActivityModalState(true);
                                 }}
                             />
                             <Button 
                                 icon='add' 
                                 disabled={setControlButtonState('add')}
                                 onClick={() => { 
-                                    const activityName = 'Activity-' + (getAllActivityNames().length + 1);
-                                    addActivity(activityName);
-                                    navigateToActivity(activityName);
+                                    var newActivityName = 'New Activity';
+                                    var newActivityCounter = 1;
+                                    while (activityManager.getAllActivityNames().includes(newActivityName))
+                                        newActivityName = 'New Activity (' + (newActivityCounter++) + ')';
+                                    addActivity(newActivityName);
+                                    navigateToActivity(newActivityName);
                                 }}
                             />
                             <Button 
@@ -99,15 +105,34 @@ const Prototype = (props) => {
                             <Button 
                                 icon='question' 
                                 onClick={() => { 
-                                    // activityEditor.editActivityName('Main Activity', 'lmao this works?');
-                                    // console.log(currentActivity);
-                                    // activityManager.getActivity('Main Activity').changeName('lmao this works?');
-                                    // navigateToActivity('lmao this works?')
-                                    // console.log("thy bidding is done");
+                                    console.log(activityManager.getActivity('Main Activity'));
+                                    activityEditor.editActivityName('Main Activity', 'lmao this works?');
                                     console.log("thy haven't give me a bidding master");
                                 }}
                             />
                         </Button.Group>
+
+                        <Modal
+                            basic
+                            size='small'
+                            open={deleteActivityModalState}
+                            onClose={() => { setDeleteActivityModalState(false); }}>
+                            <Header as='h2' icon inverted>
+                                <Icon name='trash' />
+                                Delete Activity
+                                <Header.Subheader>Are you sure you want to delete this activity?</Header.Subheader>
+                            </Header>
+                            <Modal.Actions style={{'textAlign': 'center'}}>
+                                <Button basic icon='cancel' color='green' inverted onClick={() => { setDeleteActivityModalState(false); }} />
+                                <Button icon='trash' color='red' content='Delete Activity' inverted onClick={() => {
+                                    setDeleteActivityModalState(false);
+                                    const activityToBeDeleted = currentActivity;
+                                    navigateToActivity('previous');
+                                    deleteActivity(activityToBeDeleted); 
+                                }} 
+                            />
+                            </Modal.Actions>
+                        </Modal>
                     </Grid.Column>
                 </Grid>
             </div>
