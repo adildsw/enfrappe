@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Grid } from 'semantic-ui-react';
 
 import useActivityManager from './utils/useActivityManager';
+import useAppManager from './utils/useAppManager';
 
 import Toolbar from './components/panels/Toolbar';
 import Properties from './components/panels/Properties';
@@ -16,9 +17,12 @@ const DEFAULT_ACTIVITY_NAME = 'Main Activity';
 
 const App = () => {
 
+    const appManager = useAppManager();
     const activityManager = useActivityManager();
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_NAME);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': 'None'});
+
+    console.log("lol");
 
     useConstructor(() => {
         activityManager.addActivity(DEFAULT_ACTIVITY_NAME);
@@ -48,6 +52,7 @@ const App = () => {
                         activityManager={activityManager} 
                         currentActivity={currentActivity}
                         setCurrentActivity={setCurrentActivity} 
+                        setSelectedComponent={setSelectedComponent} 
                     />
                 </Grid.Column>
                 <Grid.Column width={6} className={'fullscreen-div'} id='panel-prototype' onClick={(e) => { manageSelection(e.target.id, e.target.className) }}>
@@ -60,7 +65,7 @@ const App = () => {
                     />
                 </Grid.Column>
                 <Grid.Column width={4} id='panel-appdetails' className={'fullscreen-div'}>
-                    <AppDetails />
+                    <AppDetails appManager={appManager} activityManager={activityManager}/>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

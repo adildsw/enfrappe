@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const ActivityProperties = (props) => {
 
-    const { activityManager, currentActivity, setCurrentActivity } = props;
+    const { activityManager, currentActivity, setCurrentActivity, setSelectedComponent } = props;
     const { getActivity, activityEditor } = activityManager;
     const activityData = getActivity(currentActivity);
 
@@ -155,6 +155,7 @@ const ActivityProperties = (props) => {
                         const currentIdx = activityManager.getAllActivityNames().findIndex(activity => activity === currentActivity);
                         activityManager.deleteActivity(currentActivity);
                         setCurrentActivity(activityManager.getAllActivityNames()[currentIdx - 1]);
+                        setSelectedComponent({'id': 'None', 'type': 'None'});
                     }} 
                 />
                 </Modal.Actions>

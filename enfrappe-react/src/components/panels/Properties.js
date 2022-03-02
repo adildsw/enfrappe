@@ -4,7 +4,7 @@ import ActivityProperties from '../ui-component-properties/ActivityProperties';
 import './Properties.css';
 
 const Properties = (props) => {
-    const { selectedComponent, activityManager, currentActivity, setCurrentActivity } = props;
+    const { selectedComponent, setSelectedComponent, activityManager, currentActivity, setCurrentActivity } = props;
 
     return (
         selectedComponent.type === 'None' ?
@@ -24,7 +24,8 @@ const Properties = (props) => {
                         <ActivityProperties 
                             activityManager={activityManager} 
                             currentActivity={currentActivity} 
-                            setCurrentActivity={setCurrentActivity} /> 
+                            setCurrentActivity={setCurrentActivity}
+                            setSelectedComponent={setSelectedComponent} /> 
                     }
                 </div>
             </div>
