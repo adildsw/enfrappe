@@ -1,0 +1,28 @@
+.dnd-space {
+    display: grid;
+    place-items: center;
+    border: 2px dashed #BBBBBB;
+    text-align: center;
+    border-radius: 10px;
+    padding: 20px;
+    color: #BBBBBB;
+    height: 15%;
+}
+
+.dnd-space-active {
+    border: 3px dashed #111111;
+    background: #d2e4d0 ;
+    color: #111111;
+}
+
+.dnd-space-dragging {
+    border: 3px dashed #111111;
+    color: #111111;
+}
+
+.dnd-space-centered {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

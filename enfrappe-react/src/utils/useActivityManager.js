@@ -1,106 +1,85 @@
 import { useState } from 'react';
 import nextId from 'react-id-generator';
 
+import { modifyKeyInDict, getValueFromDict } from './helperFunctions';
+
+import { defaultActivityData } from './defaultComponentData';
+
 const useActivityManager = () => {
-    const [activityData, setActivityData] = useState({'last-edited': Date.now(), 'data': {}});
+    const [activityData, setActivityData] = useState({'last-edited': Date.now(), 'activities': {}});
 
     // Function for adding activity
     const addActivity = (activityName) => {
-        // setActivityData({...activityData, [nextId()]: {
-        //     'name': activityName, 
-        //     'background': '#ffffff', 
-        //     'data': {},
-        // }});
-
+        const newId = nextId();
         setActivityData({...activityData, 
             'last-edited': Date.now(), 
-            'data': {...activityData.data, [nextId()]: {
-                'name': activityName, 
-                'background': '#ffffff', 
-                'data': {},
-            }
-        }});
+            'activities': {...activityData.activities, [newId]: {...defaultActivityData, 'id': newId, 'name': activityName}}
+        });
     }
 
     // Function for deleting activity
     const deleteActivity = (activityName) => {
-        // const newActivityData = {...activityData};
-        // delete newActivityData[getActivityId(activityName)];
-        // setActivityData(newActivityData);
-
         const newActivityData = {...activityData, 'last-edited': Date.now()};
-        delete newActivityData.data[getActivityId(activityName)];
+        delete newActivityData.activities[getActivityId(activityName)];
         setActivityData(newActivityData);
     }
 
     // Function for modifying activity name
     const editActivityName = (activityName, newActivityName) => {
-        // const newActivityData = {...activityData};
-        // newActivityData[getActivityId(activityName)]['name'] = newActivityName;
-        // setActivityData(newActivityData);
-        
         const newActivityData = {...activityData, 'last-edited': Date.now()};
-        newActivityData.data[getActivityId(activityName)]['name'] = newActivityName;
+        newActivityData.activities[getActivityId(activityName)]['name'] = newActivityName;
         setActivityData(newActivityData);
     }
 
     // Function for modifying activity background
     const editActivityBackground = (activityName, newBackground) => {
-        // const newActivityData = {...activityData};
-        // newActivityData[getActivityId(activityName)]['background'] = newBackground;
-        // setActivityData(newActivityData);
-        
         const newActivityData = {...activityData, 'last-edited': Date.now()};
-        newActivityData.data[getActivityId(activityName)]['background'] = newBackground;
+        newActivityData.activities[getActivityId(activityName)]['background'] = newBackground;
         setActivityData(newActivityData);
     }
 
     // Function for modifying activity data
     const editActivityData = (activityName, data) => {
-        // const newActivityData = {...activityData};
-        // newActivityData[getActivityId(activityName)]['data'] = data;
-        // setActivityData(newActivityData);
-        
         const newActivityData = {...activityData, 'last-edited': Date.now()};
-        newActivityData.data[getActivityId(activityName)]['data'] = data;
+        newActivityData.activities[getActivityId(activityName)]['data'] = data;
         setActivityData(newActivityData);
     }
 
     // Function for getting activity ID from activity name
     const getActivityId = (activityName) => {
-        // for (const key in activityData)
-        //     if (activityData[key]['name'] === activityName)
-        //         return key
-        // return undefined;
-
-        for (const key in activityData.data)
-            if (activityData.data[key]['name'] === activityName)
+        for (const key in activityData.activities)
+            if (activityData.activities[key]['name'] === activityName)
                 return key
         return undefined;
     }
 
     // Function for returning activity data
     const getActivity = (activityName) => {
-        // return activityData[getActivityId(activityName)];
-        return activityData.data[getActivityId(activityName)];
+        return activityData.activities[getActivityId(activityName)];
     }
 
     // Function for returning activity data
     const getAllActivityNames = () => {
-        // const activityNames = [];
-        // for (const key in activityData)
-        //     activityNames.push(activityData[key]['name']);
-        // return activityNames;
-        
         const activityNames = [];
-        for (const key in activityData.data)
-            activityNames.push(activityData.data[key]['name']);
+        for (const key in activityData.activities)
+            activityNames.push(activityData.activities[key]['name']);
         return activityNames;
     }
 
     // Function for returning activity data object
     const getActivityDataObject = () => {
         return activityData;
+    }
+
+    const addComponent = (parentId, componentData) => {
+        const newActivityData = {...activityData, 'last-edited': Date.now()};
+        const parentComp = getValueFromDict(newActivityData, parentId);
+        console.log("erverything", activityData);
+        console.log("hello", parentId, parentComp);
+        const compId = nextId();
+        parentComp['data']['sequence'].push(compId);
+        parentComp['data']['components'][compId] = {...componentData, 'id': compId};
+        setActivityData(newActivityData);
     }
 
     // Packaging functions under a single object
@@ -117,7 +96,8 @@ const useActivityManager = () => {
         getActivityId,
         getActivityDataObject,
         activityData,
-        loadActivityData: setActivityData
+        loadActivityData: setActivityData,
+        addComponent
     }
 }
 

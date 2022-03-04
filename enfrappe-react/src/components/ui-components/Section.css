@@ -1,0 +1,11 @@
+.enfrappe-ui-section {
+    background: #DDDDDD;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #DDDDDD;
+    opacity: 1;
+}
+
+.enfrappe-ui-section:hover {
+    border-color: #BBBBBB;
+}

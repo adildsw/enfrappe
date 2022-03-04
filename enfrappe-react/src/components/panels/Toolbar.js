@@ -1,4 +1,5 @@
 import { Divider } from 'semantic-ui-react';
+import SectionStatic from '../ui-components/SectionStatic';
 
 import './Toolbar.css';
 
@@ -18,7 +19,9 @@ const Toolbar = (props) => {
                     <h3 className={'panel-subheading'}>Components for {selectedComponent.type}</h3>
                 </div>
                 <Divider />
-                <div className={'scrollable-section'}></div>
+                <div className={'scrollable-section', 'toolbar-component-container'}>
+                    <SectionStatic />
+                </div>
             </div>
     );
 }

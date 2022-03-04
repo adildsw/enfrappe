@@ -4,12 +4,26 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    border: 2px solid;
-    border-color: #DDDDDD;
+    border: 2px solid #DDDDDD;
     border-radius: 20px;
     cursor: pointer;
 }
 
 .enfrappe-ui-activity:hover {
     border-color: #BBBBBB;
+}
+
+.enfrappe-ui-activitycontent {
+    position: absolute;
+    height: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 20px;
+    overflow-y: auto;
+}
+
+.enfrappe-ui-activitycontent > div {
+    margin-bottom: 20px;
 }

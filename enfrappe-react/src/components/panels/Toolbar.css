@@ -11,3 +11,12 @@
 #toolbar-no-component h1 {
     margin-bottom: 0;
 }
+
+.toolbar-component-container > div {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.toolbar-component-container > div:hover {
+    background: #F2F2F2;
+}

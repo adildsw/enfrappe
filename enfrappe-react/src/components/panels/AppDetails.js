@@ -1,8 +1,8 @@
-import { Image, Divider, Label, Input, Form, Button, Checkbox, Table } from 'semantic-ui-react';
+import { Image, Divider, Label, Input, Form, Button, Checkbox, Table, Modal, Header, Icon } from 'semantic-ui-react';
 import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 
-import templateManager from '../../utils/templateManager';
+import TemplateManager from '../../utils/TemplateManager';
 
 import './AppDetails.css';
 
@@ -13,31 +13,25 @@ const AppDetails = (props) => {
     const { getAppMeta, setAppMeta, loadAppData } = appManager;
     const { loadActivityData } = activityManager;
 
-    const appIdRef = useRef();
-    const appVersionRef = useRef();
-    const appNameRef = useRef();
-    const appSingleUseRef = useRef();
-    const appLocationLinkedRef = useRef();
-    const appNotifyUserref = useRef();
-    const appServerAddressRef = useRef();
-    const appServerPortRef = useRef();
-
     const appLoadFileRef = useRef();
-    const [unsavedBenchmark, setUnsavedBenchmark] = useState(templateManager.empty);
+    const [unsavedBenchmark, setUnsavedBenchmark] = useState(TemplateManager.EMPTY);
+    const [unsavedModalState, setUnsavedModalState] = useState({'state': false, 'action': 'new'});
 
     // Checks fi there exists unsaved changes
     const areChangesUnsaved = () => {
         const currentProject = getCurrentProjectData();
         delete currentProject['app-data']['last-edited'];
         delete currentProject['activity-data']['last-edited'];
-        return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmark);
+
+        const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
+        delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
+        delete unsavedBenchmarkNoTimestamp['activity-data']['last-edited'];
+
+        return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
     }
 
     // Loads project from file
     const loadProjectFromFile = (event) => {
-        console.log(appIdRef.current['value']);
-        appIdRef.current['value'] = 'lololol';
-        console.log(appIdRef.current['value']);
         const file = event.target.files[0];
         if (file === undefined) return;
 
@@ -52,18 +46,6 @@ const AppDetails = (props) => {
     const loadProject = (data) => {
         loadAppData(data['app-data']);
         loadActivityData(data['activity-data'])
-
-        appIdRef.current.value = data['app-data']['app-id'];
-        appVersionRef.current.value = data['app-data']['app-version'];
-        appNameRef.current.value = data['app-data']['app-name'];
-        appSingleUseRef.current.checked = data['app-data']['single-use'];
-        appLocationLinkedRef.current.checked = data['app-data']['location-linked'];
-        appNotifyUserref.current.checked = data['app-data']['notify-user'];
-        appServerAddressRef.current.value = data['app-data']['server-address'];
-        appServerPortRef.current.value = data['app-data']['server-port'];
-
-        delete data['app-data']['last-edited'];
-        delete data['activity-data']['last-edited'];
         setUnsavedBenchmark(data);
     }
 
@@ -84,6 +66,7 @@ const AppDetails = (props) => {
         a.href = url;
         a.download = getAppMeta('app-id') + '_' + getAppMeta('app-version') + '.enfrappe';
         a.click();
+        setUnsavedBenchmark(app);
     };
 
     // Controls state for app detail checkboxes
@@ -97,6 +80,9 @@ const AppDetails = (props) => {
             
             case 'notify-user':
                 return getAppMeta('single-use') || !getAppMeta('location-linked');
+            
+            default:
+                return false;
         }
     };
 
@@ -114,12 +100,23 @@ const AppDetails = (props) => {
                             icon='file' 
                             data-tip='Create New Application'
                             content='New'
+                            onClick={() => {
+                                if (areChangesUnsaved())
+                                    setUnsavedModalState({'state': true, 'action': 'new'});
+                                else
+                                    loadProject(TemplateManager.EMPTY);
+                            }}
                         />
                         <Button 
                             icon='folder open' 
                             data-tip='Load Application'
                             content='Load'
-                            onClick={() => appLoadFileRef.current.click()}
+                            onClick={() => {
+                                if (areChangesUnsaved())
+                                    setUnsavedModalState({'state': true, 'action': 'load'});
+                                else
+                                    appLoadFileRef.current.click();
+                            }}
                         />
                         <input hidden type='file' accept='.enfrappe' id='file-input' ref={appLoadFileRef} onChange={loadProjectFromFile} />
                         <Button 
@@ -129,6 +126,29 @@ const AppDetails = (props) => {
                             onClick={saveProject}
                         />
                     </Button.Group>
+
+                    <Modal
+                        basic
+                        size='small'
+                        open={unsavedModalState.state}
+                        onClose={() => { setUnsavedModalState({'state': false, 'action': 'new'}); }}>
+                        <Header as='h2' icon inverted>
+                            <Icon name='warning sign' />
+                            Unsaved Changes
+                            <Header.Subheader>There are unsaved changes. Are you sure you want to proceed?</Header.Subheader>
+                        </Header>
+                        <Modal.Actions style={{'textAlign': 'center'}}>
+                            <Button basic icon='cancel' color='green' inverted onClick={() => { setUnsavedModalState({'state': false, 'action': 'new'}); }} />
+                            <Button icon='check' color='red' content='Yes' inverted onClick={() => {
+                                if (unsavedModalState.action === 'new')
+                                    loadProject(TemplateManager.EMPTY);
+                                else if (unsavedModalState.action === 'load')
+                                    appLoadFileRef.current.click();
+                                setUnsavedModalState({'state': false, 'action': 'new'});
+                            }} 
+                        />
+                        </Modal.Actions>
+                    </Modal>
                 </Form>
 
                 <Divider horizontal>Application Details</Divider>
@@ -138,10 +158,9 @@ const AppDetails = (props) => {
                             <Label className={'tucked-label'}>App ID</Label>
                             <Input 
                                 placeholder='App Identifier'
-                                defaultValue='com.me.frappeapp'
                                 onChange={(e, data) => { setAppMeta('app-id', data.value); }}
                                 fluid
-                                ref={appIdRef}
+                                value={getAppMeta('app-id')}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -149,9 +168,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='App Version'
                                 fluid
-                                defaultValue='1.0.0'
                                 onChange={(e, data) => { setAppMeta('app-version', data.value); }}
-                                ref={appVersionRef}
+                                value={getAppMeta('app-version')}
                             />
                         </Form.Field>
                     </Form.Group>
@@ -160,37 +178,36 @@ const AppDetails = (props) => {
                         <Input 
                             placeholder='App Name'
                             fluid
-                            defaultValue='My Awesome Frappe App'
                             onChange={(e, data) => { setAppMeta('app-name', data.value); }}
-                            ref={appNameRef}
+                            value={getAppMeta('app-name')}
                         />
                     </Form.Field>
                     <Form.Field>
                         <Table>
                             <Table.Body>
                                 <Table.Row>
-                                    <Table.Cell>
+                                    <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Single Use' 
-                                            ref={appSingleUseRef}
                                             onChange={(e, data) => { setAppMeta('single-use', data.checked); }}
                                             disabled={getCheckboxState('single-use')}
+                                            checked={getAppMeta('single-use')}
                                         />
                                     </Table.Cell>
-                                    <Table.Cell>
+                                    <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Location-Linked' 
-                                            ref={appLocationLinkedRef}
                                             onChange={(e, data) => { setAppMeta('location-linked', data.checked); }}
                                             disabled={getCheckboxState('location-linked')}
+                                            checked={getAppMeta('location-linked')}
                                         />
                                     </Table.Cell>
-                                    <Table.Cell>
+                                    <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Notify User' 
-                                            ref={appNotifyUserref}
                                             onChange={(e, data) => { setAppMeta('notify-user', data.checked); }}
                                             disabled={getCheckboxState('notify-user')}
+                                            checked={getAppMeta('notify-user')}
                                         />
                                     </Table.Cell>
                                 </Table.Row>
@@ -203,9 +220,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='127.0.0.1'
                                 fluid
-                                defaultValue='127.0.0.1'
                                 onChange={(e) => { setAppMeta('server-address', e.target.value) }}
-                                ref={appServerAddressRef}
+                                value={getAppMeta('server-address')}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -213,9 +229,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='1803'
                                 fluid
-                                defaultValue='1803'
                                 onChange={(e) => { setAppMeta('server-port', e.target.value) }}
-                                ref={appServerPortRef}
+                                value={getAppMeta('server-port')}
                             />
                         </Form.Field>
                     </Form.Group>

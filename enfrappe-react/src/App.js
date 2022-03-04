@@ -22,18 +22,22 @@ const App = () => {
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_NAME);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': 'None'});
 
-    console.log("lol");
-
     useConstructor(() => {
         activityManager.addActivity(DEFAULT_ACTIVITY_NAME);
     });
 
     const manageSelection = (selectedId, selectedClassNames) => {
-        console.log(selectedId, selectedClassNames);
+        console.log(selectedId);
         if (selectedClassNames.includes('enfrappe-ui-')) {
             var comp = selectedClassNames.split(' ').filter((val) => (val.includes('enfrappe-ui-')))[0].split('-')[2];
-            comp = comp.charAt(0).toUpperCase() + comp.substr(1).toLowerCase();
-            setSelectedComponent({'id': selectedId, 'type': comp});
+            if (comp === 'activity' || comp === 'activitycontent' || comp === 'activitydndspace')
+                setSelectedComponent({'id': selectedId, 'type': 'Activity'});
+            else if (comp === 'section' || comp === 'sectionheader' || comp === 'sectioncontent' || comp === 'sectiondndspace')
+                setSelectedComponent({'id': selectedId, 'type': 'Section'});
+            else
+                setSelectedComponent({'id': 'None', 'type': 'None'});
+            // comp = comp.charAt(0).toUpperCase() + comp.substr(1).toLowerCase();
+            // setSelectedComponent({'id': selectedId, 'type': comp});
         }
         else {
             setSelectedComponent({'id': 'None', 'type': 'None'});
