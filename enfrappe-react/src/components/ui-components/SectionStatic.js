@@ -1,14 +1,14 @@
 import { useDrag } from "react-dnd";
 
 import DnDSpaceStatic from "./ui-component-utils/DnDSpaceStatic";
-import DropItemTypes from "../../utils/DropItemTypes";
+import UIItemTypes from "../../utils/UIItemTypes";
 
 import './Section.css';
 
 const SectionStatic = () => {
     const [{ isDragging }, drag] = useDrag(() => ({
-        type: DropItemTypes.SECTION,
-        item: { 'type': DropItemTypes.SECTION },
+        type: UIItemTypes.SECTION,
+        item: { 'type': UIItemTypes.SECTION },
         collect: (monitor) => ({
             isDragging: monitor.isDragging()
         })

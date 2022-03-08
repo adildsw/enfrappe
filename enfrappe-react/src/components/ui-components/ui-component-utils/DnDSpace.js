@@ -1,21 +1,18 @@
 import { useDrop } from 'react-dnd';
-import nextId from 'react-id-generator';
 
-import DropItemTypes from '../../../utils/DropItemTypes';
-
-import { defaultSectionData } from '../../../utils/defaultComponentData';
+import UIItemTypes from '../../../utils/UIItemTypes';
 
 import './DnDSpace.css';
 
 const DnDSpace = (props) => {
-    const { id, className, acceptedItems, centered, activityManager } = props;
+    const { id, className, acceptedItems, centered, componentManager } = props;
+    const { sectionManager } = componentManager;
 
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
         accept: acceptedItems, 
         drop: (item) => {
-            if (item.type === DropItemTypes.SECTION) {
-                console.log(id);
-                activityManager.addComponent(id, {...defaultSectionData, 'type': 'section'});
+            if (item.type === UIItemTypes.SECTION) {
+                sectionManager.addSection(id);
             }
             return {'droppedOn': id};
         },
@@ -23,11 +20,11 @@ const DnDSpace = (props) => {
             isOver: monitor.isOver(),
             canDrop: monitor.canDrop()
         })
-    }));
+    }), [id]);
     const isActive = canDrop && isOver;
     
     const generateConcatenatedClassName = () => {
-        let concatClasName = 'dnd-space' + ' ' + className;
+        let concatClasName = 'dnd-space ' + className;
         if (centered)
             concatClasName += ' dnd-space-centered';
         if (isActive)
@@ -35,7 +32,7 @@ const DnDSpace = (props) => {
         else if (canDrop)
             concatClasName += ' dnd-space-dragging';
         return concatClasName;
-    }
+    };
     
     return (
         <div 

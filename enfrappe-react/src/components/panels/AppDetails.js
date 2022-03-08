@@ -2,30 +2,30 @@ import { Image, Divider, Label, Input, Form, Button, Checkbox, Table, Modal, Hea
 import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 
-import TemplateManager from '../../utils/TemplateManager';
+import getAppTemplate from '../../utils/TemplateManager';
 
 import './AppDetails.css';
 
 import logo from '../../assets/logo.svg';
 
 const AppDetails = (props) => {
-    const { activityManager, appManager } = props;
-    const { getAppMeta, setAppMeta, loadAppData } = appManager;
-    const { loadActivityData } = activityManager;
+    const { componentManager, appManager } = props;
+    const { getAppMetadata, setAppMetadata, appData, setAppData } = appManager;
+    const { componentData, setComponentData } = componentManager;
 
     const appLoadFileRef = useRef();
-    const [unsavedBenchmark, setUnsavedBenchmark] = useState(TemplateManager.EMPTY);
+    const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
     const [unsavedModalState, setUnsavedModalState] = useState({'state': false, 'action': 'new'});
 
-    // Checks fi there exists unsaved changes
+    // Checks if there exists unsaved changes
     const areChangesUnsaved = () => {
         const currentProject = getCurrentProjectData();
         delete currentProject['app-data']['last-edited'];
-        delete currentProject['activity-data']['last-edited'];
+        delete currentProject['component-data']['last-edited'];
 
         const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
         delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
-        delete unsavedBenchmarkNoTimestamp['activity-data']['last-edited'];
+        delete unsavedBenchmarkNoTimestamp['component-data']['last-edited'];
 
         return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
     }
@@ -44,16 +44,16 @@ const AppDetails = (props) => {
     }
 
     const loadProject = (data) => {
-        loadAppData(data['app-data']);
-        loadActivityData(data['activity-data'])
+        setAppData(data['app-data']);
+        setComponentData(data['component-data'])
         setUnsavedBenchmark(data);
     }
 
     // Fetches the current project data
     const getCurrentProjectData = () => {
         return {
-            'app-data': appManager.appData, 
-            'activity-data': activityManager.activityData
+            'app-data': appData, 
+            'component-data': componentData
         };
     }
 
@@ -64,7 +64,7 @@ const AppDetails = (props) => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = getAppMeta('app-id') + '_' + getAppMeta('app-version') + '.enfrappe';
+        a.download = getAppMetadata('app-id') + '_' + getAppMetadata('app-version') + '.enfrappe';
         a.click();
         setUnsavedBenchmark(app);
     };
@@ -73,13 +73,13 @@ const AppDetails = (props) => {
     const getCheckboxState = (key) => {
         switch(key) {
             case 'single-use':
-                return getAppMeta('location-linked');
+                return getAppMetadata('location-linked');
             
             case 'location-linked':
-                return getAppMeta('single-use');
+                return getAppMetadata('single-use');
             
             case 'notify-user':
-                return getAppMeta('single-use') || !getAppMeta('location-linked');
+                return getAppMetadata('single-use') || !getAppMetadata('location-linked');
             
             default:
                 return false;
@@ -104,7 +104,7 @@ const AppDetails = (props) => {
                                 if (areChangesUnsaved())
                                     setUnsavedModalState({'state': true, 'action': 'new'});
                                 else
-                                    loadProject(TemplateManager.EMPTY);
+                                    loadProject(getAppTemplate('EMPTY'));
                             }}
                         />
                         <Button 
@@ -141,7 +141,7 @@ const AppDetails = (props) => {
                             <Button basic icon='cancel' color='green' inverted onClick={() => { setUnsavedModalState({'state': false, 'action': 'new'}); }} />
                             <Button icon='check' color='red' content='Yes' inverted onClick={() => {
                                 if (unsavedModalState.action === 'new')
-                                    loadProject(TemplateManager.EMPTY);
+                                    loadProject(getAppTemplate('EMPTY'));
                                 else if (unsavedModalState.action === 'load')
                                     appLoadFileRef.current.click();
                                 setUnsavedModalState({'state': false, 'action': 'new'});
@@ -158,9 +158,9 @@ const AppDetails = (props) => {
                             <Label className={'tucked-label'}>App ID</Label>
                             <Input 
                                 placeholder='App Identifier'
-                                onChange={(e, data) => { setAppMeta('app-id', data.value); }}
+                                onChange={(e, data) => { setAppMetadata('app-id', data.value); }}
                                 fluid
-                                value={getAppMeta('app-id')}
+                                value={getAppMetadata('app-id')}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -168,8 +168,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='App Version'
                                 fluid
-                                onChange={(e, data) => { setAppMeta('app-version', data.value); }}
-                                value={getAppMeta('app-version')}
+                                onChange={(e, data) => { setAppMetadata('app-version', data.value); }}
+                                value={getAppMetadata('app-version')}
                             />
                         </Form.Field>
                     </Form.Group>
@@ -178,8 +178,8 @@ const AppDetails = (props) => {
                         <Input 
                             placeholder='App Name'
                             fluid
-                            onChange={(e, data) => { setAppMeta('app-name', data.value); }}
-                            value={getAppMeta('app-name')}
+                            onChange={(e, data) => { setAppMetadata('app-name', data.value); }}
+                            value={getAppMetadata('app-name')}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -189,25 +189,25 @@ const AppDetails = (props) => {
                                     <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Single Use' 
-                                            onChange={(e, data) => { setAppMeta('single-use', data.checked); }}
+                                            onChange={(e, data) => { setAppMetadata('single-use', data.checked); }}
                                             disabled={getCheckboxState('single-use')}
-                                            checked={getAppMeta('single-use')}
+                                            checked={getAppMetadata('single-use')}
                                         />
                                     </Table.Cell>
                                     <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Location-Linked' 
-                                            onChange={(e, data) => { setAppMeta('location-linked', data.checked); }}
+                                            onChange={(e, data) => { setAppMetadata('location-linked', data.checked); }}
                                             disabled={getCheckboxState('location-linked')}
-                                            checked={getAppMeta('location-linked')}
+                                            checked={getAppMetadata('location-linked')}
                                         />
                                     </Table.Cell>
                                     <Table.Cell textAlign='center' verticalAlign='middle'>
                                         <Checkbox 
                                             label='Notify User' 
-                                            onChange={(e, data) => { setAppMeta('notify-user', data.checked); }}
+                                            onChange={(e, data) => { setAppMetadata('notify-user', data.checked); }}
                                             disabled={getCheckboxState('notify-user')}
-                                            checked={getAppMeta('notify-user')}
+                                            checked={getAppMetadata('notify-user')}
                                         />
                                     </Table.Cell>
                                 </Table.Row>
@@ -220,8 +220,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='127.0.0.1'
                                 fluid
-                                onChange={(e) => { setAppMeta('server-address', e.target.value) }}
-                                value={getAppMeta('server-address')}
+                                onChange={(e) => { setAppMetadata('server-address', e.target.value) }}
+                                value={getAppMetadata('server-address')}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -229,8 +229,8 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='1803'
                                 fluid
-                                onChange={(e) => { setAppMeta('server-port', e.target.value) }}
-                                value={getAppMeta('server-port')}
+                                onChange={(e) => { setAppMetadata('server-port', e.target.value) }}
+                                value={getAppMetadata('server-port')}
                             />
                         </Form.Field>
                     </Form.Group>

@@ -30,10 +30,12 @@
 .panel-heading {
     margin-bottom: 0;
     user-select: none;
+    color: #000000;
 }
 
 .panel-subheading {
-    color: #999999;
+    color: #000000;
+    opacity: 0.5;
     margin-top: 0;
     user-select: none;
 }
@@ -61,4 +63,18 @@ span {
 
 .tucked-label {
     margin-bottom: -4px !important;
+}
+
+.color-picker-cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+.color-picker-popover {
+    position: absolute;
+    right: 0;
+    z-index: 3;
 }

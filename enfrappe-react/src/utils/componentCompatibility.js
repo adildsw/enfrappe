@@ -1,12 +1,12 @@
-import DropItemTypes from "./DropItemTypes"
+import UIItemTypes from "./UIItemTypes";
 
 const componentCompatibility = (parentComponent) => {
     if (parentComponent === 'activity')
-        return [DropItemTypes.SECTION];
+        return [UIItemTypes.SECTION];
     else if (parentComponent === 'section')
-        return [DropItemTypes.NONE];
+        return [UIItemTypes.NONE];
     else
-        return [DropItemTypes.NONE];
+        return [UIItemTypes.NONE];
 }
 
 export default componentCompatibility;

@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import './Activity.css';
 import Section from './Section';
 import DnDSpace from './ui-component-utils/DnDSpace';
-import DropItemTypes from '../../utils/DropItemTypes';
-import componentCompatibility from '../../utils/componentCompatibility';
+import componentCompatibility from '../../utils/ComponentCompatibility';
+import UIItemTypes from '../../utils/UIItemTypes';
 
 const Activity = (props) => {
 
-    const { currentActivity, activityManager, selectedComponent } = props;
-    const { getActivity, getActivityId } = activityManager;
+    const { currentActivity, selectedComponent, componentManager } = props;
+    const { activityManager, getComponent } = componentManager;
+    const { getActivityData, getActivityId } = activityManager;
 
     // Storing activity container dimension states
     const [{containerHeight, containerWidth}, setContainerDim] = useState({containerHeight: 0, containerWidth: 0});
@@ -31,30 +32,29 @@ const Activity = (props) => {
     }, []);
 
     const generateActivityComponents = () => {
-        const { sequence, components } = getActivity(currentActivity)['data'];
-        console.log(currentActivity, sequence);
+        const { children } = getActivityData(currentActivity);
         let activityComponents = [];
-        sequence.forEach(comp => {
-            const componentData = components[comp];
-            if (componentData.type === 'section') {
+        children.forEach(child => {
+            const childData = getComponent(child);
+            if (childData.type === UIItemTypes.SECTION) {
                 activityComponents.push(
-                    <Section key={comp} sectionData={componentData} selectedComponent={selectedComponent} activityManager={activityManager} />
+                    <Section key={child} selectedComponent={selectedComponent} componentId={child} componentManager={componentManager} />
                 );
             }
         });
         return activityComponents;
-    }
+    };
 
     return (
-        <div className={'enfrappe-ui-activity' + (selectedComponent.id === getActivityId(currentActivity) ? ' selected-component' : '')} id={getActivityId(currentActivity)} style={{height: containerHeight, width: containerWidth, background: getActivity(currentActivity).background}}>
+        <div className={'enfrappe-ui-activity' + (selectedComponent.id === getActivityId(currentActivity) ? ' selected-component' : '')} id={getActivityId(currentActivity)} style={{height: containerHeight, width: containerWidth, background: getActivityData(currentActivity).background}}>
             <div className={'enfrappe-ui-activitycontent'} id={getActivityId(currentActivity)}>
                 {generateActivityComponents()}
                 <DnDSpace 
                     id={getActivityId(currentActivity)} 
                     className={'enfrappe-ui-activitydndspace'} 
-                    centered={getActivity(currentActivity)['data']['sequence'].length === 0} 
+                    centered={getActivityData(currentActivity)['children'].length === 0} 
                     acceptedItems={componentCompatibility('activity')} 
-                    activityManager={activityManager}
+                    componentManager={componentManager}
                 />
             </div>
         </div>

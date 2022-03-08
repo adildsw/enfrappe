@@ -1,24 +1,25 @@
 import { useState } from 'react';
 
-import TemplateManager from './TemplateManager';
+import getAppTemplate from './TemplateManager';
 
 const useAppManager = () => {
-    const [appData, setAppData] = useState(TemplateManager.EMPTY['app-data']);
+    const [appData, setAppData] = useState(getAppTemplate('EMPTY')['app-data']);
 
     // Function for setting app data
-    const setAppMeta = (key, value) => {
+    const setAppMetadata = (key, value) => {
         setAppData({...appData, 'last-edited': Date.now(), [key]: value});
     }
 
-    const getAppMeta = (key) => {
+    // Function for getting app data
+    const getAppMetadata = (key) => {
         return appData[key];
     }
 
     return {
-        setAppMeta,
-        getAppMeta,
+        setAppMetadata,
+        getAppMetadata,
         appData,
-        loadAppData: setAppData
+        setAppData
     }
 }
 

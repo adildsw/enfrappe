@@ -1,0 +1,45 @@
+{
+    "app-data": {
+        "app-id": "String",
+        "app-name": "String",
+        "app-version": "String",
+        "single-use": "Boolean",
+        "location-linked": "Boolean",
+        "notify-user": "Boolean",
+        "server-address": "String",
+        "server-port": "String",
+        "last-edited": "Unix Timestamp"
+    },
+
+    "component-data": {
+        "last-edited": "Unix Timestamp",
+        "activity-sequence": "Array",
+        "components": {
+            "...component-id": {
+                "type": "String",
+                "id": "String",
+                "...properties": "String"
+            }
+        }
+    },
+
+    "component-id-activity": {
+        "type": "'activity'",
+        "id": "String",
+        "name": "String",
+        "background": "String (hex color)",
+        "children": "Array"
+    },
+
+    "component-id-section": {
+        "type": "'section'",
+        "id": "String",
+        "title": "String",
+        "subtitle": "String",
+        "background": "String (hex color)",
+        "text-color": "String (hex color)",
+        "children": "Array",
+        "parent": "String"
+    }
+
+}

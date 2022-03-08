@@ -1,26 +1,31 @@
 import { useState } from 'react';
 import { Button, Dropdown, Grid, Modal, Header, Icon } from 'semantic-ui-react'
 
+import UIItemTypes from '../../utils/UIItemTypes';
+import { DEFAULT_ACTIVITY_NAME } from '../../utils/DefaultComponentData';
+
 import Activity from '../ui-components/Activity';
 
 import './Prototype.css';
 
 const Prototype = (props) => {
 
-    const { activityManager, currentActivity, setCurrentActivity, selectedComponent, setSelectedComponent } = props;
-    const { addActivity, deleteActivity, activityEditor, getAllActivityNames } = activityManager;
+    const { componentManager, currentActivity, setCurrentActivity, selectedComponent, setSelectedComponent } = props;
+
+    const { activityManager } = componentManager;
+    const { addActivity, deleteActivity, getAllActivityNames } = activityManager;
 
     const [deleteActivityModalState, setDeleteActivityModalState] = useState(false);
 
     // Returns activity control button states
-    const setControlButtonState = (buttonID) => {
-        if (buttonID === 'previous' || buttonID === 'delete') {
+    const setControlButtonState = (buttonId) => {
+        if (buttonId === 'previous' || buttonId === 'delete') {
             return getAllActivityNames().findIndex(activityName => activityName === currentActivity) === 0 ? true : false;
         } 
-        else if (buttonID === 'next') {
+        else if (buttonId === 'next') {
             return getAllActivityNames().findIndex(activityName => activityName === currentActivity) === getAllActivityNames().length - 1 ? true : false;
         } 
-        else if (buttonID === 'add') {
+        else if (buttonId === 'add') {
             return getAllActivityNames().length > 5 ? true : false;
         }
     }
@@ -58,12 +63,12 @@ const Prototype = (props) => {
                     inline
                     value={currentActivity}
                     options={generateDropdownItems()}
-                    onChange={(e, data) => { setCurrentActivity(data.value); setSelectedComponent({'id': 'None', 'type': 'None'}); }} />
+                    onChange={(e, data) => { setCurrentActivity(data.value); setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE}); }} />
                 </span>
             </div>
 
             <div id='activities-list-div'>
-                <Activity currentActivity={currentActivity} selectedComponent={selectedComponent} activityManager={activityManager} />
+                <Activity currentActivity={currentActivity} selectedComponent={selectedComponent} componentManager={componentManager} />
             </div>
 
             <div id='activity-navigation-controls'>
@@ -79,7 +84,7 @@ const Prototype = (props) => {
                                 icon='trash' 
                                 disabled={setControlButtonState('delete')}
                                 onClick={() => { 
-                                    if (currentActivity !== 'Main Activity')
+                                    if (currentActivity !== DEFAULT_ACTIVITY_NAME)
                                         setDeleteActivityModalState(true);
                                 }}
                             />
@@ -102,14 +107,14 @@ const Prototype = (props) => {
                             />
                             
                             {/* Test Button */}
-                            <Button 
+                            {/* <Button 
                                 icon='question' 
                                 onClick={() => { 
-                                    console.log(activityManager.getActivity('Main Activity'));
-                                    activityEditor.editActivityName('Main Activity', 'lmao this works?');
+                                    console.log(activityManager.getActivityData(DEFAULT_ACTIVITY_NAME));
+                                    setActivityName(DEFAULT_ACTIVITY_NAME, 'lmao this works?');
                                     console.log("thy haven't give me a bidding master");
                                 }}
-                            />
+                            /> */}
                         </Button.Group>
 
                         <Modal

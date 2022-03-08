@@ -1,3 +1,8 @@
+import * as deepcopy from 'deepcopy';
+
+import UIItemTypes from './UIItemTypes';
+import { DEFAULT_ACTIVITY_NAME, DEFAULT_ACTIVITY_ID } from './DefaultComponentData';
+
 const TemplateManager = {
     'EMPTY': {
         'app-data': {
@@ -11,17 +16,25 @@ const TemplateManager = {
             'server-port': '1803',
             'last-edited': Date.now()
         },
-        'activity-data': {
-            'data': {
-                'id1': {
-                    'name': 'Main Activity',
+        'component-data': {
+            'last-edited': Date.now(),
+            'activity-sequence': [DEFAULT_ACTIVITY_ID],
+            'components': {
+                [DEFAULT_ACTIVITY_ID]: {
+                    'type': UIItemTypes.ACTIVITY,
+                    'id': DEFAULT_ACTIVITY_ID,
+                    'name': DEFAULT_ACTIVITY_NAME,
                     'background': '#ffffff',
-                    'data': {}
+                    'components': []
                 }
-            },
-            'last-edited': Date.now()
+            }
         }
+
     }
 }
 
-export default TemplateManager;
+const getAppTemplate = (type) => {
+    return deepcopy(TemplateManager[type]);
+};
+
+export default getAppTemplate;
