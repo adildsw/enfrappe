@@ -14,26 +14,37 @@ const ActivityManager = (componentData, setComponentData) => {
         return undefined;
     }
 
+    // Function for getting activity name from activity ID
+    const getActivityName = (activityId) => {
+        return componentData.components[activityId]['name'];
+    }
+
     // Function for getting list of all activity names
     const getAllActivityNames = () => {
         const activityNames = [];
         componentData['activity-sequence'].forEach(activityId => {
             activityNames.push(componentData.components[activityId]['name']);
         });
-            
         return activityNames;
     }
 
-    // Function for getting metada of a specific activity
-    const getActivityData = (activityName) => {
-        const activityId = getActivityId(activityName);
-        if (!activityId) return undefined;
+    const getAllActivityIds = () => {
+        return componentData['activity-sequence'];
+    }
+
+    //
+    // Function for getting activity data
+    const getActivityData = (activityId) => {
         return componentData.components[activityId];
     }
 
     // Function for adding activity
-    const addActivity = (activityName) => {
+    const addActivity = () => {
         const newId = nextId();
+        var newActivityName = 'New Activity';
+        var newActivityCounter = 1;
+        while (getAllActivityNames().includes(newActivityName))
+            newActivityName = 'New Activity (' + (newActivityCounter++) + ')';
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now(),
@@ -41,39 +52,43 @@ const ActivityManager = (componentData, setComponentData) => {
         newComponentData['activity-sequence'].push(newId);
         newComponentData.components[newId] = getDefaultComponentData(UIItemTypes.ACTIVITY);
         newComponentData.components[newId]['id'] = newId;
-        newComponentData.components[newId]['name'] = activityName;
+        newComponentData.components[newId]['name'] = newActivityName;
         setComponentData(newComponentData);
+        return newId;
     }
 
+    //
     // Function for deleting activity
-    const deleteActivity = (activityName) => {
+    const deleteActivity = (activityId) => {
         const newComponentData = {
             ...componentData,
-            'activity-sequence': componentData['activity-sequence'].filter(id => id !== getActivityId(activityName)), 
+            'activity-sequence': componentData['activity-sequence'].filter(id => id !== activityId),
             'last-edited': Date.now()
         };
         // TODO: Delete all children attached to this activity
-        delete newComponentData.components[getActivityId(activityName)];
+        delete newComponentData.components[activityId];
         setComponentData(newComponentData);
     }
 
+    //
     // Function for modifying activity name
-    const setActivityName = (activityName, newActivityName) => {
+    const setActivityName = (activityId, newActivityName) => {
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now()
         };
-        newComponentData.components[getActivityId(activityName)]['name'] = newActivityName;
+        newComponentData.components[activityId]['name'] = newActivityName;
         setComponentData(newComponentData);
     }
 
+    //
     // Function for modifying activity background
-    const setActivityBackground = (activityName, newBackground) => {
+    const setActivityBackground = (activityId, newBackground) => {
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now()
         };
-        newComponentData.components[getActivityId(activityName)]['background'] = newBackground;
+        newComponentData.components[activityId]['background'] = newBackground;
         setComponentData(newComponentData);
     }
 
@@ -83,8 +98,10 @@ const ActivityManager = (componentData, setComponentData) => {
         setActivityName,
         setActivityBackground,
         getActivityId,
+        getActivityName,
         getAllActivityNames,
-        getActivityData
+        getActivityData,
+        getAllActivityIds
     }
 }
 

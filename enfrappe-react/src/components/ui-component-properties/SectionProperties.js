@@ -4,18 +4,24 @@ import { SketchPicker } from "react-color";
 import UIItemTypes from "../../utils/UIItemTypes";
 
 const SectionProperties = (props) => {
-    const { selectedComponent, setSelectedComponent, activityManager, sectionManager } = props;
-    const { getSectionData, setSectionTitle, setSectionSubtitle, setSectionBackground, setSectionTextColor } = sectionManager;
+    const { selectedComponent, setSelectedComponent, sectionManager, activityManager } = props;
+    const { getSectionData, setSectionTitle, setSectionSubtitle, setSectionBackground, setSectionTextColor, shiftSectionUp, shiftSectionDown } = sectionManager;
+    const { getActivityData } = activityManager;
     const sectionData = getSectionData(selectedComponent.id);
 
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
     const [backgroundColorPickerDisplay, setBackgroundColorPickerDisplay] = useState(false);
 
     const setMoveSectionButtonState = (buttonId) => {
+        const parentId = sectionData.parent;
+        const index = getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
-
+            if (index === 0) return false;
+            else return true;
         }
         else if (buttonId === 'moveDown') {
+            if (index === getActivityData(parentId).children.length - 1) return false;
+            else return true;
         }
     }
 
@@ -47,6 +53,7 @@ const SectionProperties = (props) => {
                     action={{
                         icon: 'paint brush',
                         onClick: () => { setTextColorPickerDisplay(!textColorPickerDisplay); },
+                        style: {'background': sectionData['text-color'], 'border': '1px solid #ccc'}
                     }}
                     placeholder='Text Color'
                     fluid
@@ -71,6 +78,7 @@ const SectionProperties = (props) => {
                     action={{
                         icon: 'paint brush',
                         onClick: () => { setBackgroundColorPickerDisplay(!backgroundColorPickerDisplay); },
+                        style: {'background': sectionData['background'], 'border': '1px solid #ccc'}
                     }}
                     placeholder='Background Color'
                     fluid
@@ -94,11 +102,8 @@ const SectionProperties = (props) => {
                     icon='up arrow' 
                     labelPosition='left' 
                     content='Move Section Up' 
-                    onClick={() => { 
-                        const sectionIdToBeDeleted = sectionData['id'];
-                        setSelectedComponent({id: 'None', type: UIItemTypes.NONE});
-                        sectionManager.deleteSection(sectionIdToBeDeleted);
-                    }} 
+                    onClick={() => { shiftSectionUp(selectedComponent.id); }} 
+                    disabled={!setMoveSectionButtonState('moveUp')}
                 />
                 <Button 
                     type='button'
@@ -106,10 +111,9 @@ const SectionProperties = (props) => {
                     labelPosition='left' 
                     content='Move Section Down' 
                     onClick={() => { 
-                        const sectionIdToBeDeleted = sectionData['id'];
-                        setSelectedComponent({id: 'None', type: UIItemTypes.NONE});
-                        sectionManager.deleteSection(sectionIdToBeDeleted);
+                        shiftSectionDown(selectedComponent.id);
                     }} 
+                    disabled={!setMoveSectionButtonState('moveDown')}
                 />
                 </Button.Group>
             </Form.Field>

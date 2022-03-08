@@ -13,47 +13,47 @@ const Prototype = (props) => {
     const { componentManager, currentActivity, setCurrentActivity, selectedComponent, setSelectedComponent } = props;
 
     const { activityManager } = componentManager;
-    const { addActivity, deleteActivity, getAllActivityNames } = activityManager;
+    const { addActivity, deleteActivity, getAllActivityIds, getActivityId } = activityManager;
 
     const [deleteActivityModalState, setDeleteActivityModalState] = useState(false);
 
     // Returns activity control button states
     const setControlButtonState = (buttonId) => {
         if (buttonId === 'previous' || buttonId === 'delete') {
-            return getAllActivityNames().findIndex(activityName => activityName === currentActivity) === 0 ? true : false;
+            return getAllActivityIds().findIndex(activityId => activityId === currentActivity) === 0 ? true : false;
         } 
         else if (buttonId === 'next') {
-            return getAllActivityNames().findIndex(activityName => activityName === currentActivity) === getAllActivityNames().length - 1 ? true : false;
+            return getAllActivityIds().findIndex(activityId => activityId === currentActivity) === getAllActivityIds().length - 1 ? true : false;
         } 
         else if (buttonId === 'add') {
-            return getAllActivityNames().length > 5 ? true : false;
+            return getAllActivityIds().length > 5 ? true : false;
         }
     }
 
     // Function to navigate to specified activity
-    const navigateToActivity = (activityName) => {
+    const navigateToActivity = (activityId) => {
         // Defining activity navigation landmarks
-        const currentIdx = getAllActivityNames().findIndex(activity => activity === currentActivity);
-        if (activityName === 'previous')
-            activityName = getAllActivityNames()[currentIdx - 1];
-        else if (activityName === 'next')
-            activityName = getAllActivityNames()[currentIdx + 1];
-        else if (activityName === 'first')
-            activityName = getAllActivityNames()[0];
-        else if (activityName === 'last')
-            activityName = getAllActivityNames()[getAllActivityNames().length - 1];
+        const currentIdx = getAllActivityIds().findIndex(activity => activity === currentActivity);
+        if (activityId === 'previous')
+            activityId = getAllActivityIds()[currentIdx - 1];
+        else if (activityId === 'next')
+            activityId = getAllActivityIds()[currentIdx + 1];
+        else if (activityId === 'first')
+            activityId = getAllActivityIds()[0];
+        else if (activityId === 'last')
+            activityId = getAllActivityIds()[getAllActivityIds().length - 1];
             
-        setCurrentActivity(activityName);
+        setCurrentActivity(activityId);
     }
 
     // Generates activity dropdown items
     const generateDropdownItems = () => (
         activityManager.getAllActivityNames().map(activityName => (
-            {'key' : activityName,
+            {'key' : getActivityId(activityName),
             'text' : activityName,
-            'value' : activityName}
+            'value' : getActivityId(activityName)}
         ))
-    )
+    );
 
     return (
         <div id='prototype-controls'>
@@ -92,12 +92,8 @@ const Prototype = (props) => {
                                 icon='add' 
                                 disabled={setControlButtonState('add')}
                                 onClick={() => { 
-                                    var newActivityName = 'New Activity';
-                                    var newActivityCounter = 1;
-                                    while (activityManager.getAllActivityNames().includes(newActivityName))
-                                        newActivityName = 'New Activity (' + (newActivityCounter++) + ')';
-                                    addActivity(newActivityName);
-                                    navigateToActivity(newActivityName);
+                                    const activityId = addActivity();
+                                    navigateToActivity(activityId);
                                 }}
                             />
                             <Button 

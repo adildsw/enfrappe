@@ -10,7 +10,7 @@ const Activity = (props) => {
 
     const { currentActivity, selectedComponent, componentManager } = props;
     const { activityManager, getComponent } = componentManager;
-    const { getActivityData, getActivityId } = activityManager;
+    const { getActivityData } = activityManager;
 
     // Storing activity container dimension states
     const [{containerHeight, containerWidth}, setContainerDim] = useState({containerHeight: 0, containerWidth: 0});
@@ -46,14 +46,14 @@ const Activity = (props) => {
     };
 
     return (
-        <div className={'enfrappe-ui-activity' + (selectedComponent.id === getActivityId(currentActivity) ? ' selected-component' : '')} id={getActivityId(currentActivity)} style={{height: containerHeight, width: containerWidth, background: getActivityData(currentActivity).background}}>
-            <div className={'enfrappe-ui-activitycontent'} id={getActivityId(currentActivity)}>
+        <div className={'enfrappe-ui-activity' + (selectedComponent.id === currentActivity ? ' selected-component' : '')} id={currentActivity} style={{height: containerHeight, width: containerWidth, background: getActivityData(currentActivity).background}}>
+            <div className={'enfrappe-ui-activitycontent'} id={currentActivity}>
                 {generateActivityComponents()}
                 <DnDSpace 
-                    id={getActivityId(currentActivity)} 
+                    id={currentActivity} 
                     className={'enfrappe-ui-activitydndspace'} 
                     centered={getActivityData(currentActivity)['children'].length === 0} 
-                    acceptedItems={componentCompatibility('activity')} 
+                    acceptedItems={componentCompatibility(UIItemTypes.ACTIVITY)} 
                     componentManager={componentManager}
                 />
             </div>

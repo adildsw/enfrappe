@@ -1,9 +1,9 @@
 import UIItemTypes from "./UIItemTypes";
 
 const componentCompatibility = (parentComponent) => {
-    if (parentComponent === 'activity')
+    if (parentComponent === UIItemTypes.ACTIVITY)
         return [UIItemTypes.SECTION];
-    else if (parentComponent === 'section')
+    else if (parentComponent === UIItemTypes.SECTION)
         return [UIItemTypes.NONE];
     else
         return [UIItemTypes.NONE];

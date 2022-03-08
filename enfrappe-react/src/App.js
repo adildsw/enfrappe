@@ -12,13 +12,13 @@ import AppDetails from './components/panels/AppDetails';
 
 import './App.css';
 
-import { DEFAULT_ACTIVITY_NAME } from './utils/DefaultComponentData';
+import { DEFAULT_ACTIVITY_ID } from './utils/DefaultComponentData';
 
 const App = () => {
 
     const appManager = useAppManager();
     const componentManager = useComponentManager();
-    const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_NAME);
+    const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_ID);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': UIItemTypes.NONE});
 
     const manageSelection = (selectedId, selectedClassNames) => {

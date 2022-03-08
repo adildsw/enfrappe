@@ -3,7 +3,7 @@ import { Form, Input, Label, Modal, Button, Icon, Header } from 'semantic-ui-rea
 import { SketchPicker } from 'react-color';
 
 import UIItemTypes from '../../utils/UIItemTypes';
-import { DEFAULT_ACTIVITY_NAME } from '../../utils/DefaultComponentData';
+import { DEFAULT_ACTIVITY_ID } from '../../utils/DefaultComponentData';
 
 const ActivityProperties = (props) => {
 
@@ -19,7 +19,8 @@ const ActivityProperties = (props) => {
 
     // Form validation for new activity name
     const validateActivityName = (newActivityName) => {
-        if (currentActivity === DEFAULT_ACTIVITY_NAME)
+        console.log(currentActivity);
+        if (currentActivity === DEFAULT_ACTIVITY_ID)
             setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Main activity cannot be renamed.'});
         else if (newActivityName === '' || newActivityName === undefined)
             setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Activity name cannot be empty.'});
@@ -67,13 +68,13 @@ const ActivityProperties = (props) => {
                             <Form.Field>
                                 <Label className={'tucked-label'}>New Activity Name</Label>
                                 <Form.Input 
-                                    placeholder='New Actvity Name'
+                                    placeholder='New Activity Name'
                                     onChange={(e, data) => { validateActivityName(data.value); }}
                                     error={!activityRenameState.valid && {
                                         content: activityRenameState.message,
                                         pointing: 'above',
-                                        }}
-                                        readOnly={currentActivity === DEFAULT_ACTIVITY_NAME} 
+                                    }}
+                                    readOnly={currentActivity === DEFAULT_ACTIVITY_ID} 
                                     fluid 
                                 />
                             </Form.Field>
@@ -93,7 +94,6 @@ const ActivityProperties = (props) => {
                                 if (activityRenameState.valid) {
                                     setActivityRenamerModalState(false);
                                     setActivityName(currentActivity, activityRenameState.name);
-                                    setCurrentActivity(activityRenameState.name);
                                 }
                             }} 
                         />
@@ -109,6 +109,7 @@ const ActivityProperties = (props) => {
                     action={{
                         icon: 'paint brush',
                         onClick: () => { setColorPickerDisplay(!colorPickerDisplay); },
+                        style: {'background': getActivityData(currentActivity).background, 'border': '1px solid #ccc'}
                     }}
                     placeholder='Background Color'
                     fluid
@@ -132,9 +133,9 @@ const ActivityProperties = (props) => {
                 labelPosition='left' 
                 color='red' 
                 content='Delete Activity' 
-                disabled={currentActivity === DEFAULT_ACTIVITY_NAME} 
+                disabled={currentActivity === DEFAULT_ACTIVITY_ID} 
                 onClick={() => { 
-                    if (currentActivity !== DEFAULT_ACTIVITY_NAME)
+                    if (currentActivity !== DEFAULT_ACTIVITY_ID)
                         setDeleteActivityModalState(true);
                 }} 
             />
@@ -153,10 +154,10 @@ const ActivityProperties = (props) => {
                     <Button basic icon='cancel' color='green' inverted onClick={() => { setDeleteActivityModalState(false); }} />
                     <Button icon='trash' color='red' content='Delete Activity' inverted onClick={() => {
                         setDeleteActivityModalState(false);
-                        const currentIdx = activityManager.getAllActivityNames().findIndex(activity => activity === currentActivity);
+                        const currentIdx = activityManager.getAllActivityIds().findIndex(activity => activity === currentActivity);
                         const prevIdx = currentIdx === 0 ? 0 : currentIdx - 1;
                         const activityToBeDeleted = currentActivity;
-                        setCurrentActivity(activityManager.getAllActivityNames()[prevIdx]);
+                        setCurrentActivity(activityManager.getAllActivityIds()[prevIdx]);
                         activityManager.deleteActivity(activityToBeDeleted);
                         setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
                     }} 
