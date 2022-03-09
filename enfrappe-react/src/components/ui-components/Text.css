@@ -1,0 +1,10 @@
+.enfrappe-ui-text {
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD;
+    opacity: 1;
+}
+
+.enfrappe-ui-text:hover {
+    border-color: #BBBBBB;
+}

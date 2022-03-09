@@ -1,0 +1,29 @@
+.enfrappe-ui-button {
+    display: grid;
+    place-content: center;
+    background: #CCCCCC;
+    opacity: 0.7;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD !important;
+}
+
+.enfrappe-ui-buttonstatic {
+    cursor: default !important;
+}
+
+.enfrappe-ui-buttonstatic:active {
+    pointer-events: none;
+}
+
+.enfrappe-ui-button:hover:not(.selected-component) {
+    border-color: #BBBBBB !important;
+}
+
+.enfrappe-ui-button:active:not(.enfrappe-ui-buttonstatic) {
+    opacity: 1;
+}
+
+.enfrappe-ui-button > h4 {
+    text-align: center;
+}

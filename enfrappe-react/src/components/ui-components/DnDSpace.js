@@ -1,19 +1,27 @@
 import { useDrop } from 'react-dnd';
 
-import UIItemTypes from '../../../utils/UIItemTypes';
+import UIItemTypes from '../../utils/UIItemTypes';
 
 import './DnDSpace.css';
 
 const DnDSpace = (props) => {
     const { id, className, acceptedItems, centered, componentManager } = props;
-    const { sectionManager } = componentManager;
+    const { sectionManager, buttonManager, textManager, inputManager, checkboxManager } = componentManager;
 
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
         accept: acceptedItems, 
         drop: (item) => {
-            if (item.type === UIItemTypes.SECTION) {
+            if (item.type === UIItemTypes.SECTION)
                 sectionManager.addSection(id);
-            }
+            else if (item.type === UIItemTypes.BUTTON)
+                buttonManager.addButton(id);
+            else if (item.type === UIItemTypes.TEXT)
+                textManager.addText(id);
+            else if (item.type === UIItemTypes.INPUT)
+                inputManager.addInput(id);
+            else if (item.type === UIItemTypes.CHECKBOX)
+                checkboxManager.addCheckbox(id);
+                
             return {'droppedOn': id};
         },
         collect: (monitor) => ({

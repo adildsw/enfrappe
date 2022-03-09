@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import './Activity.css';
 import Section from './Section';
-import DnDSpace from './ui-component-utils/DnDSpace';
-import componentCompatibility from '../../utils/ComponentCompatibility';
+import DnDSpace from './DnDSpace';
+import getComponentCompatibility from '../../utils/ComponentCompatibility';
 import UIItemTypes from '../../utils/UIItemTypes';
 
 const Activity = (props) => {
@@ -53,7 +53,7 @@ const Activity = (props) => {
                     id={currentActivity} 
                     className={'enfrappe-ui-activitydndspace'} 
                     centered={getActivityData(currentActivity)['children'].length === 0} 
-                    acceptedItems={componentCompatibility(UIItemTypes.ACTIVITY)} 
+                    acceptedItems={getComponentCompatibility(UIItemTypes.ACTIVITY)} 
                     componentManager={componentManager}
                 />
             </div>

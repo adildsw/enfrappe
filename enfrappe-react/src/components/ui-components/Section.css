@@ -1,5 +1,5 @@
 .enfrappe-ui-section {
-    background: #DDDDDD;
+    background: #EEEEEE;
     padding: 20px;
     border-radius: 10px;
     border: 2px solid #DDDDDD;
@@ -8,4 +8,9 @@
 
 .enfrappe-ui-section:hover {
     border-color: #BBBBBB;
+}
+
+.enfrappe-ui-section > div {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

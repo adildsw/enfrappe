@@ -2,6 +2,10 @@ import { useState } from 'react';
 
 import ActivityManager from './data-managers/ActivityManager';
 import SectionManager from './data-managers/SectionManager';
+import ButtonManager from './data-managers/ButtonManager';
+import TextManager from './data-managers/TextManager';
+import InputManager from './data-managers/InputManager';
+import CheckboxManager from './data-managers/CheckboxManager';
 
 import getDefaultComponentData from './DefaultComponentData';
 
@@ -25,6 +29,10 @@ const useComponentManager = () => {
 
     const activityManager = ActivityManager(componentData, setComponentData);
     const sectionManager = SectionManager(componentData, setComponentData);
+    const buttonManager = ButtonManager(componentData, setComponentData);
+    const textManager = TextManager(componentData, setComponentData);
+    const inputManager = InputManager(componentData, setComponentData);
+    const checkboxManager = CheckboxManager(componentData, setComponentData);
 
     const getComponent = (componentId) => {
         return componentData.components[componentId];
@@ -33,6 +41,10 @@ const useComponentManager = () => {
     return {
         activityManager,
         sectionManager,
+        buttonManager,
+        textManager,
+        inputManager,
+        checkboxManager,
         getComponent,
         componentData,
         setComponentData

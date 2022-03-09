@@ -22,11 +22,20 @@ const App = () => {
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': UIItemTypes.NONE});
 
     const manageSelection = (selectedId, selectedClassNames) => {
+        console.log(selectedClassNames);
         if (selectedClassNames.includes(UIItemTypes.UIID)) {
             if (selectedClassNames.includes(UIItemTypes.ACTIVITY))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.ACTIVITY});
             else if (selectedClassNames.includes(UIItemTypes.SECTION))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.SECTION});
+            else if (selectedClassNames.includes(UIItemTypes.BUTTON))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.BUTTON});
+            else if (selectedClassNames.includes(UIItemTypes.TEXT))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.TEXT});
+            else if (selectedClassNames.includes(UIItemTypes.INPUT))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.INPUT});
+            else if (selectedClassNames.includes(UIItemTypes.CHECKBOX))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.CHECKBOX});
             else
                 setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
         }

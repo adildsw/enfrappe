@@ -1,4 +1,4 @@
-import './DnDSpace.css';
+import '../DnDSpace.css';
 
 const DnDSpaceStatic = () => {
     return (

@@ -1,0 +1,18 @@
+.enfrappe-ui-input {
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD;
+    opacity: 1;
+}
+
+.enfrappe-ui-input:hover {
+    border-color: #BBBBBB;
+}
+
+.enfrappe-ui-inputstatic input {
+    cursor: default;
+}
+
+.enfrappe-ui-input:not(.enfrappe-ui-inputstatic) input {
+    cursor: pointer !important;
+}

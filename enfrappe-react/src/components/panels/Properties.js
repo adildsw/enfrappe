@@ -3,7 +3,11 @@ import { Divider } from 'semantic-ui-react';
 import UIItemTypes from '../../utils/UIItemTypes';
 import { getUIItemName } from '../../utils/UIItemTypes';
 import ActivityProperties from '../ui-component-properties/ActivityProperties';
+import ButtonProperties from '../ui-component-properties/ButtonProperties';
+import InputProperties from '../ui-component-properties/InputProperties';
 import SectionProperties from '../ui-component-properties/SectionProperties';
+import TextProperties from '../ui-component-properties/TextProperties';
+import CheckboxProperties from '../ui-component-properties/CheckboxProperties';
 
 import './Properties.css';
 
@@ -38,6 +42,38 @@ const Properties = (props) => {
                         <SectionProperties
                             activityManager={activityManager} 
                             sectionManager={sectionManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.BUTTON &&
+                        <ButtonProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.TEXT &&
+                        <TextProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.INPUT &&
+                        <InputProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.CHECKBOX &&
+                        <CheckboxProperties
+                            componentManager={componentManager}
                             selectedComponent={selectedComponent}
                             setSelectedComponent={setSelectedComponent}
                         />

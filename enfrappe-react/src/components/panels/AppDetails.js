@@ -243,7 +243,7 @@ const AppDetails = (props) => {
                     <Form.Field>
                         <Button.Group className={'centered-button-text'} vertical fluid>
                             <Button 
-                                icon='game' 
+                                icon='play' 
                                 labelPosition='left'
                                 content='Test Application'
                             />

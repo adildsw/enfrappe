@@ -1,9 +1,9 @@
 import { useDrag } from "react-dnd";
 
-import DnDSpaceStatic from "./ui-component-utils/DnDSpaceStatic";
-import UIItemTypes from "../../utils/UIItemTypes";
+import DnDSpaceStatic from "./DnDSpaceStatic";
+import UIItemTypes from "../../../utils/UIItemTypes";
 
-import './Section.css';
+import '../Section.css';
 
 const SectionStatic = () => {
     const [{ isDragging }, drag] = useDrag(() => ({

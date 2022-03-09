@@ -1,8 +1,14 @@
 const UIItemTypes = {
     UIID: 'enfrappe-ui-',
     NONE: 'none',
+    ACTIVITY: 'enfrappe-ui-activity',
     SECTION: 'enfrappe-ui-section',
-    ACTIVITY: 'enfrappe-ui-activity'
+    BUTTON: 'enfrappe-ui-button',
+    TEXT: 'enfrappe-ui-text',
+    INPUT: 'enfrappe-ui-input',
+    CHECKBOX: 'enfrappe-ui-checkbox',
+    RADIO: 'enfrappe-ui-radio',
+    DROPDOWN: 'enfrappe-ui-dropdown',
 }
 
 export const getUIItemName = (componentType) => {

@@ -1,0 +1,18 @@
+.enfrappe-ui-checkbox {
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD;
+    opacity: 1;
+}
+
+.enfrappe-ui-checkboxmain {
+    pointer-events: none;
+}
+
+.enfrappe-ui-checkboxmain > label {
+    color: inherit !important;
+}
+
+.enfrappe-ui-checkbox:hover {
+    border-color: #BBBBBB;
+}
