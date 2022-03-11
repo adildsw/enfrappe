@@ -2,8 +2,7 @@
     background: #EEEEEE;
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #DDDDDD;
-    opacity: 1;
+    border: 2px solid #DDDDDD00;
 }
 
 .enfrappe-ui-section:hover {

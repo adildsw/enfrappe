@@ -101,16 +101,6 @@ const Prototype = (props) => {
                                 disabled={setControlButtonState('next')} 
                                 onClick={() => { navigateToActivity('next'); }}
                             />
-                            
-                            {/* Test Button */}
-                            {/* <Button 
-                                icon='question' 
-                                onClick={() => { 
-                                    console.log(activityManager.getActivityData(DEFAULT_ACTIVITY_NAME));
-                                    setActivityName(DEFAULT_ACTIVITY_NAME, 'lmao this works?');
-                                    console.log("thy haven't give me a bidding master");
-                                }}
-                            /> */}
                         </Button.Group>
 
                         <Modal

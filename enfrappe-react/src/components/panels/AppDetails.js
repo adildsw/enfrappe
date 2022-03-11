@@ -9,7 +9,7 @@ import './AppDetails.css';
 import logo from '../../assets/logo.svg';
 
 const AppDetails = (props) => {
-    const { componentManager, appManager } = props;
+    const { componentManager, appManager, simulationState, setSimulationState } = props;
     const { getAppMetadata, setAppMetadata, appData, setAppData } = appManager;
     const { componentData, setComponentData } = componentManager;
 
@@ -106,6 +106,7 @@ const AppDetails = (props) => {
                                 else
                                     loadProject(getAppTemplate('EMPTY'));
                             }}
+                            disabled={simulationState}
                         />
                         <Button 
                             icon='folder open' 
@@ -117,6 +118,7 @@ const AppDetails = (props) => {
                                 else
                                     appLoadFileRef.current.click();
                             }}
+                            disabled={simulationState}
                         />
                         <input hidden type='file' accept='.enfrappe' id='file-input' ref={appLoadFileRef} onChange={loadProjectFromFile} />
                         <Button 
@@ -124,6 +126,7 @@ const AppDetails = (props) => {
                             data-tip='Save Application'
                             content='Save'
                             onClick={saveProject}
+                            disabled={simulationState}
                         />
                     </Button.Group>
 
@@ -161,6 +164,7 @@ const AppDetails = (props) => {
                                 onChange={(e, data) => { setAppMetadata('app-id', data.value); }}
                                 fluid
                                 value={getAppMetadata('app-id')}
+                                disabled={simulationState}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -170,6 +174,7 @@ const AppDetails = (props) => {
                                 fluid
                                 onChange={(e, data) => { setAppMetadata('app-version', data.value); }}
                                 value={getAppMetadata('app-version')}
+                                disabled={simulationState}
                             />
                         </Form.Field>
                     </Form.Group>
@@ -180,6 +185,7 @@ const AppDetails = (props) => {
                             fluid
                             onChange={(e, data) => { setAppMetadata('app-name', data.value); }}
                             value={getAppMetadata('app-name')}
+                            disabled={simulationState}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -190,7 +196,7 @@ const AppDetails = (props) => {
                                         <Checkbox 
                                             label='Single Use' 
                                             onChange={(e, data) => { setAppMetadata('single-use', data.checked); }}
-                                            disabled={getCheckboxState('single-use')}
+                                            disabled={getCheckboxState('single-use') || simulationState}
                                             checked={getAppMetadata('single-use')}
                                         />
                                     </Table.Cell>
@@ -198,7 +204,7 @@ const AppDetails = (props) => {
                                         <Checkbox 
                                             label='Location-Linked' 
                                             onChange={(e, data) => { setAppMetadata('location-linked', data.checked); }}
-                                            disabled={getCheckboxState('location-linked')}
+                                            disabled={getCheckboxState('location-linked') || simulationState}
                                             checked={getAppMetadata('location-linked')}
                                         />
                                     </Table.Cell>
@@ -206,7 +212,7 @@ const AppDetails = (props) => {
                                         <Checkbox 
                                             label='Notify User' 
                                             onChange={(e, data) => { setAppMetadata('notify-user', data.checked); }}
-                                            disabled={getCheckboxState('notify-user')}
+                                            disabled={getCheckboxState('notify-user') || simulationState}
                                             checked={getAppMetadata('notify-user')}
                                         />
                                     </Table.Cell>
@@ -222,6 +228,7 @@ const AppDetails = (props) => {
                                 fluid
                                 onChange={(e) => { setAppMetadata('server-address', e.target.value) }}
                                 value={getAppMetadata('server-address')}
+                                disabled={simulationState}
                             />
                         </Form.Field>
                         <Form.Field width={'6'}>
@@ -231,36 +238,44 @@ const AppDetails = (props) => {
                                 fluid
                                 onChange={(e) => { setAppMetadata('server-port', e.target.value) }}
                                 value={getAppMetadata('server-port')}
+                                disabled={simulationState}
                             />
                         </Form.Field>
                     </Form.Group>
-                    
-                    
                 </Form>
 
                 <Divider horizontal>Deployment</Divider>
                 <Form>
                     <Form.Field>
                         <Button.Group className={'centered-button-text'} vertical fluid>
-                            <Button 
-                                icon='play' 
+                        <Button 
+                                icon={simulationState ? 'stop' : 'play'}
                                 labelPosition='left'
-                                content='Test Application'
+                                color={simulationState ? 'red' : 'green'}
+                                content={simulationState ? 'Stop Simulation' : 'Start Simulation'}
+                                onClick={() => { setSimulationState(!simulationState); }}
                             />
+                        </Button.Group>
+                    </Form.Field>
+                    <Form.Field>
+                        <Button.Group className={'centered-button-text'} vertical fluid>
                             <Button 
                                 icon='eye' 
                                 labelPosition='left'
                                 content='View QR Code'
+                                disabled={simulationState}
                             />
                             <Button 
                                 icon='print' 
                                 labelPosition='left'
                                 content='Print QR Code'
+                                disabled={simulationState}
                             />
                             <Button 
                                 icon='download' 
                                 labelPosition='left'
                                 content='Download Application Package'
+                                disabled={simulationState}
                             />
                         </Button.Group>
                     </Form.Field>
@@ -271,6 +286,7 @@ const AppDetails = (props) => {
                                 icon='cogs' 
                                 labelPosition='left'
                                 content='Generate Backend Server'
+                                disabled={simulationState}
                             />
                         </Button.Group>
                     </Form.Field>

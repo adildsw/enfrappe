@@ -1,8 +1,14 @@
 import * as deepcopy from 'deepcopy';
+import nextId from 'react-id-generator';
+
 import UIItemTypes from './UIItemTypes';
 
 export const DEFAULT_ACTIVITY_NAME = 'Main Activity';
 export const DEFAULT_ACTIVITY_ID = 'main-activity';
+
+const RADIO_DEFAULT_OPTIONA_ID = nextId();
+const RADIO_DEFAULT_OPTIONB_ID = nextId();
+const DROPDOWN_DEFAULT_OPTION_ID = nextId();
 
 const DefaultComponentData = {
     [UIItemTypes.ACTIVITY]: {
@@ -59,7 +65,11 @@ const DefaultComponentData = {
         'type': UIItemTypes.RADIO,
         'id': '',
         'label': 'Label',
-        'options': [],
+        'option-ids': [RADIO_DEFAULT_OPTIONA_ID, RADIO_DEFAULT_OPTIONB_ID],
+        'options': {
+            [RADIO_DEFAULT_OPTIONA_ID]: {'value': 'A', 'label': 'Option A'}, 
+            [RADIO_DEFAULT_OPTIONB_ID]: {'value': 'B', 'label': 'Option B'}, 
+        },
         'text-color': '#000000',
         'parent': '',
     },
@@ -67,7 +77,10 @@ const DefaultComponentData = {
         'type': UIItemTypes.DROPDOWN,
         'id': '',
         'label': 'Label',
-        'options': [],
+        'option-ids': [DROPDOWN_DEFAULT_OPTION_ID],
+        'options': {
+            [DROPDOWN_DEFAULT_OPTION_ID]: {'value': 'A', 'label': 'Option A'}
+        },
         'text-color': '#000000',
         'parent': '',
     },

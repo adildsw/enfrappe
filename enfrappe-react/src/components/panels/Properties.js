@@ -8,6 +8,8 @@ import InputProperties from '../ui-component-properties/InputProperties';
 import SectionProperties from '../ui-component-properties/SectionProperties';
 import TextProperties from '../ui-component-properties/TextProperties';
 import CheckboxProperties from '../ui-component-properties/CheckboxProperties';
+import RadioProperties from '../ui-component-properties/RadioProperties';
+import DropdownProperties from '../ui-component-properties/DropdownProperties';
 
 import './Properties.css';
 
@@ -73,6 +75,22 @@ const Properties = (props) => {
                     {
                         selectedComponent.type === UIItemTypes.CHECKBOX &&
                         <CheckboxProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.RADIO &&
+                        <RadioProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.DROPDOWN &&
+                        <DropdownProperties
                             componentManager={componentManager}
                             selectedComponent={selectedComponent}
                             setSelectedComponent={setSelectedComponent}

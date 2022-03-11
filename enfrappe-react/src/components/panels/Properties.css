@@ -11,3 +11,7 @@
 #properties-no-component h1 {
     margin-bottom: 0;
 }
+
+.properties-id {
+    cursor: not-allowed !important;
+}

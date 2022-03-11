@@ -3,6 +3,7 @@ import Button from "./Button";
 import Text from "./Text";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
+import Radio from "./Radio";
 
 import DnDSpace from "./DnDSpace";
 import UIItemTypes from "../../utils/UIItemTypes";
@@ -10,6 +11,7 @@ import UIItemTypes from "../../utils/UIItemTypes";
 import getComponentCompatibility from "../../utils/ComponentCompatibility";
 
 import './Section.css';
+import Dropdown from "./Dropdown";
 
 const Section = (props) => {
     const { selectedComponent, componentManager, componentId } = props;
@@ -35,6 +37,14 @@ const Section = (props) => {
             else if (childData.type === UIItemTypes.CHECKBOX)
                 sectionComponents.push(
                     <Checkbox key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
+                );
+            else if (childData.type === UIItemTypes.RADIO)
+                sectionComponents.push(
+                    <Radio key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
+                );
+            else if (childData.type === UIItemTypes.DROPDOWN)
+                sectionComponents.push(
+                    <Dropdown key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
                 );
 
         });

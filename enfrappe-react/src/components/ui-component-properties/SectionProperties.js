@@ -13,7 +13,7 @@ const SectionProperties = (props) => {
 
     const [deleteSectionModalState, setDeleteSectionModalState] = useState(false);
 
-    const setMoveSectionButtonState = (buttonId) => {
+    const getMoveSectionButtonState = (buttonId) => {
         const parentId = sectionData.parent;
         const index = activityManager.getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
@@ -104,7 +104,7 @@ const SectionProperties = (props) => {
                     labelPosition='left' 
                     content='Move Section Up' 
                     onClick={() => { shiftSectionUp(selectedComponent.id); }} 
-                    disabled={!setMoveSectionButtonState('moveUp')}
+                    disabled={!getMoveSectionButtonState('moveUp')}
                 />
                 <Button 
                     type='button'
@@ -112,7 +112,7 @@ const SectionProperties = (props) => {
                     labelPosition='left' 
                     content='Move Section Down' 
                     onClick={() => { shiftSectionDown(selectedComponent.id); }} 
-                    disabled={!setMoveSectionButtonState('moveDown')}
+                    disabled={!getMoveSectionButtonState('moveDown')}
                 />
                 </Button.Group>
             </Form.Field>

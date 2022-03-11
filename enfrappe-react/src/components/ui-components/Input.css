@@ -1,8 +1,20 @@
 .enfrappe-ui-input {
-    padding: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
     border-radius: 5px;
-    border: 2px solid #DDDDDD;
+    border: 2px solid #DDDDDD00;
     opacity: 1;
+}
+
+.enfrappe-ui-inputmain {
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: inherit !important;
+}
+
+.enfrappe-ui-inputmaindiv {
+    background: transparent;
 }
 
 .enfrappe-ui-input:hover {

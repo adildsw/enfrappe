@@ -15,7 +15,7 @@
     overflow-x: hidden;
 }
 
-#panel-prototype {
+#panel-prototype, #panel-simulation {
     position: relative;
     clip-path: inset(0px);
     background-image: url('./assets/grid_bg.png');
@@ -51,8 +51,30 @@
     border-color: #323232 !important; 
 }
 
+.selected-component-option {
+    background: #F2F2F2 !important;
+}
+
+.component-option {
+    border-radius: 5px;
+    padding: 5px !important;
+}
+
+.component-option:hover {
+    border-radius: 5px;
+    padding: 5px !important;
+    background: #F8F8F8;
+}
+
 .tucked-label {
-    margin-bottom: -4px !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+    margin-bottom: -2px !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.tucked-label-compat {
+    margin-top: 0px !important;
 }
 
 .color-picker-cover {

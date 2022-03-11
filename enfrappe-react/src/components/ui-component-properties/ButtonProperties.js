@@ -15,7 +15,7 @@ const ButtonProperties = (props) => {
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
 
-    const setMoveButtonButtonState = (buttonId) => {
+    const getMoveButtonButtonState = (buttonId) => {
         const parentId = buttonData.parent;
         const index = activityManager.getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
@@ -98,7 +98,7 @@ const ButtonProperties = (props) => {
                         labelPosition='left' 
                         content='Move Button Up' 
                         onClick={() => { shiftButtonUp(selectedComponent.id); }} 
-                        disabled={!setMoveButtonButtonState('moveUp')}
+                        disabled={!getMoveButtonButtonState('moveUp')}
                     />
                     <Button 
                         type='button'
@@ -106,7 +106,7 @@ const ButtonProperties = (props) => {
                         labelPosition='left' 
                         content='Move Button Down' 
                         onClick={() => { shiftButtonDown(selectedComponent.id); }} 
-                        disabled={!setMoveButtonButtonState('moveDown')}
+                        disabled={!getMoveButtonButtonState('moveDown')}
                     />
                 </Button.Group>
             </Form.Field>

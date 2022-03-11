@@ -20,9 +20,9 @@ const App = () => {
     const componentManager = useComponentManager();
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_ID);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': UIItemTypes.NONE});
+    const [simulationState, setSimulationState] = useState(false);
 
     const manageSelection = (selectedId, selectedClassNames) => {
-        console.log(selectedClassNames);
         if (selectedClassNames.includes(UIItemTypes.UIID)) {
             if (selectedClassNames.includes(UIItemTypes.ACTIVITY))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.ACTIVITY});
@@ -36,12 +36,15 @@ const App = () => {
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.INPUT});
             else if (selectedClassNames.includes(UIItemTypes.CHECKBOX))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.CHECKBOX});
+            else if (selectedClassNames.includes(UIItemTypes.RADIO))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.RADIO});
+            else if (selectedClassNames.includes(UIItemTypes.DROPDOWN))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.DROPDOWN});
             else
                 setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
         }
-        else {
+        else 
             setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
-        }
     }
 
     return (
@@ -69,7 +72,12 @@ const App = () => {
                     />
                 </Grid.Column>
                 <Grid.Column width={4} id='panel-appdetails' className={'fullscreen-div'}>
-                    <AppDetails appManager={appManager} componentManager={componentManager}/>
+                    <AppDetails 
+                        appManager={appManager} 
+                        componentManager={componentManager} 
+                        simulationState={simulationState} 
+                        setSimulationState={setSimulationState}
+                    />
                 </Grid.Column>
             </Grid.Row>
         </Grid>

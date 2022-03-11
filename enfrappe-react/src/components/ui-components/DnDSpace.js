@@ -6,7 +6,7 @@ import './DnDSpace.css';
 
 const DnDSpace = (props) => {
     const { id, className, acceptedItems, centered, componentManager } = props;
-    const { sectionManager, buttonManager, textManager, inputManager, checkboxManager } = componentManager;
+    const { sectionManager, buttonManager, textManager, inputManager, checkboxManager, radioManager, dropdownManager } = componentManager;
 
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
         accept: acceptedItems, 
@@ -21,6 +21,10 @@ const DnDSpace = (props) => {
                 inputManager.addInput(id);
             else if (item.type === UIItemTypes.CHECKBOX)
                 checkboxManager.addCheckbox(id);
+            else if (item.type === UIItemTypes.RADIO)
+                radioManager.addRadio(id);
+            else if (item.type === UIItemTypes.DROPDOWN)
+                dropdownManager.addDropdown(id);
                 
             return {'droppedOn': id};
         },

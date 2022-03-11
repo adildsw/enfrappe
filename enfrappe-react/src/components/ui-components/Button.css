@@ -3,9 +3,8 @@
     place-content: center;
     background: #CCCCCC;
     opacity: 0.7;
-    padding: 10px;
     border-radius: 5px;
-    border: 2px solid #DDDDDD !important;
+    border: 2px solid #DDDDDD00 !important;
 }
 
 .enfrappe-ui-buttonstatic {

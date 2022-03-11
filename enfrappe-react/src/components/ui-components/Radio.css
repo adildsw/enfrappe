@@ -1,4 +1,4 @@
-.enfrappe-ui-checkbox {
+.enfrappe-ui-radio {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 2px;
@@ -8,14 +8,18 @@
     opacity: 1;
 }
 
-.enfrappe-ui-checkboxmain {
+.enfrappe-ui-radiosegment {
+    background: rgba(255, 255, 255, 0.7) !important;
+}
+
+.enfrappe-ui-radiomain {
     pointer-events: none;
 }
 
-.enfrappe-ui-checkboxmain > label {
+.enfrappe-ui-radiooption label {
     color: inherit !important;
 }
 
-.enfrappe-ui-checkbox:hover {
+.enfrappe-ui-radio:hover {
     border-color: #BBBBBB;
 }

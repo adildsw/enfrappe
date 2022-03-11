@@ -8,13 +8,13 @@ const CheckboxProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, checkboxManager } = componentManager;
     const { deleteCheckbox, setCheckboxLabel, setCheckboxTextColor, shiftCheckboxDown, shiftCheckboxUp } = checkboxManager;
-    const checkboxData = checkboxManager.getCheckboxData(selectedComponent.id);
+    const checkboxData = componentManager.getComponent(selectedComponent.id);
 
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
 
-    const setMoveCheckboxButtonState = (buttonId) => {
+    const getMoveCheckboxButtonState = (buttonId) => {
         const parentId = checkboxData.parent;
         const index = activityManager.getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
@@ -29,12 +29,12 @@ const CheckboxProperties = (props) => {
 
     return (
         <Form>
-            <Form.Field>
-                <Label className={'tucked-label'} color={'orange'}>ID</Label>
+            <Form.Field className={'properties-id'}>
+                <Label className={'tucked-label'} color={'grey'}>ID</Label>
                 <Input
                     value={checkboxData.id}
                     readOnly
-                    style={{ 'pointerEvents': 'none', 'userSelect': 'none' }}
+                    style={{ 'pointerEvents': 'none', 'userSelect': 'none'}}
                 />
             </Form.Field>
             <Form.Field>
@@ -79,7 +79,7 @@ const CheckboxProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Up' 
                         onClick={() => { shiftCheckboxUp(checkboxData.id); }} 
-                        disabled={!setMoveCheckboxButtonState('moveUp')}
+                        disabled={!getMoveCheckboxButtonState('moveUp')}
                     />
                     <Button 
                         type='button'
@@ -87,7 +87,7 @@ const CheckboxProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Down' 
                         onClick={() => { shiftCheckboxDown(checkboxData.id); }} 
-                        disabled={!setMoveCheckboxButtonState('moveDown')}
+                        disabled={!getMoveCheckboxButtonState('moveDown')}
                     />
                 </Button.Group>
             </Form.Field>

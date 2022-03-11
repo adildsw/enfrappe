@@ -14,7 +14,7 @@ const TextProperties = (props) => {
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
 
-    const setMoveTextButtonState = (buttonId) => {
+    const getMoveTextButtonState = (buttonId) => {
         const parentId = textData.parent;
         const index = activityManager.getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
@@ -96,7 +96,7 @@ const TextProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Up' 
                         onClick={() => { shiftTextUp(textData.id); }} 
-                        disabled={!setMoveTextButtonState('moveUp')}
+                        disabled={!getMoveTextButtonState('moveUp')}
                     />
                     <Button 
                         type='button'
@@ -104,7 +104,7 @@ const TextProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Down' 
                         onClick={() => { shiftTextDown(textData.id); }} 
-                        disabled={!setMoveTextButtonState('moveDown')}
+                        disabled={!getMoveTextButtonState('moveDown')}
                     />
                 </Button.Group>
             </Form.Field>

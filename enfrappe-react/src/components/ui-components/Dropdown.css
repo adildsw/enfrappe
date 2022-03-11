@@ -1,4 +1,4 @@
-.enfrappe-ui-checkbox {
+.enfrappe-ui-dropdown {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 2px;
@@ -8,14 +8,12 @@
     opacity: 1;
 }
 
-.enfrappe-ui-checkboxmain {
+.enfrappe-ui-dropdownmain {
+    background: rgba(255, 255, 255, 0.7) !important;
+    color: inherit !important;   
     pointer-events: none;
 }
 
-.enfrappe-ui-checkboxmain > label {
-    color: inherit !important;
-}
-
-.enfrappe-ui-checkbox:hover {
+.enfrappe-ui-dropdown:hover {
     border-color: #BBBBBB;
 }

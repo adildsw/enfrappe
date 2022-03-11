@@ -14,7 +14,7 @@ const InputProperties = (props) => {
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
 
-    const setMoveInputButtonState = (buttonId) => {
+    const getMoveInputButtonState = (buttonId) => {
         const parentId = inputData.parent;
         const index = activityManager.getActivityData(parentId).children.indexOf(selectedComponent.id);
         if (buttonId === 'moveUp') {
@@ -29,8 +29,8 @@ const InputProperties = (props) => {
 
     return (
         <Form>
-            <Form.Field>
-                <Label className={'tucked-label'} color={'orange'}>ID</Label>
+            <Form.Field className={'properties-id'}>
+                <Label className={'tucked-label'} color={'grey'}>ID</Label>
                 <Input
                     value={inputData.id}
                     readOnly
@@ -88,7 +88,7 @@ const InputProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Up' 
                         onClick={() => { shiftInputUp(inputData.id); }} 
-                        disabled={!setMoveInputButtonState('moveUp')}
+                        disabled={!getMoveInputButtonState('moveUp')}
                     />
                     <Button 
                         type='button'
@@ -96,7 +96,7 @@ const InputProperties = (props) => {
                         labelPosition='left' 
                         content='Move Text Down' 
                         onClick={() => { shiftInputDown(inputData.id); }} 
-                        disabled={!setMoveInputButtonState('moveDown')}
+                        disabled={!getMoveInputButtonState('moveDown')}
                     />
                 </Button.Group>
             </Form.Field>

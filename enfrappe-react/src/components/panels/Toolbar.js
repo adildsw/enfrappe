@@ -11,6 +11,8 @@ import UIItemTypes from '../../utils/UIItemTypes';
 import getComponentCompatibility from '../../utils/ComponentCompatibility';
 
 import './Toolbar.css';
+import RadioStatic from '../ui-components/ui-static-components/RadioStatic';
+import DropdownStatic from '../ui-components/ui-static-components/DropdownStatic';
 
 const Toolbar = (props) => {
 
@@ -46,6 +48,10 @@ const Toolbar = (props) => {
                         toolbarComponents.push(<InputStatic key={component} />)
                     else if (component === UIItemTypes.CHECKBOX)
                         toolbarComponents.push(<CheckboxStatic key={component} />)
+                    else if (component === UIItemTypes.RADIO)
+                        toolbarComponents.push(<RadioStatic key={component} />)
+                    else if (component === UIItemTypes.DROPDOWN)
+                        toolbarComponents.push(<DropdownStatic key={component} />)
                 });
 
                 return (

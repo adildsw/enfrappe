@@ -6,6 +6,8 @@ import ButtonManager from './data-managers/ButtonManager';
 import TextManager from './data-managers/TextManager';
 import InputManager from './data-managers/InputManager';
 import CheckboxManager from './data-managers/CheckboxManager';
+import RadioManager from './data-managers/RadioManager';
+import DropdownManager from './data-managers/DropdownManager';
 
 import getDefaultComponentData from './DefaultComponentData';
 
@@ -33,6 +35,8 @@ const useComponentManager = () => {
     const textManager = TextManager(componentData, setComponentData);
     const inputManager = InputManager(componentData, setComponentData);
     const checkboxManager = CheckboxManager(componentData, setComponentData);
+    const radioManager = RadioManager(componentData, setComponentData);
+    const dropdownManager = DropdownManager(componentData, setComponentData);
 
     const getComponent = (componentId) => {
         return componentData.components[componentId];
@@ -45,6 +49,8 @@ const useComponentManager = () => {
         textManager,
         inputManager,
         checkboxManager,
+        radioManager,
+        dropdownManager,
         getComponent,
         componentData,
         setComponentData
