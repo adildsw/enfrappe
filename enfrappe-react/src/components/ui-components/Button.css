@@ -1,10 +1,15 @@
-.enfrappe-ui-button {
+.enfrappe-ui-button, .enfrappe-ui-buttonlive {
+    position: relative;
     display: grid;
     place-content: center;
     background: #CCCCCC;
     opacity: 0.7;
     border-radius: 5px;
     border: 2px solid #DDDDDD00 !important;
+}
+
+.enfrappe-ui-button h4 {
+    -webkit-font-smoothing: antialiased !important;
 }
 
 .enfrappe-ui-buttonstatic {
@@ -19,10 +24,10 @@
     border-color: #BBBBBB !important;
 }
 
-.enfrappe-ui-button:active:not(.enfrappe-ui-buttonstatic) {
-    opacity: 1;
-}
-
 .enfrappe-ui-button > h4 {
     text-align: center;
+}
+
+.enfrappe-ui-buttonlive:active {
+    opacity: 1;
 }

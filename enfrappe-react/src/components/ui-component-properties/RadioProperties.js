@@ -7,7 +7,7 @@ import UIItemTypes from "../../utils/UIItemTypes";
 const RadioProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, radioManager } = componentManager;
-    const { deleteRadio, setRadioLabel, setRadioTextColor, shiftRadioUp, shiftRadioDown, addRadioOption, deleteRadioOption, editRadioOption, shiftRadioOptionUp, shiftRadioOptionDown, findOptionLabel, findOptionValue } = radioManager;
+    const { deleteRadio, setRadioLabel, setRadioTextColor, shiftRadioUp, shiftRadioDown, addRadioOption, deleteRadioOption, editRadioOption, shiftRadioOptionUp, shiftRadioOptionDown, findOptionLabel, findOptionValue, setRadioName } = radioManager;
     const radioData = componentManager.getComponent(selectedComponent.id);
 
     const [selectedOption, setSelectedOption] = useState(null);
@@ -20,6 +20,10 @@ const RadioProperties = (props) => {
     const [addOptionModalState, setAddOptionModalState] = useState(false);
     const [editOptionModalState, setEditOptionModalState] = useState(false);
     const [optionValidationState, setOptionValidationState] = useState({'label': '', 'label-valid': false, 'label-message': 'Label cannot be empty.', 'value': '', 'value-valid': false, 'value-message': 'Value cannot be empty.'});
+
+    const [userInputRenamerModalState, setUserInputRenamerModalState] = useState(false);
+    const [userInputRenameState, setUserInputRenameState] = useState({'name': '', 'valid': false, 'message': 'Component name cannot be empty.'});
+    const [newName, setNewName] = useState('');
 
     const getMoveRadioButtonState = (buttonId) => {
         const parentId = radioData.parent;
@@ -53,6 +57,22 @@ const RadioProperties = (props) => {
         if (radioData['option-ids'].length < 3) return false;
         else return true;
     }
+
+    // Form validation for new user-input name
+    const validateUserInputName = (newUserInputName) => {
+        const currentUserInputName = radioData.name;
+        if (newUserInputName === '' || newUserInputName === undefined)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot be empty.'});
+        else if (newUserInputName.charAt(0).match(/[0-9]/) !== null)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot start with a number.'});
+        else if (componentManager.getAllUserInputComponentNames().includes(newUserInputName))
+            if (newUserInputName === currentUserInputName)
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'The new component name cannot be the same as the old one.'});
+            else
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name already exists.'});
+        else
+            setUserInputRenameState({'name': newUserInputName, 'valid': true, 'message': ''});
+    };
 
     const validateOption = (label, value, type) => {
         const newOptionValidationState = {...optionValidationState};
@@ -144,13 +164,75 @@ const RadioProperties = (props) => {
 
     return (
         <Form>
-            <Form.Field className={'properties-id'}>
-                <Label className={'tucked-label'} color={'grey'}>ID</Label>
+            <Form.Field>
+                <Label className={'tucked-label'} color={'grey'}>Name</Label>
                 <Input
-                    value={radioData.id}
+                    className={'button-based-input-only'}
+                    value={radioData.name}
+                    action={{
+                        icon: 'pencil',
+                        onClick: () => { 
+                            validateUserInputName(); 
+                            setUserInputRenamerModalState(true); 
+                        },
+                    }}
                     readOnly
-                    style={{ 'pointerEvents': 'none', 'userSelect': 'none' }}
                 />
+                <Modal
+                    size={'tiny'}
+                    open={userInputRenamerModalState}
+                    onClose={() => { setUserInputRenamerModalState(false); }}>
+                    <Header icon='pencil' content='Rename Component' />
+                    <Modal.Content>
+                        <Form>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>Current Component Name</Label>
+                                <Input 
+                                    className={'button-based-input-only'}
+                                    value={radioData.name}
+                                    placeholder='Current Component Name'
+                                    fluid
+                                    readOnly 
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>New Component Name</Label>
+                                <Form.Input 
+                                    placeholder='New Component Name'
+                                    value={newName}
+                                    onChange={(e, data) => { 
+                                        const newUserInputName = data.value.replace(/[^a-zA-Z0-9_]/g, '');
+                                        setNewName(newUserInputName);
+                                        validateUserInputName(newUserInputName); 
+                                    }}
+                                    error={!userInputRenameState.valid && {
+                                        content: userInputRenameState.message,
+                                        pointing: 'above',
+                                    }}
+                                    fluid 
+                                />
+                            </Form.Field>
+                        </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button 
+                            icon='cancel' 
+                            onClick={() => { setUserInputRenamerModalState(false); }} 
+                        />
+                        <Button 
+                            icon='check'
+                            content='Confirm Changes'
+                            labelPosition='right' 
+                            disabled={!userInputRenameState.valid} 
+                            onClick={() => { 
+                                if (userInputRenameState.valid) {
+                                    setUserInputRenamerModalState(false);
+                                    setRadioName(radioData.id, userInputRenameState.name);
+                                }
+                            }} 
+                        />
+                    </Modal.Actions>
+                </Modal>
             </Form.Field>
             <Form.Field>
                 <Label className={'tucked-label'}>Radio Group Label</Label>

@@ -25,12 +25,11 @@ const TemplateManager = {
                     'id': DEFAULT_ACTIVITY_ID,
                     'name': DEFAULT_ACTIVITY_NAME,
                     'background': '#ffffff',
-                    'components': []
+                    'children': []
                 }
             }
         }
-
-    }
+    },
 }
 
 const getAppTemplate = (type) => {

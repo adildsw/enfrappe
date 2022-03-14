@@ -6,10 +6,13 @@
     background: white;
     border: 2px solid #DDDDDD;
     border-radius: 20px;
+}
+
+.enfrappe-ui-activity:not(.enfrappe-ui-activitylive) {
     cursor: pointer;
 }
 
-.enfrappe-ui-activity:hover {
+.enfrappe-ui-activity:hover:not(.enfrappe-ui-activitylive) {
     border-color: #BBBBBB;
 }
 

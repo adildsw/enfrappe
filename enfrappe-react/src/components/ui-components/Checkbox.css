@@ -5,7 +5,6 @@
     padding-right: 2px;
     border-radius: 5px;
     border: 2px solid #DDDDDD00;
-    opacity: 1;
 }
 
 .enfrappe-ui-checkboxmain {
@@ -18,4 +17,17 @@
 
 .enfrappe-ui-checkbox:hover {
     border-color: #BBBBBB;
+}
+
+.enfrappe-ui-checkboxlive {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD00;
+}
+
+.enfrappe-ui-checkboxlive > label {
+    color: inherit !important;
 }

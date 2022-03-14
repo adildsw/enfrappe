@@ -14,6 +14,7 @@ const RadioManager = (componentData, setComponentData) => {
         }
         newComponentData.components[newId] = getDefaultComponentData(UIItemTypes.RADIO);
         newComponentData.components[newId]['id'] = newId;
+        newComponentData.components[newId]['name'] = newId;
         newComponentData.components[newId]['parent'] = parentId;
         newComponentData.components[parentId]['children'].push(newId);
         setComponentData(newComponentData);
@@ -60,6 +61,15 @@ const RadioManager = (componentData, setComponentData) => {
 
     const getRadioData = (radioId) => {
         return componentData.components[radioId];
+    }
+
+    const setRadioName = (radioId, name) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[radioId]['name'] = name;
+        setComponentData(newComponentData);
     }
 
     const setRadioLabel = (radioId, label) => {
@@ -166,6 +176,7 @@ const RadioManager = (componentData, setComponentData) => {
         addRadio,
         deleteRadio,
         getRadioData,
+        setRadioName,
         setRadioLabel,
         setRadioTextColor,
         shiftRadioUp,

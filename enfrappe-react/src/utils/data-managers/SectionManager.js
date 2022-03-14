@@ -26,6 +26,12 @@ const SectionManager = (componentData, setComponentData) => {
         }
         const parentId = newComponentData.components[sectionId]['parent'];
         newComponentData.components[parentId]['children'] = newComponentData.components[parentId]['children'].filter(childId => childId !== sectionId);
+
+        // Deleting child components
+        newComponentData.components[sectionId].children.forEach(childId => {
+            delete newComponentData.components[childId];
+        });
+
         delete newComponentData.components[sectionId];
         setComponentData(newComponentData);
     }

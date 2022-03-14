@@ -3,27 +3,37 @@ import { Grid } from 'semantic-ui-react';
 
 import useComponentManager from './utils/useComponentManager';
 import useAppManager from './utils/useAppManager';
+import useLiveDataManager from './utils/useLiveDataManager';
+
 import UIItemTypes from './utils/UIItemTypes';
 
 import Toolbar from './components/panels/Toolbar';
 import Properties from './components/panels/Properties';
 import Prototype from './components/panels/Prototype';
 import AppDetails from './components/panels/AppDetails';
+import Simulation from './components/panels/Simulation';
 
 import './App.css';
 
 import { DEFAULT_ACTIVITY_ID } from './utils/DefaultComponentData';
 
-const App = () => {
+/**
+ * Bug List
+ * - Text elements become blurry upon hover when all the components are added to a section
+ * - Adding elements to a loaded app breaks the app [Workaround: start and stop simulation after loading]
+ * - Unsaved changes not checking properly [Workaround: notify user of unsaved changes regardless of whether there are unsaved changes]
+ */
 
+const App = () => {
     const appManager = useAppManager();
     const componentManager = useComponentManager();
+    const liveDataManager = useLiveDataManager(componentManager);
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_ID);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': UIItemTypes.NONE});
     const [simulationState, setSimulationState] = useState(false);
 
     const manageSelection = (selectedId, selectedClassNames) => {
-        if (selectedClassNames.includes(UIItemTypes.UIID)) {
+        if (selectedClassNames.includes(UIItemTypes.UIID) && !simulationState) {
             if (selectedClassNames.includes(UIItemTypes.ACTIVITY))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.ACTIVITY});
             else if (selectedClassNames.includes(UIItemTypes.SECTION))
@@ -63,13 +73,23 @@ const App = () => {
                     />
                 </Grid.Column>
                 <Grid.Column width={6} className={'fullscreen-div'} id='panel-prototype' onClick={(e) => { manageSelection(e.target.id, e.target.className) }}>
-                    <Prototype 
-                        componentManager={componentManager}
-                        currentActivity={currentActivity} 
-                        setCurrentActivity={setCurrentActivity} 
-                        selectedComponent={selectedComponent} 
-                        setSelectedComponent={setSelectedComponent} 
-                    />
+                    {simulationState ? 
+                        <Simulation 
+                            appManager={appManager} 
+                            componentManager={componentManager}
+                            currentActivity={currentActivity} 
+                            setCurrentActivity={setCurrentActivity} 
+                            liveData={liveDataManager.liveData}
+                            updateLiveData={liveDataManager.updateLiveData}
+                        /> : 
+                        <Prototype 
+                            componentManager={componentManager}
+                            currentActivity={currentActivity} 
+                            setCurrentActivity={setCurrentActivity} 
+                            selectedComponent={selectedComponent} 
+                            setSelectedComponent={setSelectedComponent} 
+                        />
+                    }
                 </Grid.Column>
                 <Grid.Column width={4} id='panel-appdetails' className={'fullscreen-div'}>
                     <AppDetails 
@@ -77,6 +97,9 @@ const App = () => {
                         componentManager={componentManager} 
                         simulationState={simulationState} 
                         setSimulationState={setSimulationState}
+                        setCurrentActivity={setCurrentActivity}
+                        setSelectedComponent={setSelectedComponent}
+                        resetLiveData={liveDataManager.resetLiveData}
                     />
                 </Grid.Column>
             </Grid.Row>

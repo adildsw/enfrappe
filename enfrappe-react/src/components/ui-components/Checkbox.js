@@ -7,7 +7,7 @@ const Checkbox = (props) => {
     return (
         <div>
             <div id={checkboxData.id} className={'enfrappe-ui-checkbox' + (selectedComponent.id === checkboxData.id ? ' selected-component' : '')}>
-                <SemanticCheckbox id={checkboxData.id} className={'enfrappe-ui-checkboxmain'} label={checkboxData.label} style={{'color': checkboxData['text-color']}} readOnly checked />
+                <SemanticCheckbox id={checkboxData.id} className={'enfrappe-ui-checkboxmain'} label={checkboxData.label} style={{'color': checkboxData['text-color']}} readOnly />
             </div>
         </div>
     );

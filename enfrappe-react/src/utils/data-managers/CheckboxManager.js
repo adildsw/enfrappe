@@ -14,6 +14,7 @@ const CheckboxManager = (componentData, setComponentData) => {
         }
         newComponentData.components[newId] = getDefaultComponentData(UIItemTypes.CHECKBOX);
         newComponentData.components[newId]['id'] = newId;
+        newComponentData.components[newId]['name'] = newId;
         newComponentData.components[newId]['parent'] = parentId;
         newComponentData.components[parentId]['children'].push(newId);
         setComponentData(newComponentData);
@@ -62,6 +63,15 @@ const CheckboxManager = (componentData, setComponentData) => {
         return componentData.components[checkboxId];
     }
 
+    const setCheckboxName = (checkboxId, name) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[checkboxId]['name'] = name;
+        setComponentData(newComponentData);
+    }
+
     const setCheckboxLabel = (checkboxId, value) => {
         const newComponentData = {
             ...componentData,
@@ -84,6 +94,7 @@ const CheckboxManager = (componentData, setComponentData) => {
         addCheckbox,
         deleteCheckbox,
         getCheckboxData,
+        setCheckboxName,
         setCheckboxLabel,
         setCheckboxTextColor,
         shiftCheckboxUp,

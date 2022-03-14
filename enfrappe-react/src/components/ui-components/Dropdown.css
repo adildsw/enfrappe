@@ -1,17 +1,29 @@
-.enfrappe-ui-dropdown {
+.enfrappe-ui-dropdown, .enfrappe-ui-dropdownlive {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 2px;
     padding-right: 2px;
     border-radius: 5px;
     border: 2px solid #DDDDDD00;
-    opacity: 1;
 }
 
 .enfrappe-ui-dropdownmain {
     background: rgba(255, 255, 255, 0.7) !important;
     color: inherit !important;   
     pointer-events: none;
+}
+
+.enfrappe-ui-dropdownmainlive {
+    background: rgba(255, 255, 255, 0.7) !important;
+    color: inherit !important;   
+}
+
+.enfrappe-ui-dropdownmainlive div {
+    color: inherit !important;   
+}
+
+.enfrappe-ui-dropdownmainlive .text {
+    color: inherit !important;   
 }
 
 .enfrappe-ui-dropdown:hover {

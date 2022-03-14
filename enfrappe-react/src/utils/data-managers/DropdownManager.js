@@ -14,6 +14,7 @@ const DropdownManager = (componentData, setComponentData) => {
         }
         newComponentData.components[newId] = getDefaultComponentData(UIItemTypes.DROPDOWN);
         newComponentData.components[newId]['id'] = newId;
+        newComponentData.components[newId]['name'] = newId;
         newComponentData.components[newId]['parent'] = parentId;
         newComponentData.components[parentId]['children'].push(newId);
         setComponentData(newComponentData);
@@ -60,6 +61,15 @@ const DropdownManager = (componentData, setComponentData) => {
 
     const getDropdownData = (dropdownId) => {
         return componentData.components[dropdownId];
+    }
+
+    const setDropdownName = (dropdownId, name) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[dropdownId]['name'] = name;
+        setComponentData(newComponentData);
     }
 
     const setDropdownLabel = (dropdownId, label) => {
@@ -166,6 +176,7 @@ const DropdownManager = (componentData, setComponentData) => {
         addDropdown,
         deleteDropdown,
         getDropdownData,
+        setDropdownName,
         setDropdownLabel,
         setDropdownTextColor,
         shiftDropdownUp,

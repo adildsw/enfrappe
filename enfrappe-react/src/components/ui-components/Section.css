@@ -5,7 +5,7 @@
     border: 2px solid #DDDDDD00;
 }
 
-.enfrappe-ui-section:hover {
+.enfrappe-ui-section:hover:not(.enfrappe-ui-sectionlive) {
     border-color: #BBBBBB;
 }
 

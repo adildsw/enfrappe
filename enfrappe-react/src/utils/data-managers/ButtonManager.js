@@ -87,12 +87,57 @@ const ButtonManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
-    const setButtonOnPressEvent = (buttonId, onPressEvent) => {
+    const setButtonOnPressActionType = (buttonId, actionType) => {
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now()
         }
-        newComponentData.components[buttonId]['on-press'] = onPressEvent;
+        newComponentData.components[buttonId]['on-press-action-type'] = actionType;
+        setComponentData(newComponentData);
+    }
+
+    const setButtonOnPressActivity = (buttonId, activity) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-activity'] = activity;
+        setComponentData(newComponentData);
+    }
+
+    const setButtonOnPressApiCallType = (buttonId, apiCallType) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-call-type'] = apiCallType;
+        setComponentData(newComponentData);
+    }
+
+    const setButtonOnPressApiUrl = (buttonId, apiUrl) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-url'] = apiUrl;
+        setComponentData(newComponentData);
+    }
+
+    const addButtonOnPressApiParam = (buttonId, apiParam) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-params'].push(apiParam);
+        setComponentData(newComponentData);
+    }
+
+    const deleteButtonOnPressApiParam = (buttonId, apiParam) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-params'] = newComponentData.components[buttonId]['on-press-api-params'].filter(param => param !== apiParam);
         setComponentData(newComponentData);
     }
 
@@ -103,7 +148,12 @@ const ButtonManager = (componentData, setComponentData) => {
         setButtonText,
         setButtonBackground,
         setButtonTextColor,
-        setButtonOnPressEvent,
+        setButtonOnPressActionType,
+        setButtonOnPressActivity,
+        setButtonOnPressApiCallType,
+        setButtonOnPressApiUrl,
+        addButtonOnPressApiParam,
+        deleteButtonOnPressApiParam,
         shiftButtonUp,
         shiftButtonDown
     }

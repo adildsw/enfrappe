@@ -14,6 +14,7 @@ const InputManager = (componentData, setComponentData) => {
         }
         newComponentData.components[newId] = getDefaultComponentData(UIItemTypes.INPUT);
         newComponentData.components[newId]['id'] = newId;
+        newComponentData.components[newId]['name'] = newId;
         newComponentData.components[newId]['parent'] = parentId;
         newComponentData.components[parentId]['children'].push(newId);
         setComponentData(newComponentData);
@@ -62,6 +63,15 @@ const InputManager = (componentData, setComponentData) => {
         return componentData.components[inputId];
     }
 
+    const setInputName = (inputId, name) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[inputId]['name'] = name;
+        setComponentData(newComponentData);
+    }
+
     const setInputLabel = (inputId, label) => {
         const newComponentData = {
             ...componentData,
@@ -93,6 +103,7 @@ const InputManager = (componentData, setComponentData) => {
         addInput,
         deleteInput,
         getInputData,
+        setInputName,
         setInputLabel,
         setInputPlaceholder,
         setInputTextColor,

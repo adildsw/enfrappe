@@ -7,8 +7,12 @@ import UIItemTypes from "../../utils/UIItemTypes";
 const InputProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, inputManager } = componentManager;
-    const { deleteInput, setInputLabel, setInputPlaceholder, setInputTextColor, shiftInputDown, shiftInputUp } = inputManager;
+    const { deleteInput, setInputLabel, setInputPlaceholder, setInputTextColor, shiftInputDown, shiftInputUp, setInputName } = inputManager;
     const inputData = inputManager.getInputData(selectedComponent.id);
+
+    const [userInputRenamerModalState, setUserInputRenamerModalState] = useState(false);
+    const [userInputRenameState, setUserInputRenameState] = useState({'name': '', 'valid': false, 'message': 'Component name cannot be empty.'});
+    const [newName, setNewName] = useState('');
     
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
 
@@ -27,15 +31,93 @@ const InputProperties = (props) => {
         }
     }
 
+    // Form validation for new user-input name
+    const validateUserInputName = (newUserInputName) => {
+        const currentUserInputName = inputData.name;
+        if (newUserInputName === '' || newUserInputName === undefined)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot be empty.'});
+        else if (newUserInputName.charAt(0).match(/[0-9]/) !== null)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot start with a number.'});
+        else if (componentManager.getAllUserInputComponentNames().includes(newUserInputName))
+            if (newUserInputName === currentUserInputName)
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'The new component name cannot be the same as the old one.'});
+            else
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name already exists.'});
+        else
+            setUserInputRenameState({'name': newUserInputName, 'valid': true, 'message': ''});
+    };
+
     return (
         <Form>
-            <Form.Field className={'properties-id'}>
-                <Label className={'tucked-label'} color={'grey'}>ID</Label>
+            <Form.Field>
+                <Label className={'tucked-label'} color={'grey'}>Name</Label>
                 <Input
-                    value={inputData.id}
+                    className={'button-based-input-only'}
+                    value={inputData.name}
+                    action={{
+                        icon: 'pencil',
+                        onClick: () => { 
+                            validateUserInputName(); 
+                            setUserInputRenamerModalState(true); 
+                        },
+                    }}
                     readOnly
-                    style={{ 'pointerEvents': 'none', 'userSelect': 'none' }}
                 />
+                <Modal
+                    size={'tiny'}
+                    open={userInputRenamerModalState}
+                    onClose={() => { setUserInputRenamerModalState(false); }}>
+                    <Header icon='pencil' content='Rename Component' />
+                    <Modal.Content>
+                        <Form>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>Current Component Name</Label>
+                                <Input 
+                                    className={'button-based-input-only'}
+                                    value={inputData.name}
+                                    placeholder='Current Component Name'
+                                    fluid
+                                    readOnly 
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>New Component Name</Label>
+                                <Form.Input 
+                                    placeholder='New Component Name'
+                                    value={newName}
+                                    onChange={(e, data) => { 
+                                        const newUserInputName = data.value.replace(/[^a-zA-Z0-9_]/g, '');
+                                        setNewName(newUserInputName);
+                                        validateUserInputName(newUserInputName); 
+                                    }}
+                                    error={!userInputRenameState.valid && {
+                                        content: userInputRenameState.message,
+                                        pointing: 'above',
+                                    }}
+                                    fluid 
+                                />
+                            </Form.Field>
+                        </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button 
+                            icon='cancel' 
+                            onClick={() => { setUserInputRenamerModalState(false); }} 
+                        />
+                        <Button 
+                            icon='check'
+                            content='Confirm Changes'
+                            labelPosition='right' 
+                            disabled={!userInputRenameState.valid} 
+                            onClick={() => { 
+                                if (userInputRenameState.valid) {
+                                    setUserInputRenamerModalState(false);
+                                    setInputName(inputData.id, userInputRenameState.name);
+                                }
+                            }} 
+                        />
+                    </Modal.Actions>
+                </Modal>
             </Form.Field>
             <Form.Field>
                 <Label className={'tucked-label'}>Input Label</Label>

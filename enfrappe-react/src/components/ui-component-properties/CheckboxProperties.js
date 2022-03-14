@@ -7,12 +7,32 @@ import UIItemTypes from "../../utils/UIItemTypes";
 const CheckboxProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, checkboxManager } = componentManager;
-    const { deleteCheckbox, setCheckboxLabel, setCheckboxTextColor, shiftCheckboxDown, shiftCheckboxUp } = checkboxManager;
+    const { deleteCheckbox, setCheckboxLabel, setCheckboxTextColor, shiftCheckboxDown, shiftCheckboxUp, setCheckboxName } = checkboxManager;
     const checkboxData = componentManager.getComponent(selectedComponent.id);
 
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
+
+    const [userInputRenamerModalState, setUserInputRenamerModalState] = useState(false);
+    const [userInputRenameState, setUserInputRenameState] = useState({'name': '', 'valid': false, 'message': 'Component name cannot be empty.'});
+    const [newName, setNewName] = useState('');
+
+    // Form validation for new user-input name
+    const validateUserInputName = (newUserInputName) => {
+        const currentUserInputName = checkboxData.name;
+        if (newUserInputName === '' || newUserInputName === undefined)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot be empty.'});
+        else if (newUserInputName.charAt(0).match(/[0-9]/) !== null)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot start with a number.'});
+        else if (componentManager.getAllUserInputComponentNames().includes(newUserInputName))
+            if (newUserInputName === currentUserInputName)
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'The new component name cannot be the same as the old one.'});
+            else
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name already exists.'});
+        else
+            setUserInputRenameState({'name': newUserInputName, 'valid': true, 'message': ''});
+    };
 
     const getMoveCheckboxButtonState = (buttonId) => {
         const parentId = checkboxData.parent;
@@ -29,13 +49,75 @@ const CheckboxProperties = (props) => {
 
     return (
         <Form>
-            <Form.Field className={'properties-id'}>
-                <Label className={'tucked-label'} color={'grey'}>ID</Label>
+            <Form.Field>
+                <Label className={'tucked-label'} color={'grey'}>Name</Label>
                 <Input
-                    value={checkboxData.id}
+                    className={'button-based-input-only'}
+                    value={checkboxData.name}
+                    action={{
+                        icon: 'pencil',
+                        onClick: () => { 
+                            validateUserInputName(); 
+                            setUserInputRenamerModalState(true); 
+                        },
+                    }}
                     readOnly
-                    style={{ 'pointerEvents': 'none', 'userSelect': 'none'}}
                 />
+                <Modal
+                    size={'tiny'}
+                    open={userInputRenamerModalState}
+                    onClose={() => { setUserInputRenamerModalState(false); }}>
+                    <Header icon='pencil' content='Rename Component' />
+                    <Modal.Content>
+                        <Form>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>Current Component Name</Label>
+                                <Input 
+                                    className={'button-based-input-only'}
+                                    value={checkboxData.name}
+                                    placeholder='Current Component Name'
+                                    fluid
+                                    readOnly 
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>New Component Name</Label>
+                                <Form.Input 
+                                    placeholder='New Component Name'
+                                    value={newName}
+                                    onChange={(e, data) => { 
+                                        const newUserInputName = data.value.replace(/[^a-zA-Z0-9_]/g, '');
+                                        setNewName(newUserInputName);
+                                        validateUserInputName(newUserInputName); 
+                                    }}
+                                    error={!userInputRenameState.valid && {
+                                        content: userInputRenameState.message,
+                                        pointing: 'above',
+                                    }}
+                                    fluid 
+                                />
+                            </Form.Field>
+                        </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button 
+                            icon='cancel' 
+                            onClick={() => { setUserInputRenamerModalState(false); }} 
+                        />
+                        <Button 
+                            icon='check'
+                            content='Confirm Changes'
+                            labelPosition='right' 
+                            disabled={!userInputRenameState.valid} 
+                            onClick={() => { 
+                                if (userInputRenameState.valid) {
+                                    setUserInputRenamerModalState(false);
+                                    setCheckboxName(checkboxData.id, userInputRenameState.name);
+                                }
+                            }} 
+                        />
+                    </Modal.Actions>
+                </Modal>
             </Form.Field>
             <Form.Field>
                 <Label className={'tucked-label'}>Checkbox Label</Label>

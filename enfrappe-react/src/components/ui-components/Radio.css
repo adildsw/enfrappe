@@ -1,11 +1,10 @@
-.enfrappe-ui-radio {
+.enfrappe-ui-radio, .enfrappe-ui-radiolive {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 2px;
     padding-right: 2px;
     border-radius: 5px;
     border: 2px solid #DDDDDD00;
-    opacity: 1;
 }
 
 .enfrappe-ui-radiosegment {

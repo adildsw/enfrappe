@@ -46,9 +46,7 @@ const Section = (props) => {
                 sectionComponents.push(
                     <Dropdown key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
                 );
-
         });
-
         return sectionComponents;
     }
 

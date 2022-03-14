@@ -19,13 +19,15 @@ const ActivityProperties = (props) => {
 
     // Form validation for new activity name
     const validateActivityName = (newActivityName) => {
-        console.log(currentActivity);
         if (currentActivity === DEFAULT_ACTIVITY_ID)
             setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Main activity cannot be renamed.'});
         else if (newActivityName === '' || newActivityName === undefined)
             setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Activity name cannot be empty.'});
         else if (activityManager.getAllActivityNames().includes(newActivityName))
-            setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Activity name already exists.'});
+            if (newActivityName === getActivityData(currentActivity).name)
+                setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'The new activity name cannot be the same as the old one.'});
+            else
+                setActivityRenameState({'name': currentActivity, 'valid': false, 'message': 'Activity name already exists.'});
         else
             setActivityRenameState({'name': newActivityName, 'valid': true, 'message': ''});
     };
@@ -33,7 +35,7 @@ const ActivityProperties = (props) => {
     return (
         <Form>
             <Form.Field>
-                <Label className={'tucked-label'}>Activity Name</Label>
+                <Label className={'tucked-label'} color={'grey'}>Activity Name</Label>
                 <Input 
                     className={'button-based-input-only'}
                     value={getActivityData(currentActivity).name}
@@ -60,7 +62,7 @@ const ActivityProperties = (props) => {
                                 <Input 
                                     className={'button-based-input-only'}
                                     value={getActivityData(currentActivity).name}
-                                    placeholder='Current Actvity Name'
+                                    placeholder='Current Activity Name'
                                     fluid
                                     readOnly 
                                 />

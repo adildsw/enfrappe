@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import Section from './Section';
-import DnDSpace from './DnDSpace';
-import getComponentCompatibility from '../../utils/ComponentCompatibility';
-import UIItemTypes from '../../utils/UIItemTypes';
+import SectionLive from './SectionLive';
+import UIItemTypes from '../../../utils/UIItemTypes';
 
-import './Activity.css';
+import '../Activity.css';
 
-const Activity = (props) => {
+const ActivityLive = (props) => {
 
-    const { currentActivity, selectedComponent, componentManager } = props;
+    const { appManager, currentActivity, setCurrentActivity, componentManager, liveData, updateLiveData } = props;
     const { activityManager, getComponent } = componentManager;
     const { getActivityData } = activityManager;
 
@@ -39,7 +37,7 @@ const Activity = (props) => {
             const childData = getComponent(child);
             if (childData.type === UIItemTypes.SECTION) {
                 activityComponents.push(
-                    <Section key={child} selectedComponent={selectedComponent} componentId={child} componentManager={componentManager} />
+                    <SectionLive appManager={appManager} key={child} setCurrentActivity={setCurrentActivity} componentId={child} componentManager={componentManager} liveData={liveData} updateLiveData={updateLiveData} />
                 );
             }
         });
@@ -47,20 +45,13 @@ const Activity = (props) => {
     };
 
     return (
-        <div className={'enfrappe-ui-activity' + (selectedComponent.id === currentActivity ? ' selected-component' : '')} id={currentActivity} style={{height: containerHeight, width: containerWidth, background: getActivityData(currentActivity).background}}>
+        <div className={'enfrappe-ui-activity enfrappe-ui-activitylive'} id={currentActivity} style={{height: containerHeight, width: containerWidth, background: getActivityData(currentActivity).background}}>
             <div className={'enfrappe-ui-activitycontent'} id={currentActivity}>
                 {generateActivityComponents()}
-                <DnDSpace 
-                    id={currentActivity} 
-                    className={'enfrappe-ui-activitydndspace'} 
-                    centered={getActivityData(currentActivity)['children'].length === 0} 
-                    acceptedItems={getComponentCompatibility(UIItemTypes.ACTIVITY)} 
-                    componentManager={componentManager}
-                />
             </div>
         </div>
     );
 
 }
 
-export default Activity;
+export default ActivityLive;

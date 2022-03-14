@@ -1,34 +1,40 @@
 import { Image, Divider, Label, Input, Form, Button, Checkbox, Table, Modal, Header, Icon } from 'semantic-ui-react';
 import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
+import { resetId } from "react-id-generator";
+import nextId from 'react-id-generator';
 
 import getAppTemplate from '../../utils/TemplateManager';
 
 import './AppDetails.css';
 
 import logo from '../../assets/logo.svg';
+import UIItemTypes from '../../utils/UIItemTypes';
 
 const AppDetails = (props) => {
-    const { componentManager, appManager, simulationState, setSimulationState } = props;
+    const { componentManager, appManager, simulationState, setSimulationState, setCurrentActivity, setSelectedComponent, resetLiveData } = props;
     const { getAppMetadata, setAppMetadata, appData, setAppData } = appManager;
     const { componentData, setComponentData } = componentManager;
 
     const appLoadFileRef = useRef();
-    const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
+    // const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
     const [unsavedModalState, setUnsavedModalState] = useState({'state': false, 'action': 'new'});
 
-    // Checks if there exists unsaved changes
-    const areChangesUnsaved = () => {
-        const currentProject = getCurrentProjectData();
-        delete currentProject['app-data']['last-edited'];
-        delete currentProject['component-data']['last-edited'];
+    // Checks if there exists unsaved changes [NOT WORKING]
+    // const areChangesUnsaved = () => {
+    //     const currentProject = getCurrentProjectData();
+    //     delete currentProject['app-data']['last-edited'];
+    //     delete currentProject['component-data']['last-edited'];
 
-        const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
-        delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
-        delete unsavedBenchmarkNoTimestamp['component-data']['last-edited'];
+    //     const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
+    //     delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
+    //     delete unsavedBenchmarkNoTimestamp['component-data']['last-edited'];
 
-        return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
-    }
+    //     console.log(currentProject, unsavedBenchmarkNoTimestamp);
+    //     console.log(JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp))
+
+    //     return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
+    // }
 
     // Loads project from file
     const loadProjectFromFile = (event) => {
@@ -41,12 +47,35 @@ const AppDetails = (props) => {
             loadProject(loadedProject);
         };
         reader.readAsText(file);
+        appLoadFileRef.current.value = "";
     }
 
     const loadProject = (data) => {
+        setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE})
+        resetIdGeneratorToLastMax(data);
         setAppData(data['app-data']);
         setComponentData(data['component-data'])
-        setUnsavedBenchmark(data);
+        // setUnsavedBenchmark(data);
+
+        // Workaround for fixing app-loading bug
+        setSimulationState(true);
+        setSimulationState(false);
+    }
+
+    const resetIdGeneratorToLastMax = (data) => {
+        var maxId = 0;
+        data = JSON.stringify(data);
+        var matches = data.matchAll(/id[0-9]+/g);
+        matches = Array.from(matches);
+        var extractedIds = matches.map(match => match[0]);
+        extractedIds.forEach(id => {
+            var idNumber = parseInt(id.substring(2));
+            if (idNumber > maxId) maxId = idNumber;
+        });
+        resetId();
+        for (let i = 0; i < maxId; i++) 
+            nextId();
+        return maxId;
     }
 
     // Fetches the current project data
@@ -66,7 +95,7 @@ const AppDetails = (props) => {
         a.href = url;
         a.download = getAppMetadata('app-id') + '_' + getAppMetadata('app-version') + '.enfrappe';
         a.click();
-        setUnsavedBenchmark(app);
+        // setUnsavedBenchmark(app);
     };
 
     // Controls state for app detail checkboxes
@@ -101,10 +130,11 @@ const AppDetails = (props) => {
                             data-tip='Create New Application'
                             content='New'
                             onClick={() => {
-                                if (areChangesUnsaved())
-                                    setUnsavedModalState({'state': true, 'action': 'new'});
-                                else
-                                    loadProject(getAppTemplate('EMPTY'));
+                                setUnsavedModalState({'state': true, 'action': 'new'});
+                                // if (areChangesUnsaved())
+                                //     setUnsavedModalState({'state': true, 'action': 'new'});
+                                // else
+                                    // loadProject(getAppTemplate('EMPTY'));
                             }}
                             disabled={simulationState}
                         />
@@ -113,10 +143,11 @@ const AppDetails = (props) => {
                             data-tip='Load Application'
                             content='Load'
                             onClick={() => {
-                                if (areChangesUnsaved())
-                                    setUnsavedModalState({'state': true, 'action': 'load'});
-                                else
-                                    appLoadFileRef.current.click();
+                                setUnsavedModalState({'state': true, 'action': 'load'});
+                                // if (areChangesUnsaved())
+                                //     setUnsavedModalState({'state': true, 'action': 'load'});
+                                // else
+                                    // appLoadFileRef.current.click();
                             }}
                             disabled={simulationState}
                         />
@@ -138,7 +169,7 @@ const AppDetails = (props) => {
                         <Header as='h2' icon inverted>
                             <Icon name='warning sign' />
                             Unsaved Changes
-                            <Header.Subheader>There are unsaved changes. Are you sure you want to proceed?</Header.Subheader>
+                            <Header.Subheader>Any unsaved changes will be lost. Are you sure you want to proceed?</Header.Subheader>
                         </Header>
                         <Modal.Actions style={{'textAlign': 'center'}}>
                             <Button basic icon='cancel' color='green' inverted onClick={() => { setUnsavedModalState({'state': false, 'action': 'new'}); }} />
@@ -189,7 +220,8 @@ const AppDetails = (props) => {
                         />
                     </Form.Field>
                     <Form.Field>
-                        <Table>
+                        <Label className={'tucked-label'}>App Features</Label>
+                        <Table className={'tucked-label-compat'}>
                             <Table.Body>
                                 <Table.Row>
                                     <Table.Cell textAlign='center' verticalAlign='middle'>
@@ -253,7 +285,12 @@ const AppDetails = (props) => {
                                 labelPosition='left'
                                 color={simulationState ? 'red' : 'green'}
                                 content={simulationState ? 'Stop Simulation' : 'Start Simulation'}
-                                onClick={() => { setSimulationState(!simulationState); }}
+                                onClick={() => { 
+                                    resetLiveData();
+                                    setCurrentActivity('main-activity');
+                                    setSimulationState(!simulationState);
+                                    setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
+                                }}
                             />
                         </Button.Group>
                     </Form.Field>

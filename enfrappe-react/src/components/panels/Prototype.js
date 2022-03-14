@@ -67,7 +67,7 @@ const Prototype = (props) => {
                 </span>
             </div>
 
-            <div id='activities-list-div'>
+            <div id='activity-area'>
                 <Activity currentActivity={currentActivity} selectedComponent={selectedComponent} componentManager={componentManager} />
             </div>
 
@@ -80,14 +80,14 @@ const Prototype = (props) => {
                                 disabled={setControlButtonState('previous')}
                                 onClick={() => { navigateToActivity('previous'); }}
                             />
-                            <Button 
+                            {/* <Button 
                                 icon='trash' 
                                 disabled={setControlButtonState('delete')}
                                 onClick={() => { 
                                     if (currentActivity !== DEFAULT_ACTIVITY_NAME)
                                         setDeleteActivityModalState(true);
                                 }}
-                            />
+                            /> */}
                             <Button 
                                 icon='add' 
                                 disabled={setControlButtonState('add')}

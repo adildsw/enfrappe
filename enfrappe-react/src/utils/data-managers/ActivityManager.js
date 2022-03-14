@@ -32,7 +32,6 @@ const ActivityManager = (componentData, setComponentData) => {
         return componentData['activity-sequence'];
     }
 
-    //
     // Function for getting activity data
     const getActivityData = (activityId) => {
         return componentData.components[activityId];
@@ -57,7 +56,6 @@ const ActivityManager = (componentData, setComponentData) => {
         return newId;
     }
 
-    //
     // Function for deleting activity
     const deleteActivity = (activityId) => {
         const newComponentData = {
@@ -65,12 +63,30 @@ const ActivityManager = (componentData, setComponentData) => {
             'activity-sequence': componentData['activity-sequence'].filter(id => id !== activityId),
             'last-edited': Date.now()
         };
-        // TODO: Delete all children attached to this activity
+
+        // Deleting child components
+        newComponentData.components[activityId].children.forEach(childId => {
+            if (newComponentData.components[childId].hasOwnProperty('children')) {
+                newComponentData.components[childId].children.forEach(grandChildId => {
+                    delete newComponentData.components[grandChildId];
+                });
+            }
+            delete newComponentData.components[childId];
+        });
+
+        // Deleting button links to activity
+        Object.keys(newComponentData.components).forEach(compId => {
+            var component = newComponentData.components[compId];
+            if (component.hasOwnProperty('on-press-activity')) {
+                if (component['on-press-activity'] === activityId)
+                    component['on-press-activity'] = 'none';
+            }
+        });
+
         delete newComponentData.components[activityId];
         setComponentData(newComponentData);
     }
 
-    //
     // Function for modifying activity name
     const setActivityName = (activityId, newActivityName) => {
         const newComponentData = {
@@ -81,7 +97,6 @@ const ActivityManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
-    //
     // Function for modifying activity background
     const setActivityBackground = (activityId, newBackground) => {
         const newComponentData = {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ActivityManager from './data-managers/ActivityManager';
 import SectionManager from './data-managers/SectionManager';
@@ -15,11 +15,11 @@ import { DEFAULT_ACTIVITY_NAME, DEFAULT_ACTIVITY_ID } from './DefaultComponentDa
 
 import UIItemTypes from './UIItemTypes';
 
-const useComponentManager = () => {
+const initActivityData = getDefaultComponentData(UIItemTypes.ACTIVITY);
+initActivityData['id'] = DEFAULT_ACTIVITY_ID;
+initActivityData['name'] = DEFAULT_ACTIVITY_NAME;
 
-    const initActivityData = getDefaultComponentData(UIItemTypes.ACTIVITY);
-    initActivityData['id'] = DEFAULT_ACTIVITY_ID;
-    initActivityData['name'] = DEFAULT_ACTIVITY_NAME;
+const useComponentManager = () => {
 
     const [componentData, setComponentData] = useState({
         'last-edited': Date.now(), 
@@ -42,6 +42,25 @@ const useComponentManager = () => {
         return componentData.components[componentId];
     }
 
+    const getAllUserInputComponentNames = () => {
+        const userInputComponentNames = [];
+        Object.keys(componentData.components).forEach(component => {
+            if (componentData.components[component].hasOwnProperty('name'))
+                userInputComponentNames.push(componentData.components[component].name);
+        });
+        return userInputComponentNames;
+    }
+
+    const getUserInputIdByName = (name) => {
+        const userInputId = Object.keys(componentData.components).find(component => {
+            if (componentData.components[component].hasOwnProperty('name'))
+                return componentData.components[component].name === name;
+            else
+                return false;
+        });
+        return userInputId;
+    }
+
     return {
         activityManager,
         sectionManager,
@@ -52,6 +71,8 @@ const useComponentManager = () => {
         radioManager,
         dropdownManager,
         getComponent,
+        getAllUserInputComponentNames,
+        getUserInputIdByName,
         componentData,
         setComponentData
     }

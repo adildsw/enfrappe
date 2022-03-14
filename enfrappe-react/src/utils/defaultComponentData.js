@@ -1,7 +1,10 @@
 import * as deepcopy from 'deepcopy';
+// import { setPrefix } from 'react-id-generator';
 import nextId from 'react-id-generator';
 
 import UIItemTypes from './UIItemTypes';
+
+// setPrefix('frpid-');
 
 export const DEFAULT_ACTIVITY_NAME = 'Main Activity';
 export const DEFAULT_ACTIVITY_ID = 'main-activity';
@@ -35,7 +38,11 @@ const DefaultComponentData = {
         'background': '#CCCCCC',
         'text-color': '#000000',
         'parent': '',
-        'on-press': ''
+        'on-press-action-type': 'activity', // 'activity': for changing activity, 'api': for RESTful API call
+        'on-press-activity': 'none',
+        'on-press-api-call-type': 'GET', // 'GET', 'POST'
+        'on-press-api-url': '',
+        'on-press-api-params': [],
     },
     [UIItemTypes.TEXT]: {
         'type': UIItemTypes.TEXT,
@@ -49,6 +56,7 @@ const DefaultComponentData = {
     [UIItemTypes.INPUT]: {
         'type': UIItemTypes.INPUT,
         'id': '',
+        'name': '',
         'label': 'Label',
         'placeholder': 'Placeholder',
         'text-color': '#000000',
@@ -57,6 +65,7 @@ const DefaultComponentData = {
     [UIItemTypes.CHECKBOX]: {
         'type': UIItemTypes.CHECKBOX,
         'id': '',
+        'name': '',
         'label': 'Label',
         'text-color': '#000000',
         'parent': '',
@@ -64,6 +73,7 @@ const DefaultComponentData = {
     [UIItemTypes.RADIO]: {
         'type': UIItemTypes.RADIO,
         'id': '',
+        'name': '',
         'label': 'Label',
         'option-ids': [RADIO_DEFAULT_OPTIONA_ID, RADIO_DEFAULT_OPTIONB_ID],
         'options': {
@@ -76,6 +86,7 @@ const DefaultComponentData = {
     [UIItemTypes.DROPDOWN]: {
         'type': UIItemTypes.DROPDOWN,
         'id': '',
+        'name': '',
         'label': 'Label',
         'option-ids': [DROPDOWN_DEFAULT_OPTION_ID],
         'options': {

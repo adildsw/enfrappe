@@ -7,7 +7,7 @@ import UIItemTypes from "../../utils/UIItemTypes";
 const DropdownProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, dropdownManager } = componentManager;
-    const { deleteDropdown, setDropdownLabel, setDropdownTextColor, shiftDropdownUp, shiftDropdownDown, addDropdownOption, deleteDropdownOption, editDropdownOption, shiftDropdownOptionUp, shiftDropdownOptionDown, findOptionLabel, findOptionValue } = dropdownManager;
+    const { deleteDropdown, setDropdownLabel, setDropdownTextColor, shiftDropdownUp, shiftDropdownDown, addDropdownOption, deleteDropdownOption, editDropdownOption, shiftDropdownOptionUp, shiftDropdownOptionDown, findOptionLabel, findOptionValue, setDropdownName } = dropdownManager;
     const dropdownData = componentManager.getComponent(selectedComponent.id);
 
     const [selectedOption, setSelectedOption] = useState(null);
@@ -20,6 +20,26 @@ const DropdownProperties = (props) => {
     const [addOptionModalState, setAddOptionModalState] = useState(false);
     const [editOptionModalState, setEditOptionModalState] = useState(false);
     const [optionValidationState, setOptionValidationState] = useState({'label': '', 'label-valid': false, 'label-message': 'Label cannot be empty.', 'value': '', 'value-valid': false, 'value-message': 'Value cannot be empty.'});
+
+    const [userInputRenamerModalState, setUserInputRenamerModalState] = useState(false);
+    const [userInputRenameState, setUserInputRenameState] = useState({'name': '', 'valid': false, 'message': 'Component name cannot be empty.'});
+    const [newName, setNewName] = useState('');
+
+    // Form validation for new user-input name
+    const validateUserInputName = (newUserInputName) => {
+        const currentUserInputName = dropdownData.name;
+        if (newUserInputName === '' || newUserInputName === undefined)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot be empty.'});
+        else if (newUserInputName.charAt(0).match(/[0-9]/) !== null)
+            setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name cannot start with a number.'});
+        else if (componentManager.getAllUserInputComponentNames().includes(newUserInputName))
+            if (newUserInputName === currentUserInputName)
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'The new component name cannot be the same as the old one.'});
+            else
+                setUserInputRenameState({'name': currentUserInputName, 'valid': false, 'message': 'Component name already exists.'});
+        else
+            setUserInputRenameState({'name': newUserInputName, 'valid': true, 'message': ''});
+    };
 
     const getMoveDropdownButtonState = (buttonId) => {
         const parentId = dropdownData.parent;
@@ -144,13 +164,75 @@ const DropdownProperties = (props) => {
 
     return (
         <Form>
-            <Form.Field className={'properties-id'}>
-                <Label className={'tucked-label'} color={'grey'}>ID</Label>
+            <Form.Field>
+                <Label className={'tucked-label'} color={'grey'}>Name</Label>
                 <Input
-                    value={dropdownData.id}
+                    className={'button-based-input-only'}
+                    value={dropdownData.name}
+                    action={{
+                        icon: 'pencil',
+                        onClick: () => { 
+                            validateUserInputName(); 
+                            setUserInputRenamerModalState(true); 
+                        },
+                    }}
                     readOnly
-                    style={{ 'pointerEvents': 'none', 'userSelect': 'none' }}
                 />
+                <Modal
+                    size={'tiny'}
+                    open={userInputRenamerModalState}
+                    onClose={() => { setUserInputRenamerModalState(false); }}>
+                    <Header icon='pencil' content='Rename Component' />
+                    <Modal.Content>
+                        <Form>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>Current Component Name</Label>
+                                <Input 
+                                    className={'button-based-input-only'}
+                                    value={dropdownData.name}
+                                    placeholder='Current Component Name'
+                                    fluid
+                                    readOnly 
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>New Component Name</Label>
+                                <Form.Input 
+                                    placeholder='New Component Name'
+                                    value={newName}
+                                    onChange={(e, data) => { 
+                                        const newUserInputName = data.value.replace(/[^a-zA-Z0-9_]/g, '');
+                                        setNewName(newUserInputName);
+                                        validateUserInputName(newUserInputName); 
+                                    }}
+                                    error={!userInputRenameState.valid && {
+                                        content: userInputRenameState.message,
+                                        pointing: 'above',
+                                    }}
+                                    fluid 
+                                />
+                            </Form.Field>
+                        </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button 
+                            icon='cancel' 
+                            onClick={() => { setUserInputRenamerModalState(false); }} 
+                        />
+                        <Button 
+                            icon='check'
+                            content='Confirm Changes'
+                            labelPosition='right' 
+                            disabled={!userInputRenameState.valid} 
+                            onClick={() => { 
+                                if (userInputRenameState.valid) {
+                                    setUserInputRenamerModalState(false);
+                                    setDropdownName(dropdownData.id, userInputRenameState.name);
+                                }
+                            }} 
+                        />
+                    </Modal.Actions>
+                </Modal>
             </Form.Field>
             <Form.Field>
                 <Label className={'tucked-label'}>Dropdown Group Label</Label>

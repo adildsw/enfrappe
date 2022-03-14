@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Form, Label, Input, Button, Modal, Header, Icon } from "semantic-ui-react";
+import { Form, Label, Input, Button, Modal, Header, Icon, Segment, Radio, Table, Dropdown, List } from "semantic-ui-react";
 import { SketchPicker } from 'react-color';
 
-import UIItemTypes from '../../utils/UIItemTypes';
+import UIItemTypes, { getUIItemName } from '../../utils/UIItemTypes';
 
 const ButtonProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
-    const { activityManager, buttonManager } = componentManager;
-    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton } = buttonManager;
+    const { componentData, activityManager, buttonManager } = componentManager;
+    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton, setButtonOnPressActionType, setButtonOnPressActivity, setButtonOnPressApiCallType, setButtonOnPressApiUrl, addButtonOnPressApiParam, deleteButtonOnPressApiParam } = buttonManager;
     const buttonData = buttonManager.getButtonData(selectedComponent.id);
     
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
@@ -26,6 +26,60 @@ const ButtonProperties = (props) => {
             if (index === activityManager.getActivityData(parentId).children.length - 1) return false;
             else return true;
         }
+    }
+
+    // Generates activity dropdown items
+    const generateDropdownItems = () => {
+        var activityList = [{ 
+            key: 'none',
+            text: 'None',
+            value: 'none'
+        }];
+        activityList = activityList.concat(
+            activityManager.getAllActivityNames().map(activityName => (
+                {'key' : activityManager.getActivityId(activityName),
+                'text' : activityName,
+                'value' : activityManager.getActivityId(activityName)}
+            ))
+        );
+
+        return activityList;
+    }
+
+    const generateSectionUserInputComponentItems = () => {
+        var itemList = [];
+        var parentId = buttonData.parent;
+        componentData.components[parentId].children.forEach(childId => {
+            var childData = componentData.components[childId];
+            if (childData.hasOwnProperty('name') && !buttonData['on-press-api-params'].includes(childData.id)) {
+                itemList.push({
+                    'key': childId,
+                    'text': childData.name + ' [' + getUIItemName(childData.type) + ']',
+                    'value': childId
+                });
+            }
+        });
+        return itemList;
+    }
+
+    const generateApiCallParams = () => {
+        const apiCallParams = [];
+        buttonData['on-press-api-params'].forEach(param => {
+            if (Object.keys(componentData.components).includes(param)) {
+                apiCallParams.push(
+                    <List.Item key={param} as='a'>
+                        <List.Content floated='right'>
+                            <List.Icon name='trash' verticalAlign='middle' onClick={() => { deleteButtonOnPressApiParam(buttonData.id, param); }} />
+                        </List.Content>
+                        <List.Icon name='circle outline' size='tiny' verticalAlign='middle' style={{'cursor': 'default'}} />
+                        <List.Content verticalAlign='middle' style={{'cursor': 'default', 'color': 'black'}}>
+                            <b>{componentData.components[param].name}</b> <i>[{getUIItemName(componentData.components[param].type)}]</i>
+                        </List.Content>
+                    </List.Item>
+                );
+            }
+        });
+        return apiCallParams;
     }
 
     return (
@@ -90,6 +144,130 @@ const ButtonProperties = (props) => {
                     </div>
                 }
             </Form.Field>
+
+            <Form.Field>
+                <Label className={'tucked-label'}>On Press Event</Label>
+                <Segment className={'tucked-label-compat'}>
+                    <Label className={'tucked-label'}>Action Type</Label>
+                    <Table className={'tucked-label-compat'}>
+                        <Table.Body>
+                            <Table.Row>
+                                <Table.Cell textAlign='center' verticalAlign='middle'>
+                                    <Radio 
+                                        name={'on-press-action-type'} 
+                                        label={'Switch Activity'}  
+                                        value={'activity'}
+                                        checked={buttonData['on-press-action-type'] === 'activity'}
+                                        onChange={() => {
+                                            setButtonOnPressActionType(selectedComponent.id, 'activity');
+                                        }}
+                                    />
+                                </Table.Cell>
+                                <Table.Cell textAlign='center' verticalAlign='middle'>
+                                    <Radio 
+                                        name={'on-press-action-type'} 
+                                        label={'Make API Call'}  
+                                        value={'api'}
+                                        checked={buttonData['on-press-action-type'] === 'api'}
+                                        onChange={() => {
+                                            setButtonOnPressActionType(selectedComponent.id, 'api');
+                                        }}
+                                    />
+                                </Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table>
+                    {buttonData['on-press-action-type'] === 'activity' &&
+                        <>
+                            <Label className={'tucked-label'}>Activity</Label>
+                            <Dropdown
+                                fluid
+                                selection
+                                placeholder='Select Activity'
+                                value={buttonData['on-press-activity']}
+                                options={generateDropdownItems()}
+                                onChange={(e, data) => { setButtonOnPressActivity(selectedComponent.id, data.value); }}
+                            />
+                        </>
+                    }
+                    {buttonData['on-press-action-type'] === 'api' &&
+                        <>
+                            <Form.Field>
+                                <Label className={'tucked-label'}>API Call Type</Label>
+                                <Table className={'tucked-label-compat'}>
+                                    <Table.Body>
+                                        <Table.Row>
+                                            <Table.Cell textAlign='center' verticalAlign='middle'>
+                                                <Radio 
+                                                    name={'on-press-api-call-type'} 
+                                                    label={'GET'}  
+                                                    value={'activity'}
+                                                    checked={buttonData['on-press-api-call-type'] === 'GET'}
+                                                    onChange={() => {
+                                                        setButtonOnPressApiCallType(selectedComponent.id, 'GET');
+                                                    }}
+                                                />
+                                            </Table.Cell>
+                                            <Table.Cell textAlign='center' verticalAlign='middle'>
+                                                <Radio 
+                                                    name={'on-press-api-call-type'} 
+                                                    label={'POST'}  
+                                                    value={'api'}
+                                                    checked={buttonData['on-press-api-call-type'] === 'POST'}
+                                                    onChange={() => {
+                                                        setButtonOnPressApiCallType(selectedComponent.id, 'POST');
+                                                    }}
+                                                />
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    </Table.Body>
+                                </Table>
+                            </Form.Field>
+                            
+                            <Form.Field>
+                                <Label className={'tucked-label'}>API URL/Endpoint</Label>
+                                <Input 
+                                    value={buttonData['on-press-api-url']}
+                                    onChange={(e) => { 
+                                        if (e.target.value !== '' && !e.target.value.startsWith('/'))
+                                            setButtonOnPressApiUrl(selectedComponent.id, '/' + e.target.value);
+                                        else
+                                            setButtonOnPressApiUrl(selectedComponent.id, e.target.value); 
+                                    }}
+                                    placeholder='/apicall'
+                                    fluid
+                                />
+                            </Form.Field>
+
+                            <Form.Field>
+                                <Label className={'tucked-label'}>API Call Parameters</Label>
+                                <Segment className={'tucked-label-compat'}>
+                                    
+                                    {generateApiCallParams().length > 0 &&
+                                        <List divided relaxed verticalAlign='middle' >
+                                            {generateApiCallParams()}
+                                        </List>
+                                    }
+                                    
+                                    <Form.Field >
+                                        <Dropdown
+                                            button
+                                            onChange={(e, data) => { addButtonOnPressApiParam(selectedComponent.id, data.value); }}
+                                            options={generateSectionUserInputComponentItems()}
+                                            text={'Add Parameter'}
+                                            value=''
+                                            fluid
+                                            disabled={generateSectionUserInputComponentItems().length === 0}
+                                        />
+                                    </Form.Field>
+                                </Segment>
+                            </Form.Field>
+                        </>
+                        
+                    }
+                </Segment>
+            </Form.Field>
+
             <Form.Field>
                 <Button.Group vertical fluid>
                     <Button 
