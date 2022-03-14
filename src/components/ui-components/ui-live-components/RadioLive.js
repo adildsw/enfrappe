@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Form, Radio as SemanticRadio, Label, Segment } from "semantic-ui-react";
 
 import '../Radio.css';
@@ -8,8 +7,6 @@ const RadioLive = (props) => {
     const radioData = componentManager.getComponent(componentId);
     const optionIds = radioData['option-ids'];
     const options = radioData['options'];
-
-    const [selectedRadioOption, setSelectedRadioOption] = useState(options[optionIds[0]]['value']);
 
     const generateRadioOptions = () => {
         const radioOptions = [];

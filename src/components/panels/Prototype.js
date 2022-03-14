@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Button, Dropdown, Grid, Modal, Header, Icon } from 'semantic-ui-react'
 
 import UIItemTypes from '../../utils/UIItemTypes';
-import { DEFAULT_ACTIVITY_NAME } from '../../utils/DefaultComponentData';
 
 import Activity from '../ui-components/Activity';
 

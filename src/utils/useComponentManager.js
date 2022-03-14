@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import ActivityManager from './data-managers/ActivityManager';
 import SectionManager from './data-managers/SectionManager';
