@@ -7,7 +7,7 @@ import UIItemTypes, { getUIItemName } from '../../utils/UIItemTypes';
 const ButtonProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { componentData, activityManager, buttonManager } = componentManager;
-    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton, setButtonOnPressActionType, setButtonOnPressActivity, setButtonOnPressApiCallType, setButtonOnPressApiUrl, addButtonOnPressApiParam, deleteButtonOnPressApiParam } = buttonManager;
+    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton, setButtonOnPressActionType, setButtonOnPressActivity, setButtonOnPressApiCallType, setButtonOnPressApiUrl, addButtonOnPressApiParam, deleteButtonOnPressApiParam, setButtonOnPressApiResultDisplayType } = buttonManager;
     const buttonData = buttonManager.getButtonData(selectedComponent.id);
     
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
@@ -261,6 +261,49 @@ const ButtonProperties = (props) => {
                                         />
                                     </Form.Field>
                                 </Segment>
+                            </Form.Field>
+
+                            <Form.Field>
+                                <Label className={'tucked-label'}>API Result Display Type</Label>
+                                <Table className={'tucked-label-compat'}>
+                                    <Table.Body>
+                                        <Table.Row>
+                                            {/* <Table.Cell textAlign='center' verticalAlign='middle'>
+                                                <Radio
+                                                    name={'on-press-api-result-display-type'}
+                                                    label={'None'}
+                                                    value={'none'}
+                                                    checked={buttonData['on-press-api-result-display-type'] === 'none'}
+                                                    onChange={() => {
+                                                        setButtonOnPressApiResultDisplayType(selectedComponent.id, 'none');
+                                                    }}
+                                                />
+                                            </Table.Cell> */}
+                                            <Table.Cell textAlign='center' verticalAlign='middle'>
+                                                <Radio
+                                                    name={'on-press-api-result-display-type'}
+                                                    label={'Toast'}
+                                                    value={'toast'}
+                                                    checked={buttonData['on-press-api-result-display-type'] === 'toast'}
+                                                    onChange={() => {
+                                                        setButtonOnPressApiResultDisplayType(selectedComponent.id, 'toast');
+                                                    }}
+                                                />
+                                            </Table.Cell>
+                                            <Table.Cell textAlign='center' verticalAlign='middle'>
+                                                <Radio
+                                                    name={'on-press-api-result-display-type'}
+                                                    label={'Prompt'}
+                                                    value={'prompt'}
+                                                    checked={buttonData['on-press-api-result-display-type'] === 'prompt'}
+                                                    onChange={() => {
+                                                        setButtonOnPressApiResultDisplayType(selectedComponent.id, 'prompt');
+                                                    }}
+                                                />
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    </Table.Body>
+                                </Table>
                             </Form.Field>
                         </>
                         

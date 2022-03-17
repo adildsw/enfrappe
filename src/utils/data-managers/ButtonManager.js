@@ -141,6 +141,15 @@ const ButtonManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
+    const setButtonOnPressApiResultDisplayType = (buttonId, apiResultDisplayType) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-result-display-type'] = apiResultDisplayType;
+        setComponentData(newComponentData);
+    }
+
     return {
         addButton,
         deleteButton,
@@ -154,6 +163,7 @@ const ButtonManager = (componentData, setComponentData) => {
         setButtonOnPressApiUrl,
         addButtonOnPressApiParam,
         deleteButtonOnPressApiParam,
+        setButtonOnPressApiResultDisplayType,
         shiftButtonUp,
         shiftButtonDown
     }

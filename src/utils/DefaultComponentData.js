@@ -1,10 +1,7 @@
 import * as deepcopy from 'deepcopy';
-// import { setPrefix } from 'react-id-generator';
 import nextId from 'react-id-generator';
 
 import UIItemTypes from './UIItemTypes';
-
-// setPrefix('frpid-');
 
 export const DEFAULT_ACTIVITY_NAME = 'Main Activity';
 export const DEFAULT_ACTIVITY_ID = 'main-activity';
@@ -40,6 +37,7 @@ const DefaultComponentData = {
         'parent': '',
         'on-press-action-type': 'activity', // 'activity': for changing activity, 'api': for RESTful API call
         'on-press-activity': 'none',
+        'on-press-api-result-display-type': 'prompt', // 'none, 'toast', 'prompt'
         'on-press-api-call-type': 'GET', // 'GET', 'POST'
         'on-press-api-url': '',
         'on-press-api-params': [],

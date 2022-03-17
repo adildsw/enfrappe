@@ -43,39 +43,47 @@ const ButtonLive = (props) => {
             
             fetch(apiUrl, requestInnit)
                 .then(response => {
-                    setResponseModalState(true);
-                    console.log(response);
                     if (response.ok) {
                         response.text().then(data => {
-                            console.log(data);
-                            setResponseModalContent({'status': response.status, 'message': data});
-                            setResponseModalState(true);
+                            if (response.status === 299) {
+                                const activity = componentManager.activityManager.getActivityId(response.statusText);
+                                if (activity !== undefined)
+                                    setCurrentActivity(activity);
+                                else {
+                                    setResponseModalContent({'status': 'Activity Not Found', 'message': 'Server responded with an invalid activity reference.'});
+                                    reportResult('Activity Not Found', 'Server responded with an invalid activity reference.');
+                                }
+                            }
+                            else {
+                                setResponseModalContent({'status': response.status, 'message': data});
+                                reportResult(response.status, data);
+                            }
+                            
                         });
                     }
                     else {
                         var statusText = response.statusText.toLowerCase();
                         statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
                         setResponseModalContent({'status': response.status, 'message': statusText});
-                        setResponseModalState(true);
+                        reportResult(response.status, statusText);
                     }
                 })
                 .catch(error => {
                     setResponseModalContent({'status': 'Undefined', 'message': 'Something went wrong, please check the console for more details...'});
-                    setResponseModalState(true);
+                    reportResult('Undefined', 'Something went wrong, please check the console for more details...');
                     console.log(error);
                 });
         }
+    }
 
-        // fetch(apiUrl, requestInnit)
-        //     .then(response => response.text())
-        //     .then(data => {
-        //         console.log(data); 
-
-        //     }).catch(error => {
-        //         console.log(error);
-        //     });
-        // }
-
+    const reportResult = (status, message) => {
+        const type = buttonData['on-press-api-result-display-type'];
+        if (type === 'prompt')
+            setResponseModalState(true);
+        else if (type === 'toast')
+            alert('Status: ' + status + '\nMessage: ' + message);
+        else
+            console.log('Status: ' + status + '\nMessage: ' + message);
     }
 
     return (

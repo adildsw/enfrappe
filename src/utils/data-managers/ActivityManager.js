@@ -16,7 +16,12 @@ const ActivityManager = (componentData, setComponentData) => {
 
     // Function for getting activity name from activity ID
     const getActivityName = (activityId) => {
-        return componentData.components[activityId]['name'];
+        try {
+            return componentData.components[activityId]['name'];
+        }
+        catch (error) {
+            return undefined;
+        }
     }
 
     // Function for getting list of all activity names

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
+// import LZUTF8 from 'lzutf8';
 
 import getAppTemplate from '../../utils/TemplateManager';
 
@@ -113,6 +114,12 @@ const AppDetails = (props) => {
             default:
                 return false;
         }
+    };
+
+    const viewQRCode = () => {
+        // const output = LZUTF8.compress(JSON.stringify(getCurrentProjectData()));
+        // console.log(output);
+        // console.log(LZUTF8.decompress(output));
     };
 
     return (
@@ -301,17 +308,12 @@ const AppDetails = (props) => {
                                 labelPosition='left'
                                 content='View QR Code'
                                 disabled={simulationState}
+                                onClick={() => { viewQRCode(); }}
                             />
                             <Button 
                                 icon='print' 
                                 labelPosition='left'
                                 content='Print QR Code'
-                                disabled={simulationState}
-                            />
-                            <Button 
-                                icon='download' 
-                                labelPosition='left'
-                                content='Download Application Package'
                                 disabled={simulationState}
                             />
                         </Button.Group>
@@ -323,6 +325,12 @@ const AppDetails = (props) => {
                                 icon='cogs' 
                                 labelPosition='left'
                                 content='Generate Backend Server'
+                                disabled={simulationState}
+                            />
+                            <Button 
+                                icon='download' 
+                                labelPosition='left'
+                                content='Download Application Package'
                                 disabled={simulationState}
                             />
                         </Button.Group>
