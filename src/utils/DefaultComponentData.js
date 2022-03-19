@@ -39,8 +39,9 @@ const DefaultComponentData = {
         'on-press-activity': 'none',
         'on-press-api-result-display-type': 'prompt', // 'none, 'toast', 'prompt'
         'on-press-api-call-type': 'GET', // 'GET', 'POST'
-        'on-press-api-url': '',
+        'on-press-api-url': '/',
         'on-press-api-params': [],
+        'on-press-api-custom-params': {},
     },
     [UIItemTypes.TEXT]: {
         'type': UIItemTypes.TEXT,

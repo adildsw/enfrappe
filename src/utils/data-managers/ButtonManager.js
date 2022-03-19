@@ -141,6 +141,24 @@ const ButtonManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
+    const addButtonOnPressApiCustomParam = (buttonId, apiParamKey, apiParamValue) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[buttonId]['on-press-api-custom-params'][apiParamKey] = apiParamValue;
+        setComponentData(newComponentData);
+    }
+
+    const deleteButtonOnPressApiCustomParam = (buttonId, apiParamKey, apiParamValue) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        delete newComponentData.components[buttonId]['on-press-api-custom-params'][apiParamKey];
+        setComponentData(newComponentData);
+    }
+
     const setButtonOnPressApiResultDisplayType = (buttonId, apiResultDisplayType) => {
         const newComponentData = {
             ...componentData,
@@ -163,6 +181,8 @@ const ButtonManager = (componentData, setComponentData) => {
         setButtonOnPressApiUrl,
         addButtonOnPressApiParam,
         deleteButtonOnPressApiParam,
+        addButtonOnPressApiCustomParam,
+        deleteButtonOnPressApiCustomParam,
         setButtonOnPressApiResultDisplayType,
         shiftButtonUp,
         shiftButtonDown

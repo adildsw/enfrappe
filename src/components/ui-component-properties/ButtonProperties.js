@@ -7,13 +7,30 @@ import UIItemTypes, { getUIItemName } from '../../utils/UIItemTypes';
 const ButtonProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { componentData, activityManager, buttonManager } = componentManager;
-    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton, setButtonOnPressActionType, setButtonOnPressActivity, setButtonOnPressApiCallType, setButtonOnPressApiUrl, addButtonOnPressApiParam, deleteButtonOnPressApiParam, setButtonOnPressApiResultDisplayType } = buttonManager;
+    const { setButtonText, setButtonBackground, setButtonTextColor, shiftButtonUp, shiftButtonDown, deleteButton, setButtonOnPressActionType, setButtonOnPressActivity, setButtonOnPressApiCallType, setButtonOnPressApiUrl, addButtonOnPressApiParam, deleteButtonOnPressApiParam, setButtonOnPressApiResultDisplayType, addButtonOnPressApiCustomParam, deleteButtonOnPressApiCustomParam } = buttonManager;
     const buttonData = buttonManager.getButtonData(selectedComponent.id);
     
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
     const [backgroundColorPickerDisplay, setBackgroundColorPickerDisplay] = useState(false);
 
     const [deleteButtonModalState, setDeleteButtonModalState] = useState(false);
+
+    const [addCustomParamModalState, setAddCustomParamModalState] = useState(false);
+    const [customParam, setCustomParam] = useState({'key': '', 'value': ''})
+    const [customParamState, setCustomParamState] = useState({'valid': false, 'message': 'Parameter key cannot be empty'});
+
+    const validateCustomParam = (newParamKey) => {
+        if (newParamKey === '' || newParamKey === undefined) {
+            setCustomParamState({'valid': false, 'message': 'Parameter name cannot be empty'});
+        } else {
+            if (buttonData['on-press-api-params'].includes(newParamKey) || buttonData['on-press-api-custom-params'].hasOwnProperty(newParamKey)) {
+                setCustomParamState({'valid': false, 'message': 'Parameter name already exists'});
+            }
+            else {
+                setCustomParamState({'valid': true, 'message': ''});
+            }
+        }
+    }
 
     const getMoveButtonButtonState = (buttonId) => {
         const parentId = buttonData.parent;
@@ -59,6 +76,11 @@ const ButtonProperties = (props) => {
                 });
             }
         });
+        itemList.push({
+            'key': 'custom',
+            'text': 'Custom Data',
+            'value': 'custom'
+        });
         return itemList;
     }
 
@@ -78,6 +100,20 @@ const ButtonProperties = (props) => {
                     </List.Item>
                 );
             }
+        });
+        Object.keys(buttonData['on-press-api-custom-params']).forEach(param => {
+            apiCallParams.push(
+                <List.Item key={param} as='a'>
+                    <List.Content floated='right'>
+                        <List.Icon name='trash' verticalAlign='middle' onClick={() => { deleteButtonOnPressApiCustomParam(buttonData.id, param); }} />
+                    </List.Content>
+                    <List.Icon name='circle outline' size='tiny' verticalAlign='middle' style={{'cursor': 'default'}} />
+                    <List.Content verticalAlign='middle' style={{'cursor': 'default', 'color': 'black'}}>
+                        <b>{param}</b> <i>[Custom Data]</i><br />
+                        Value: <i>{buttonData['on-press-api-custom-params'][param]}</i>
+                    </List.Content>
+                </List.Item>
+            )
         });
         return apiCallParams;
     }
@@ -229,10 +265,10 @@ const ButtonProperties = (props) => {
                                 <Input 
                                     value={buttonData['on-press-api-url']}
                                     onChange={(e) => { 
-                                        if (e.target.value !== '' && !e.target.value.startsWith('/'))
+                                        if (!e.target.value.startsWith('/'))
                                             setButtonOnPressApiUrl(selectedComponent.id, '/' + e.target.value);
                                         else
-                                            setButtonOnPressApiUrl(selectedComponent.id, e.target.value); 
+                                            setButtonOnPressApiUrl(selectedComponent.id, e.target.value);
                                     }}
                                     placeholder='/apicall'
                                     fluid
@@ -252,7 +288,14 @@ const ButtonProperties = (props) => {
                                     <Form.Field >
                                         <Dropdown
                                             button
-                                            onChange={(e, data) => { addButtonOnPressApiParam(selectedComponent.id, data.value); }}
+                                            onChange={(e, data) => { 
+                                                if (data.value !== 'custom')
+                                                    addButtonOnPressApiParam(selectedComponent.id, data.value); 
+                                                else  {
+                                                    validateCustomParam();
+                                                    setAddCustomParamModalState(true);
+                                                }
+                                            }}
                                             options={generateSectionUserInputComponentItems()}
                                             text={'Add Parameter'}
                                             value=''
@@ -263,22 +306,66 @@ const ButtonProperties = (props) => {
                                 </Segment>
                             </Form.Field>
 
+                            <Modal
+                                size={'tiny'}
+                                open={addCustomParamModalState}
+                                onClose={() => { setAddCustomParamModalState(false); }}>
+                                <Header icon='pencil' content='Add Custom Parameter' />
+                                <Modal.Content>
+                                    <Form>
+                                        <Form.Field>
+                                            <Label className={'tucked-label'}>Parameter Name</Label>
+                                            <Form.Input 
+                                                placeholder='Parameter Name'
+                                                value={customParam.key}
+                                                onChange={(e, data) => {
+                                                    const newParamkey = data.value.replace(/[^a-zA-Z0-9_]/g, '');
+                                                    setCustomParam({...customParam, 'key': newParamkey});
+                                                    validateCustomParam(newParamkey); 
+                                                }}
+                                                error={!customParamState.valid && {
+                                                    content: customParamState.message
+                                                }}
+                                                fluid
+                                            />
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <Label className={'tucked-label'}>Parameter Value</Label>
+                                            <Form.Input 
+                                                placeholder='Parameter Value'
+                                                value={customParam.value}
+                                                onChange={(e, data) => { setCustomParam({...customParam, 'value': data.value}); }}
+                                                fluid 
+                                            />
+                                        </Form.Field>
+                                    </Form>
+                                </Modal.Content>
+                                <Modal.Actions>
+                                    <Button 
+                                        icon='cancel' 
+                                        onClick={() => { setAddCustomParamModalState(false); }} 
+                                    />
+                                    <Button 
+                                        icon='check'
+                                        content='Confirm Changes'
+                                        labelPosition='right' 
+                                        disabled={!customParamState.valid} 
+                                        onClick={() => { 
+                                            if (customParamState.valid) {
+                                                setAddCustomParamModalState(false);
+                                                addButtonOnPressApiCustomParam(buttonData.id, customParam.key, customParam.value);
+                                                setCustomParam({'key': '', 'value': ''});
+                                            }
+                                        }} 
+                                    />
+                                </Modal.Actions>
+                            </Modal>
+
                             <Form.Field>
                                 <Label className={'tucked-label'}>API Result Display Type</Label>
                                 <Table className={'tucked-label-compat'}>
                                     <Table.Body>
                                         <Table.Row>
-                                            {/* <Table.Cell textAlign='center' verticalAlign='middle'>
-                                                <Radio
-                                                    name={'on-press-api-result-display-type'}
-                                                    label={'None'}
-                                                    value={'none'}
-                                                    checked={buttonData['on-press-api-result-display-type'] === 'none'}
-                                                    onChange={() => {
-                                                        setButtonOnPressApiResultDisplayType(selectedComponent.id, 'none');
-                                                    }}
-                                                />
-                                            </Table.Cell> */}
                                             <Table.Cell textAlign='center' verticalAlign='middle'>
                                                 <Radio
                                                     name={'on-press-api-result-display-type'}

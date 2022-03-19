@@ -6,6 +6,7 @@ import nextId from 'react-id-generator';
 // import LZUTF8 from 'lzutf8';
 
 import getAppTemplate from '../../utils/TemplateManager';
+import CustomServerUtils from '../../deployment/CustomServerUtils';
 
 import './AppDetails.css';
 
@@ -16,6 +17,8 @@ const AppDetails = (props) => {
     const { componentManager, appManager, simulationState, setSimulationState, setCurrentActivity, setSelectedComponent, resetLiveData } = props;
     const { getAppMetadata, setAppMetadata, appData, setAppData } = appManager;
     const { componentData, setComponentData } = componentManager;
+
+    const customServerUtils = CustomServerUtils(appManager, componentManager);
 
     const appLoadFileRef = useRef();
     // const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
@@ -324,13 +327,15 @@ const AppDetails = (props) => {
                             <Button 
                                 icon='cogs' 
                                 labelPosition='left'
-                                content='Generate Backend Server'
+                                content='Generate Custom Server'
+                                onClick={() => { customServerUtils.generateCustomServer(); }}
                                 disabled={simulationState}
                             />
                             <Button 
                                 icon='download' 
                                 labelPosition='left'
                                 content='Download Application Package'
+                                onClick={() => { customServerUtils.countFiles(); }}
                                 disabled={simulationState}
                             />
                         </Button.Group>

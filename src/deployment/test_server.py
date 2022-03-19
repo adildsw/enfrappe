@@ -32,7 +32,12 @@ def index1():
 
 @app.route('/change', methods=['GET'])
 def index2():
-    return '', '299 kidsmenu1'
+    return '', '299 kidsmenu'
+
+def test():
+    # check if directory 'data' exists, if not create it
+    if not os.path.exists('data'):
+        os.makedirs('data')
 
 
 if __name__ == '__main__':
