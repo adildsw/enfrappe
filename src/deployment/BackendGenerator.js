@@ -29,6 +29,10 @@ def update_last_timestamp():
     global last_timestamp
     last_timestamp = time_in_millis()
 
+def reset_last_timestamp():
+    global last_timestamp
+    last_timestamp = 0
+
 def update_last_timestamp_from_data():
     global last_timestamp
     for rootdir, dirs, files in os.walk('./data/'):
@@ -45,23 +49,27 @@ def get_all_files_after_timestamp(timestamp):
             if float(file.split('_')[0]) > timestamp:
                 file_dir = rootdir + '/' + file
                 file_key = file_dir.replace('./data/', '')
+                file_key = file_key.replace('.json', '')
                 all_files[file_key] = open(file_dir, 'r').read()
     return all_files
 
 def delete_data_folder():
-    for rootdir, dirs, files in os.walk('./data/'):
-        for file in files:
-            os.remove(rootdir + '/' + file)
-    os.rmdir('./data/')
+    reset_last_timestamp()
+    if os.path.exists('./data'):
+        shutil.rmtree('./data')
 
 # |--------------------------------------------------------------------------
 # | Utility API Routes
 # |--------------------------------------------------------------------------
 
+@app.route('/enfrappe_static_get_last_timestamp', methods=['POST'])
+def get_last_timestamp_api_route():
+    return jsonify({'timestamp': get_last_timestamp()})
+
 @app.route('/enfrappe_static_update_data', methods=['POST'])
 def get_updated_data():
-    timestamp = request.get_json()['timestamp']
-    if timestamp <= get_last_timestamp():
+    timestamp = int(request.get_json()['timestamp'])
+    if timestamp >= get_last_timestamp():
         return jsonify({})
     else:
         return jsonify(get_all_files_after_timestamp(timestamp))
@@ -70,24 +78,39 @@ def get_updated_data():
 def delete_data():
     delete_data_folder()
     return jsonify({})
-
 `;
 
-// Returns all the API routes for the flask backend
-const backendApiRoutes = (apiUrlList, apiMethodList) => {
+const backendAppDetailApiRoutes = (appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList) => {
     const functionApiMapping = {};
     apiUrlList.forEach(api => {
         var functionName = 'func_' + apiUrlList.indexOf(api);
         functionApiMapping[functionName] = api;
     });
 
-    var apiRoutes = `
+    var appDetailRoutes = `
 @app.route('/enfrappe_static_function_api_mapping', methods=['POST'])
 def get_function_api_mapping():
-    return jsonify(${JSON.stringify(functionApiMapping)}) `;
+    return jsonify(${JSON.stringify(functionApiMapping)}) 
+    `;
 
+    appDetailRoutes += `
+@app.route('/enfrappe_static_app_detail', methods=['POST'])
+def get_app_detail():
+    return jsonify({
+        'app_id': '${appId}',
+        'app_version': '${appVer}',
+        'app_name': '${appName}',
+        'server_ip': '${serverIp}',
+        'server_port': '${serverPort}'
+    }) 
+    `;
 
-    apiRoutes += `
+    return appDetailRoutes;
+}
+
+// Returns all the API routes for the flask backend
+const backendApiRoutes = (apiUrlList, apiMethodList) => {
+    var apiRoutes = `
 # |--------------------------------------------------------------------------
 # | Data API Routes
 # |--------------------------------------------------------------------------
@@ -129,18 +152,19 @@ def ${functionName}():
     return 'OK'
 `);
 
-const backendServerLauncher = (ip, port) => (
+const backendServerLauncher = (serverIp, serverPort) => (
 `
 if __name__ == '__main__':
     update_last_timestamp_from_data()
-    app.run(host='${ip}', port=${port})
+    app.run(host='${serverIp}', port=${serverPort})
 `);
 
-const generateFlaskBackend = (apiUrlList, apiMethodList) => {
+const generateFlaskBackend = (appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList) => {
     var backendCode = backendHeader;
     backendCode += backendUtilityFunctions;
+    backendCode += backendAppDetailApiRoutes(appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList);
     backendCode += backendApiRoutes(apiUrlList, apiMethodList);
-    backendCode += backendServerLauncher('127.0.0.1', '1803');
+    backendCode += backendServerLauncher(serverIp, serverPort);
     return backendCode;
 }
 

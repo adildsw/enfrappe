@@ -3,7 +3,8 @@ import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
-// import LZUTF8 from 'lzutf8';
+import JSZip from 'jszip';
+import saveAs from 'file-saver';
 
 import getAppTemplate from '../../utils/TemplateManager';
 import CustomServerUtils from '../../deployment/CustomServerUtils';
@@ -21,22 +22,21 @@ const AppDetails = (props) => {
     const customServerUtils = CustomServerUtils(appManager, componentManager);
 
     const appLoadFileRef = useRef();
-    // const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
     const [unsavedModalState, setUnsavedModalState] = useState({'state': false, 'action': 'new'});
+    const [customServerModalState, setCustomServerModalState] = useState(false);
+    const [customServerDetails, setCustomServerDetails] = useState({'ip': '127.0.0.1', 'port': '1804'});
 
     // Checks if there exists unsaved changes [NOT WORKING]
+    // const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
     // const areChangesUnsaved = () => {
     //     const currentProject = getCurrentProjectData();
     //     delete currentProject['app-data']['last-edited'];
     //     delete currentProject['component-data']['last-edited'];
-
     //     const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
     //     delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
     //     delete unsavedBenchmarkNoTimestamp['component-data']['last-edited'];
-
     //     console.log(currentProject, unsavedBenchmarkNoTimestamp);
     //     console.log(JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp))
-
     //     return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
     // }
 
@@ -120,9 +120,44 @@ const AppDetails = (props) => {
     };
 
     const viewQRCode = () => {
+        const output = JSON.stringify(getCurrentProjectData());
         // const output = LZUTF8.compress(JSON.stringify(getCurrentProjectData()));
-        // console.log(output);
+        console.log(output);
+        // console.log(LZString.compress(output));
+        // console.log(LZString.decompress(LZString.compress(output)));
+        // console.log(lzwCompress.pack(getCurrentProjectData()));
         // console.log(LZUTF8.decompress(output));
+
+        var zip = new JSZip();
+
+        // const { apiUrlList, apiMethodList } = getApiList();
+        // zip.file("server.py", generateFlaskBackend(
+        //     appManager.appData['app-id'], 
+        //     appManager.appData['app-version'],
+        //     appManager.appData['app-name'],
+        //     appManager.appData['server-address'],
+        //     appManager.appData['server-port'], 
+        //     apiUrlList, 
+        //     apiMethodList
+        // ));
+        // zip.file("favicon.ico", generateReactFrontend(), {base64: true});
+
+        zip.file("test.txt", output);
+
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            saveAs(content, "example.zip");
+        });
+
+        zip.generateAsync({
+            type: "base64",
+            compression: "DEFLATE",
+            compressionOptions: {
+                level: 9
+            }
+        }).then(function(content) {
+            console.log(content);
+            // saveAs(content, "exampleComp.zip");
+        });
     };
 
     return (
@@ -268,7 +303,7 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='127.0.0.1'
                                 fluid
-                                onChange={(e) => { setAppMetadata('server-address', e.target.value) }}
+                                onChange={(e) => { setAppMetadata('server-address', e.target.value); }}
                                 value={getAppMetadata('server-address')}
                                 disabled={simulationState}
                             />
@@ -278,7 +313,10 @@ const AppDetails = (props) => {
                             <Input
                                 placeholder='1803'
                                 fluid
-                                onChange={(e) => { setAppMetadata('server-port', e.target.value) }}
+                                onChange={(e) => { 
+                                    const port = e.target.value.replace(/[^0-9]/g, '');
+                                    setAppMetadata('server-port', port); 
+                                }}
                                 value={getAppMetadata('server-port')}
                                 disabled={simulationState}
                             />
@@ -314,32 +352,60 @@ const AppDetails = (props) => {
                                 onClick={() => { viewQRCode(); }}
                             />
                             <Button 
-                                icon='print' 
-                                labelPosition='left'
-                                content='Print QR Code'
-                                disabled={simulationState}
-                            />
-                        </Button.Group>
-                    </Form.Field>
-
-                    <Form.Field>
-                        <Button.Group className={'centered-button-text'} vertical fluid>
-                            <Button 
                                 icon='cogs' 
                                 labelPosition='left'
                                 content='Generate Custom Server'
-                                onClick={() => { customServerUtils.generateCustomServer(); }}
-                                disabled={simulationState}
-                            />
-                            <Button 
-                                icon='download' 
-                                labelPosition='left'
-                                content='Download Application Package'
-                                onClick={() => { customServerUtils.countFiles(); }}
+                                onClick={() => { setCustomServerModalState(true); }}
                                 disabled={simulationState}
                             />
                         </Button.Group>
                     </Form.Field>
+                    <Modal
+                        size={'tiny'}
+                        open={customServerModalState}
+                        onClose={() => { setCustomServerModalState(false); }}>
+                        <Header icon='cogs' content='Custom Server Details' />
+                        <Modal.Content>
+                            <Form>
+                                <Form.Field>
+                                    <Label className={'tucked-label'}>IP</Label>
+                                    <Form.Input 
+                                        value={customServerDetails.ip}
+                                        placeholder={'127.0.0.1'}
+                                        fluid
+                                        onChange={(e, data) => { setCustomServerDetails({...customServerDetails, 'ip': data.value}); }}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <Label className={'tucked-label'}>Port</Label>
+                                    <Form.Input 
+                                        value={customServerDetails.port}
+                                        placeholder={'1804'}
+                                        fluid 
+                                        onChange={(e, data) => { 
+                                            const port = e.target.value.replace(/[^0-9]/g, '');
+                                            setCustomServerDetails({...customServerDetails, 'port': port});
+                                        }}
+                                    />
+                                </Form.Field>
+                            </Form>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button 
+                                icon='cancel' 
+                                onClick={() => { setCustomServerModalState(false); }} 
+                            />
+                            <Button 
+                                icon='check'
+                                content='Create Custom Server'
+                                labelPosition='right' 
+                                onClick={() => { 
+                                    setCustomServerModalState(false);
+                                    customServerUtils.generateCustomServer(customServerDetails.ip, customServerDetails.port);
+                                }} 
+                            />
+                        </Modal.Actions>
+                    </Modal>
                 </Form>
                 
             </div>
