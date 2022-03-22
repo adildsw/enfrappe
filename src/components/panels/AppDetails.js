@@ -5,6 +5,9 @@ import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
 import JSZip from 'jszip';
 import saveAs from 'file-saver';
+import pako from 'pako';
+
+import { byteSize, enfrappifyData } from '../../utils/DataUtils';
 
 import getAppTemplate from '../../utils/TemplateManager';
 import CustomServerUtils from '../../deployment/CustomServerUtils';
@@ -121,43 +124,18 @@ const AppDetails = (props) => {
 
     const viewQRCode = () => {
         const output = JSON.stringify(getCurrentProjectData());
-        // const output = LZUTF8.compress(JSON.stringify(getCurrentProjectData()));
-        console.log(output);
-        // console.log(LZString.compress(output));
-        // console.log(LZString.decompress(LZString.compress(output)));
-        // console.log(lzwCompress.pack(getCurrentProjectData()));
-        // console.log(LZUTF8.decompress(output));
+        const compressed = btoa(String.fromCharCode(...pako.deflate(output)));
+        // console.log(output);
+        // console.log(byteSize('abcsd;'));
+        // console.log(output.length);
+        // console.log(compressed);
+        // console.log(pako.deflate(output));
+        // console.log(pako.deflate(output).toString());
+        const decompressed = atob(compressed);
+        const binaryArray = decompressed.split('').reduce((acc, next) => [...acc, next.charCodeAt(0)], [] );
+        // console.log(pako.inflate(binaryArray, { to: 'string' }));
 
-        var zip = new JSZip();
-
-        // const { apiUrlList, apiMethodList } = getApiList();
-        // zip.file("server.py", generateFlaskBackend(
-        //     appManager.appData['app-id'], 
-        //     appManager.appData['app-version'],
-        //     appManager.appData['app-name'],
-        //     appManager.appData['server-address'],
-        //     appManager.appData['server-port'], 
-        //     apiUrlList, 
-        //     apiMethodList
-        // ));
-        // zip.file("favicon.ico", generateReactFrontend(), {base64: true});
-
-        zip.file("test.txt", output);
-
-        zip.generateAsync({type:"blob"}).then(function(content) {
-            saveAs(content, "example.zip");
-        });
-
-        zip.generateAsync({
-            type: "base64",
-            compression: "DEFLATE",
-            compressionOptions: {
-                level: 9
-            }
-        }).then(function(content) {
-            console.log(content);
-            // saveAs(content, "exampleComp.zip");
-        });
+        enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
     };
 
     return (
