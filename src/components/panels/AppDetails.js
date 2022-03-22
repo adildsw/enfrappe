@@ -3,11 +3,8 @@ import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
-import JSZip from 'jszip';
-import saveAs from 'file-saver';
-import pako from 'pako';
 
-import { byteSize, enfrappifyData } from '../../utils/DataUtils';
+import { enfrappifyData, generateQRCode } from '../../utils/DataUtils';
 
 import getAppTemplate from '../../utils/TemplateManager';
 import CustomServerUtils from '../../deployment/CustomServerUtils';
@@ -122,20 +119,9 @@ const AppDetails = (props) => {
         }
     };
 
-    const viewQRCode = () => {
-        const output = JSON.stringify(getCurrentProjectData());
-        const compressed = btoa(String.fromCharCode(...pako.deflate(output)));
-        // console.log(output);
-        // console.log(byteSize('abcsd;'));
-        // console.log(output.length);
-        // console.log(compressed);
-        // console.log(pako.deflate(output));
-        // console.log(pako.deflate(output).toString());
-        const decompressed = atob(compressed);
-        const binaryArray = decompressed.split('').reduce((acc, next) => [...acc, next.charCodeAt(0)], [] );
-        // console.log(pako.inflate(binaryArray, { to: 'string' }));
-
-        enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
+    const downloadQRCode = () => {
+        const enfrappefiedData = enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
+        generateQRCode(appManager.appData['app-id'], enfrappefiedData);
     };
 
     return (
@@ -323,11 +309,11 @@ const AppDetails = (props) => {
                     <Form.Field>
                         <Button.Group className={'centered-button-text'} vertical fluid>
                             <Button 
-                                icon='eye' 
+                                icon='download' 
                                 labelPosition='left'
-                                content='View QR Code'
+                                content='Download QR Code'
                                 disabled={simulationState}
-                                onClick={() => { viewQRCode(); }}
+                                onClick={() => { downloadQRCode(); }}
                             />
                             <Button 
                                 icon='cogs' 
