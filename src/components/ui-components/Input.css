@@ -22,7 +22,7 @@
 }
 
 .enfrappe-ui-inputstatic input {
-    cursor: default;
+    cursor: grab;
 }
 
 .enfrappe-ui-input:not(.enfrappe-ui-inputstatic) input {

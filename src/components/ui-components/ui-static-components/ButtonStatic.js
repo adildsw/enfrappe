@@ -17,7 +17,7 @@ const ButtonStatic = () => {
     return (
         <div>
             <h3>Button</h3>
-            <div ref={drag}>
+            <div ref={drag} className={'draggable-enfrappe-ui'}>
                 <SemanticButton fluid className={'enfrappe-ui-button enfrappe-ui-buttonstatic'} style={{'background': '#CCCCCC', 'opacity': isDragging ? '0.4' : '0.7'}}>
                     <h4 className={'enfrappe-ui-buttonlabel'}>Button</h4>
                 </SemanticButton>

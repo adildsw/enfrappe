@@ -16,7 +16,7 @@ const TextStatic = () => {
     return (
         <div>
             <h3>Text</h3>
-            <div ref={drag} className={'enfrappe-ui-text enfrappe-ui-textstatic'} style={{'opacity': isDragging ? '0.4' : '1'}}>
+            <div ref={drag} className={'enfrappe-ui-text enfrappe-ui-textstatic draggable-enfrappe-ui'} style={{'opacity': isDragging ? '0.4' : '1'}}>
                 <p>Text content here.</p>
             </div>
         </div>

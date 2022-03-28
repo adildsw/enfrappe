@@ -50,7 +50,7 @@ const InputProperties = (props) => {
     return (
         <Form>
             <Form.Field>
-                <Label className={'tucked-label'} color={'grey'}>Name</Label>
+                <Label className={'tucked-label'} color={'orange'}>Parameter Name</Label>
                 <Input
                     className={'button-based-input-only'}
                     value={inputData.name}

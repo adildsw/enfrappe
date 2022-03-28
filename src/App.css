@@ -15,6 +15,10 @@
     overflow-x: hidden;
 }
 
+.draggable-enfrappe-ui {
+    cursor: grab !important;
+}
+
 #panel-prototype, #panel-simulation {
     position: relative;
     clip-path: inset(0px);

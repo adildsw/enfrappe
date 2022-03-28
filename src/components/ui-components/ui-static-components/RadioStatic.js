@@ -17,7 +17,7 @@ const RadioStatic = () => {
     return (
         <div>
             <h3>Radio Group</h3>
-            <div ref={drag} className={'enfrappe-ui-radio enfrappe-ui-radiostatic'} style={{'opacity': isDragging ? '0.4' : '1'}}>
+            <div ref={drag} className={'enfrappe-ui-radio enfrappe-ui-radiostatic draggable-enfrappe-ui'} style={{'opacity': isDragging ? '0.4' : '1'}}>
                 <Label className={'tucked-label'}>Label</Label>
                 <Segment className={'tucked-label-compat'}>
                     <Form.Field>

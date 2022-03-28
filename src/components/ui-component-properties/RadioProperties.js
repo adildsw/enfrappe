@@ -78,6 +78,7 @@ const RadioProperties = (props) => {
         const newOptionValidationState = {...optionValidationState};
         if (label !== null) {
             if (label.length === 0) {
+                newOptionValidationState['label'] = label;
                 newOptionValidationState['label-valid'] = false;
                 newOptionValidationState['label-message'] = 'Label cannot be empty.';
             }
@@ -106,6 +107,7 @@ const RadioProperties = (props) => {
         }
         if (value !== null) {
             if (value.length === 0) {
+                newOptionValidationState['value'] = value;
                 newOptionValidationState['value-valid'] = false;
                 newOptionValidationState['value-message'] = 'Value cannot be empty.';
             }
@@ -165,7 +167,7 @@ const RadioProperties = (props) => {
     return (
         <Form>
             <Form.Field>
-                <Label className={'tucked-label'} color={'grey'}>Name</Label>
+                <Label className={'tucked-label'} color={'orange'}>Parameter Name</Label>
                 <Input
                     className={'button-based-input-only'}
                     value={radioData.name}

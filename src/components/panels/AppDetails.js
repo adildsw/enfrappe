@@ -332,7 +332,11 @@ const AppDetails = (props) => {
                                 icon='cogs' 
                                 labelPosition='left'
                                 content='Generate Custom Server'
-                                onClick={() => { setCustomServerModalState(true); }}
+                                onClick={() => { 
+                                    // Setting custom frontend server ip/port
+                                    // setCustomServerModalState(true); 
+                                    customServerUtils.generateCustomServer(customServerDetails.ip, customServerDetails.port);
+                                }}
                                 disabled={simulationState}
                             />
                         </Button.Group>
@@ -353,11 +357,11 @@ const AppDetails = (props) => {
                         size={'tiny'}
                         open={customServerModalState}
                         onClose={() => { setCustomServerModalState(false); }}>
-                        <Header icon='cogs' content='Custom Server Details' />
+                        <Header icon='cogs' content='Custom Frontend Server Details' />
                         <Modal.Content>
                             <Form>
                                 <Form.Field>
-                                    <Label className={'tucked-label'}>IP</Label>
+                                    <Label className={'tucked-label'}>Frontend IP</Label>
                                     <Form.Input 
                                         value={customServerDetails.ip}
                                         placeholder={'127.0.0.1'}
@@ -366,7 +370,7 @@ const AppDetails = (props) => {
                                     />
                                 </Form.Field>
                                 <Form.Field>
-                                    <Label className={'tucked-label'}>Port</Label>
+                                    <Label className={'tucked-label'}>Frontend Port</Label>
                                     <Form.Input 
                                         value={customServerDetails.port}
                                         placeholder={'1804'}

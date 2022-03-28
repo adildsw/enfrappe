@@ -17,7 +17,7 @@ const SectionStatic = () => {
     return (
         <div>
             <h3>Section</h3>
-            <div ref={drag} className={'enfrappe-ui-section'} style={{'opacity': isDragging ? '0.4' : '1'}}>
+            <div ref={drag} className={'enfrappe-ui-section draggable-enfrappe-ui'} style={{'opacity': isDragging ? '0.4' : '1'}}>
                 <h1 className={'panel-heading'}>Title</h1>
                 <h3 className={'panel-subheading'}>Subtitle</h3>
                 <DnDSpaceStatic />

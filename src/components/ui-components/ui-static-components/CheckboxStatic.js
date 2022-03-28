@@ -17,7 +17,7 @@ const CheckboxStatic = () => {
     return (
         <div>
             <h3>Checkbox</h3>
-            <div ref={drag} className={'enfrappe-ui-checkbox enfrappe-ui-checkboxstatic'} style={{'opacity': isDragging ? '0.4' : '1'}}>
+            <div ref={drag} className={'enfrappe-ui-checkbox enfrappe-ui-checkboxstatic draggable-enfrappe-ui'} style={{'opacity': isDragging ? '0.4' : '1'}}>
                 <SemanticCheckbox className={'enfrappe-ui-checkboxmain'} label='Label' readOnly checked />
             </div>
         </div>

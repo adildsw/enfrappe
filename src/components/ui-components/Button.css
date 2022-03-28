@@ -13,7 +13,7 @@
 }
 
 .enfrappe-ui-buttonstatic {
-    cursor: default !important;
+    cursor: grab !important;
 }
 
 .enfrappe-ui-buttonstatic:active {

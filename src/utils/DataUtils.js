@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 import JSZip from 'jszip';
 import saveAs from 'file-saver';
 
-const MAX_SIZE = 2500;
+const MAX_SIZE = 2100;
 
 const PDF_SERVER_IP = '127.0.0.1';
 const PDF_SERVER_PORT = '3001';
@@ -47,7 +47,7 @@ export const enfrappifyData = (appId, data) => {
 export const generateQRCode = (appId, appVersion, dataPacketArray) => {
     const zip = new JSZip();
     dataPacketArray.forEach((packet, idx) => {
-        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
+        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'M'}, function (err, url) {
             const base64Data = url.replace('data:image/png;base64,', '');
             zip.file((idx + 1) + '.png', base64Data, {base64: true});
         });
@@ -60,7 +60,7 @@ export const generateQRCode = (appId, appVersion, dataPacketArray) => {
 export const generateQRCodePdf = (appId, appName, appVersion, dataPacketArray) => {
     const b64Images = {};
     dataPacketArray.forEach((packet, idx) => {
-        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
+        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'M'}, function (err, url) {
             b64Images['img_' + (idx + 1)] = url;
         });
     });

@@ -17,7 +17,7 @@ const TextInputStatic = () => {
     return (
         <div>
             <h3>Input Field</h3>
-            <div ref={drag} className={'enfrappe-ui-input enfrappe-ui-inputstatic'} style={{'opacity': isDragging ? '0.4' : '1'}}>
+            <div ref={drag} className={'enfrappe-ui-input enfrappe-ui-inputstatic draggable-enfrappe-ui'} style={{'opacity': isDragging ? '0.4' : '1'}}>
                 <Form.Field>
                     <Label className={'tucked-label'}>Label</Label>
                     <Input 

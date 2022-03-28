@@ -22,7 +22,7 @@ import { DEFAULT_ACTIVITY_ID } from './utils/DefaultComponentData';
  * - Text elements become blurry upon hover when all the components are added to a section
  * - Adding elements to a loaded app breaks the app [Workaround: start and stop simulation after loading]
  * - Unsaved changes not checking properly [Workaround: notify user of unsaved changes regardless of whether there are unsaved changes]
- * - New app button not working.
+ * - renaming parameter names retain changes
 */
 
 const App = () => {
@@ -35,8 +35,7 @@ const App = () => {
 
     useEffect(() => {
         window.onbeforeunload = confirmExit;
-        function confirmExit()
-        {
+        function confirmExit() {
           return "show warning";
         }
     }, [])

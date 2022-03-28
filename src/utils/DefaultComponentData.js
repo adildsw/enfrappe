@@ -35,9 +35,9 @@ const DefaultComponentData = {
         'background': '#CCCCCC',
         'text-color': '#000000',
         'parent': '',
-        'on-press-action-type': 'activity', // 'activity': for changing activity, 'api': for RESTful API call
+        'on-press-action-type': 'api', // 'activity': for changing activity, 'api': for RESTful API call
         'on-press-activity': 'none',
-        'on-press-api-result-display-type': 'prompt', // 'none, 'toast', 'prompt'
+        'on-press-api-result-display-type': 'toast', // 'none, 'toast', 'prompt'
         'on-press-api-call-type': 'GET', // 'GET', 'POST'
         'on-press-api-url': '/',
         'on-press-api-params': [],
