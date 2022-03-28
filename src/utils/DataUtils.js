@@ -5,6 +5,9 @@ import saveAs from 'file-saver';
 
 const MAX_SIZE = 2500;
 
+const PDF_SERVER_IP = '127.0.0.1';
+const PDF_SERVER_PORT = '3001';
+
 export const compressData = (data) => (
     {
         'length': JSON.stringify(data).length,
@@ -26,11 +29,12 @@ export const enfrappifyData = (appId, data) => {
     const dataPackets = Math.ceil(compressedDataSize / allowedDataPacketSize);
     const dataPacketArray = [];
 
+    console.log(compressedData, dataLength);
+
     var dataPointer = 0;
     for (let i = 0; i < dataPackets; i++) {
         var dataSlice = "";
         while (byteSize(dataSlice) < allowedDataPacketSize && dataPointer < dataLength) {
-            console.log(byteSize(dataSlice), dataSlice.length);
             dataSlice += compressedData.charAt(dataPointer);
             dataPointer++;
         }
@@ -40,18 +44,76 @@ export const enfrappifyData = (appId, data) => {
     return dataPacketArray;
 }
 
-export const generateQRCode = (appId, dataPacketArray) => {
+export const generateQRCode = (appId, appVersion, dataPacketArray) => {
     const zip = new JSZip();
     dataPacketArray.forEach((packet, idx) => {
-        QRCode.toDataURL(packet, { errorCorrectionLevel: 'L'}, function (err, url) {
+        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
             const base64Data = url.replace('data:image/png;base64,', '');
             zip.file((idx + 1) + '.png', base64Data, {base64: true});
         });
     });
-    zip.generateAsync({type:"blob"}).then(function(content) {
-        saveAs(content, appId + "_qrcode.zip");
+    zip.generateAsync({type:'blob'}).then(function(content) {
+        saveAs(content, appId + '_' + appVersion + '_qrcode.zip');
     });
 }
 
+export const generateQRCodePdf = (appId, appName, appVersion, dataPacketArray) => {
+    const b64Images = {};
+    dataPacketArray.forEach((packet, idx) => {
+        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
+            b64Images['img_' + (idx + 1)] = url;
+        });
+    });
+    fetch('http://' + PDF_SERVER_IP + ':' + PDF_SERVER_PORT + '/generate_pdf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...b64Images,
+                'app_id': appId,
+                'app_name': appName,
+                'count': dataPacketArray.length,
+            })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            saveAs(blob, appId + '_' + appVersion + '_qrcode.pdf');
+        });
+}
+
+export const generateAndPrintQRCodePdf = (appId, appName, appVersion, dataPacketArray) => {
+    const b64Images = {};
+    dataPacketArray.forEach((packet, idx) => {
+        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
+            b64Images['img_' + (idx + 1)] = url;
+        });
+    });
+    fetch('http://' + PDF_SERVER_IP + ':' + PDF_SERVER_PORT + '/generate_pdf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...b64Images,
+                'app_id': appId,
+                'app_name': appName,
+                'count': dataPacketArray.length,
+            })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const blobUrl = URL.createObjectURL(blob);
+            const iframe = document.createElement('iframe');
+            document.body.appendChild(iframe);
+            iframe.style.display = 'none';
+            iframe.src = blobUrl;
+            iframe.onload = function() {
+                setTimeout(function() {
+                    iframe.contentWindow.print();
+                }, 1);
+            }
+        });
+}
 
 export const byteSize = str => new Blob([str]).size;

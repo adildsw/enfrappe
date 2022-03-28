@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
 
 import useComponentManager from './utils/useComponentManager';
@@ -22,7 +22,8 @@ import { DEFAULT_ACTIVITY_ID } from './utils/DefaultComponentData';
  * - Text elements become blurry upon hover when all the components are added to a section
  * - Adding elements to a loaded app breaks the app [Workaround: start and stop simulation after loading]
  * - Unsaved changes not checking properly [Workaround: notify user of unsaved changes regardless of whether there are unsaved changes]
- */
+ * - New app button not working.
+*/
 
 const App = () => {
     const appManager = useAppManager();
@@ -31,6 +32,14 @@ const App = () => {
     const [currentActivity, setCurrentActivity] = useState(DEFAULT_ACTIVITY_ID);
     const [selectedComponent, setSelectedComponent] = useState({'id': 'None', 'type': UIItemTypes.NONE});
     const [simulationState, setSimulationState] = useState(false);
+
+    useEffect(() => {
+        window.onbeforeunload = confirmExit;
+        function confirmExit()
+        {
+          return "show warning";
+        }
+    }, [])
 
     const manageSelection = (selectedId, selectedClassNames) => {
         if (selectedClassNames.includes(UIItemTypes.UIID) && !simulationState) {

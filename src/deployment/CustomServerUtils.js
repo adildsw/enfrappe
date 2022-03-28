@@ -68,8 +68,8 @@ const CustomServerUtils = (appManager, componentManager) => {
 
         generateReactFrontend(frontendFolder, appManager.appData['server-address'], appManager.appData['server-port'], frontendIp, frontendPort);
 
-        zip.generateAsync({type:"blob"}).then(function(content) {
-            saveAs(content, "example.zip");
+        zip.generateAsync({type:'blob'}).then(function(content) {
+            saveAs(content, appManager.appData['app-id'] + '_' + appManager.appData['app-version'] + '_customserver.zip');
         });
     }
 

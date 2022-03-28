@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
 
-import { enfrappifyData, generateQRCode } from '../../utils/DataUtils';
+import { enfrappifyData, generateAndPrintQRCodePdf, generateQRCode, generateQRCodePdf } from '../../utils/DataUtils';
 
 import getAppTemplate from '../../utils/TemplateManager';
 import CustomServerUtils from '../../deployment/CustomServerUtils';
@@ -55,10 +55,10 @@ const AppDetails = (props) => {
     }
 
     const loadProject = (data) => {
-        setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE})
+        setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
         resetIdGeneratorToLastMax(data);
         setAppData(data['app-data']);
-        setComponentData(data['component-data'])
+        setComponentData(data['component-data']);
         // setUnsavedBenchmark(data);
 
         // Workaround for fixing app-loading bug
@@ -121,8 +121,14 @@ const AppDetails = (props) => {
 
     const downloadQRCode = () => {
         const enfrappefiedData = enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
-        generateQRCode(appManager.appData['app-id'], enfrappefiedData);
+        // generateQRCode(appManager.appData['app-id'], appManager.appData['app-version'], enfrappefiedData);
+        generateQRCodePdf(appManager.appData['app-id'], appManager.appData['app-name'], appManager.appData['app-version'], enfrappefiedData);
     };
+
+    const printQRCode = () => {
+        const enfrappefiedData = enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
+        generateAndPrintQRCodePdf(appManager.appData['app-id'], appManager.appData['app-name'], appManager.appData['app-version'], enfrappefiedData);
+    }
 
     return (
         <div className={'scrollable-div'}>
@@ -184,7 +190,7 @@ const AppDetails = (props) => {
                             <Button basic icon='cancel' color='green' inverted onClick={() => { setUnsavedModalState({'state': false, 'action': 'new'}); }} />
                             <Button icon='check' color='red' content='Yes' inverted onClick={() => {
                                 if (unsavedModalState.action === 'new')
-                                    loadProject(getAppTemplate('EMPTY'));
+                                    window.location.reload(false);
                                 else if (unsavedModalState.action === 'load')
                                     appLoadFileRef.current.click();
                                 setUnsavedModalState({'state': false, 'action': 'new'});
@@ -309,11 +315,18 @@ const AppDetails = (props) => {
                     <Form.Field>
                         <Button.Group className={'centered-button-text'} vertical fluid>
                             <Button 
-                                icon='download' 
+                                icon='qrcode' 
                                 labelPosition='left'
                                 content='Download QR Code'
                                 disabled={simulationState}
                                 onClick={() => { downloadQRCode(); }}
+                            />
+                            <Button 
+                                icon='print' 
+                                labelPosition='left'
+                                content='Print QR Code'
+                                disabled={simulationState}
+                                onClick={() => { printQRCode(); }}
                             />
                             <Button 
                                 icon='cogs' 
@@ -321,6 +334,18 @@ const AppDetails = (props) => {
                                 content='Generate Custom Server'
                                 onClick={() => { setCustomServerModalState(true); }}
                                 disabled={simulationState}
+                            />
+                        </Button.Group>
+                    </Form.Field>
+                    <Form.Field>
+                        <Button.Group className={'centered-button-text'} vertical fluid>
+                        <Button 
+                                icon={'download'}
+                                labelPosition='left'
+                                content={'Download Application Package'}
+                                onClick={() => { 
+                                    // TODO: Download Application Package
+                                }}
                             />
                         </Button.Group>
                     </Form.Field>

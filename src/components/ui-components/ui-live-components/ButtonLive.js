@@ -49,7 +49,7 @@ const ButtonLive = (props) => {
                     if (response.ok) {
                         response.text().then(data => {
                             if (response.status === 299) {
-                                const activity = componentManager.activityManager.getActivityId(response.statusText);
+                                const activity = componentManager.activityManager.getActivityId(data);
                                 if (activity !== undefined)
                                     setCurrentActivity(activity);
                                 else {

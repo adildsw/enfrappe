@@ -143,7 +143,10 @@ def ${functionName}():
         if request.method == 'GET':
             f.write(dumps(request.args.to_dict()))
         else:
-            f.write(dumps(request.get_json()))
+            if len(request.form.to_dict().keys()) != 0:
+                f.write(dumps(request.form.to_dict()))
+            else:
+                f.write(dumps(request.get_json()))
 
     # Business logic goes here
     # ...
