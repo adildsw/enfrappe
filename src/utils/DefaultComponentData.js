@@ -48,8 +48,12 @@ const DefaultComponentData = {
         'id': '',
         'text': 'Text content here.',
         'text-color': '#000000',
+        'size': 'small', // 'large', 'medium', 'small'
+        'align': 'left', // 'left', 'center', 'right', 'justify'
         'bold': false,
         'italic': false,
+        'underline': false,
+        'tight': false,
         'parent': '',
     },
     [UIItemTypes.INPUT]: {
@@ -94,6 +98,23 @@ const DefaultComponentData = {
         'text-color': '#000000',
         'parent': '',
     },
+    [UIItemTypes.DATAVIEWER]: {
+        'type': UIItemTypes.DATAVIEWER,
+        'id': '',
+        'text': 'Server data here.',
+        'text-color': '#000000',
+        'size': 'small', // 'large', 'medium', 'small'
+        'align': 'left', // 'left', 'center', 'right', 'justify'
+        'bold': false,
+        'italic': false,
+        'underline': false,
+        'tight': false,
+        'refresh-interval': 0,
+        'parent': '',
+        'on-press-api-call-type': 'GET', // 'GET', 'POST'
+        'on-press-api-url': '/',
+        'on-press-api-custom-params': {},
+    }
 }
 
 const getDefaultComponentData = (componentType) => {

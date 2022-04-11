@@ -89,12 +89,48 @@ const TextManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
+    const setTextUnderline = (textId, value) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[textId]['underline'] = value;
+        setComponentData(newComponentData);
+    }
+
+    const setTextTight = (textId, value) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[textId]['tight'] = value;
+        setComponentData(newComponentData);
+    }
+
     const setTextColor = (textId, value) => {
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now()
         }
         newComponentData.components[textId]['text-color'] = value;
+        setComponentData(newComponentData);
+    }
+
+    const setTextSize = (textId, value) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[textId]['size'] = value;
+        setComponentData(newComponentData);
+    }
+
+    const setTextAlign = (textId, value) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[textId]['align'] = value;
         setComponentData(newComponentData);
     }
 
@@ -105,9 +141,13 @@ const TextManager = (componentData, setComponentData) => {
         setTextValue,
         setTextBold,
         setTextItalic,
+        setTextUnderline,
+        setTextTight,
         setTextColor,
         shiftTextUp,
-        shiftTextDown
+        shiftTextDown,
+        setTextSize,
+        setTextAlign
     }
 
 }

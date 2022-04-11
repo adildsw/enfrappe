@@ -13,6 +13,7 @@ import getComponentCompatibility from '../../utils/ComponentCompatibility';
 import './Toolbar.css';
 import RadioStatic from '../ui-components/ui-static-components/RadioStatic';
 import DropdownStatic from '../ui-components/ui-static-components/DropdownStatic';
+import DataViewerStatic from '../ui-components/ui-static-components/DataViewerStatic';
 
 const Toolbar = (props) => {
 
@@ -52,6 +53,8 @@ const Toolbar = (props) => {
                         toolbarComponents.push(<RadioStatic key={component} />)
                     else if (component === UIItemTypes.DROPDOWN)
                         toolbarComponents.push(<DropdownStatic key={component} />)
+                    else if (component === UIItemTypes.DATAVIEWER)
+                        toolbarComponents.push(<DataViewerStatic key={component} />)
                 });
 
                 return (

@@ -9,6 +9,7 @@ const UIItemTypes = {
     CHECKBOX: 'enfrappe-ui-checkbox',
     RADIO: 'enfrappe-ui-radio',
     DROPDOWN: 'enfrappe-ui-dropdown',
+    DATAVIEWER: 'enfrappe-ui-dataviewer',
 }
 
 export const getUIItemName = (componentType) => {

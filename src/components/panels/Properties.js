@@ -12,6 +12,7 @@ import RadioProperties from '../ui-component-properties/RadioProperties';
 import DropdownProperties from '../ui-component-properties/DropdownProperties';
 
 import './Properties.css';
+import DataViewerProperties from '../ui-component-properties/DataViewerProperties';
 
 const Properties = (props) => {
     const { selectedComponent, setSelectedComponent, componentManager, currentActivity, setCurrentActivity } = props;
@@ -91,6 +92,14 @@ const Properties = (props) => {
                     {
                         selectedComponent.type === UIItemTypes.DROPDOWN &&
                         <DropdownProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.DATAVIEWER &&
+                        <DataViewerProperties
                             componentManager={componentManager}
                             selectedComponent={selectedComponent}
                             setSelectedComponent={setSelectedComponent}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Label, Input, Button, Modal, Header, Icon, Checkbox, Table } from "semantic-ui-react";
+import { Form, Label, Input, Button, Modal, Header, Icon } from "semantic-ui-react";
 import { SketchPicker } from 'react-color';
 
 import UIItemTypes from '../../utils/UIItemTypes';
@@ -7,7 +7,7 @@ import UIItemTypes from '../../utils/UIItemTypes';
 const TextProperties = (props) => {
     const { componentManager, selectedComponent, setSelectedComponent } = props;
     const { activityManager, textManager } = componentManager;
-    const { setTextValue, setTextColor, setTextBold, setTextItalic, shiftTextUp, shiftTextDown, deleteText } = textManager;
+    const { setTextValue, setTextColor, setTextBold, setTextItalic, setTextUnderline, setTextAlign, setTextSize, setTextTight, shiftTextUp, shiftTextDown, deleteText } = textManager;
     const textData = textManager.getTextData(selectedComponent.id);
     
     const [textColorPickerDisplay, setTextColorPickerDisplay] = useState(false);
@@ -66,26 +66,29 @@ const TextProperties = (props) => {
             </Form.Field>
 
             <Form.Field>
-                <Table>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell textAlign='center' verticalAlign='middle'>
-                                <Checkbox 
-                                    label='Bold' 
-                                    onChange={(e, data) => { setTextBold(textData.id, data.checked); }}
-                                    checked={textData.bold}
-                                />
-                            </Table.Cell>
-                            <Table.Cell textAlign='center' verticalAlign='middle'>
-                                <Checkbox 
-                                    label='Italic' 
-                                    onChange={(e, data) => { setTextItalic(textData.id, data.checked); }}
-                                    checked={textData.italic}
-                                />
-                            </Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
+                <Button.Group fluid>
+                    <Button toggle content='Large' active={textData.size === 'large' ? true : false} onClick={() => { setTextSize(textData.id, 'large'); }} />
+                    <Button toggle content='Medium' active={textData.size === 'medium' ? true : false} onClick={() => { setTextSize(textData.id, 'medium'); }} />
+                    <Button toggle content='Small' active={textData.size === 'small' ? true : false} onClick={() => { setTextSize(textData.id, 'small'); }} />
+                </Button.Group>
+            </Form.Field>
+
+            <Form.Field>
+                <Button.Group fluid>
+                    <Button toggle icon='bold' active={textData.bold} onClick={() => { setTextBold(textData.id, !textData.bold); }} />
+                    <Button toggle icon='italic' active={textData.italic} onClick={() => { setTextItalic(textData.id, !textData.italic); }} />
+                    <Button toggle icon='underline' active={textData.underline} onClick={() => { setTextUnderline(textData.id, !textData.underline); }} />
+                    <Button toggle icon='text height' active={textData.tight} onClick={() => { setTextTight(textData.id, !textData.tight); }} />
+                </Button.Group>
+            </Form.Field>
+
+            <Form.Field>
+                <Button.Group fluid>
+                    <Button toggle icon='align left' active={textData.align === 'left' ? true : false} onClick={() => { setTextAlign(textData.id, 'left'); }} />
+                    <Button toggle icon='align center' active={textData.align === 'center' ? true : false} onClick={() => { setTextAlign(textData.id, 'center'); }} />
+                    <Button toggle icon='align right' active={textData.align === 'right' ? true : false} onClick={() => { setTextAlign(textData.id, 'right'); }} />
+                    <Button toggle icon='align justify' active={textData.align === 'justify' ? true : false} onClick={() => { setTextAlign(textData.id, 'justify'); }} />
+                </Button.Group>
             </Form.Field>
 
             <Form.Field>

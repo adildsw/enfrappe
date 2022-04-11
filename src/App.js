@@ -58,6 +58,8 @@ const App = () => {
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.RADIO});
             else if (selectedClassNames.includes(UIItemTypes.DROPDOWN))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.DROPDOWN});
+            else if (selectedClassNames.includes(UIItemTypes.DATAVIEWER))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.DATAVIEWER});
             else
                 setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
         }

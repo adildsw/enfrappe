@@ -7,7 +7,11 @@ const Text = (props) => {
     const style = {
         'color': textData['text-color'],
         'fontWeight': textData['bold'] ? 'bold' : 'normal',
-        'fontStyle': textData['italic'] ? 'italic' : 'normal'
+        'fontStyle': textData['italic'] ? 'italic' : 'normal',
+        'textDecoration': textData['underline'] ? 'underline' : 'none',
+        'textAlign': textData['align'],
+        'fontSize': textData['size'] === 'large' ? '1.8em' : (textData['size'] === 'medium' ? '1.4em' : '1em'),
+        'marginBottom': textData['tight'] ? '-10px' : '0px'
     }
 
     return (
