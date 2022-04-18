@@ -101,7 +101,7 @@ const DefaultComponentData = {
     [UIItemTypes.DATAVIEWER]: {
         'type': UIItemTypes.DATAVIEWER,
         'id': '',
-        'text': 'Server data here.',
+        'text': 'Loading...',
         'text-color': '#000000',
         'size': 'small', // 'large', 'medium', 'small'
         'align': 'left', // 'left', 'center', 'right', 'justify'
@@ -110,10 +110,24 @@ const DefaultComponentData = {
         'underline': false,
         'tight': false,
         'refresh-interval': 0,
+        'api-call-type': 'GET', // 'GET', 'POST'
+        'api-url': '/',
+        'api-custom-params': {},
         'parent': '',
-        'on-press-api-call-type': 'GET', // 'GET', 'POST'
-        'on-press-api-url': '/',
-        'on-press-api-custom-params': {},
+    },
+    [UIItemTypes.CHART]: {
+        'type': UIItemTypes.CHART,
+        'id': '',
+        'background': '#EEEEEE',
+        'text-color': '#000000',
+        'line-color': '#000000',
+        'title': 'Chart Title',
+        'x-label': 'X Label',
+        'y-label': 'Y Label',
+        'api-call-type': 'GET', // 'GET', 'POST'
+        'api-url': '/',
+        'api-custom-params': {},
+        'parent': '',
     }
 }
 

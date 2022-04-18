@@ -6,6 +6,7 @@ import Checkbox from "./Checkbox";
 import Radio from "./Radio";
 import Dropdown from "./Dropdown";
 import DataViewer from "./DataViewer";
+import Chart from "./Chart";
 
 import DnDSpace from "./DnDSpace";
 import UIItemTypes from "../../utils/UIItemTypes";
@@ -50,6 +51,10 @@ const Section = (props) => {
             else if (childData.type === UIItemTypes.DATAVIEWER)
                 sectionComponents.push(
                     <DataViewer key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
+                );
+            else if (childData.type === UIItemTypes.CHART)
+                sectionComponents.push(
+                    <Chart key={childData.id} selectedComponent={selectedComponent} componentManager={componentManager} componentId={childData.id} />
                 );
         });
         return sectionComponents;

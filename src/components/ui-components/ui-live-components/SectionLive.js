@@ -9,6 +9,8 @@ import DropdownLive from "./DropdownLive";
 import UIItemTypes from "../../../utils/UIItemTypes";
 
 import '../Section.css';
+import DataViewerLive from "./DataViewerLive";
+import ChartLive from "./ChartLive";
 
 const SectionLive = (props) => {
     const { appManager, componentManager, componentId, liveData, updateLiveData, setCurrentActivity } = props;
@@ -42,6 +44,14 @@ const SectionLive = (props) => {
             else if (childData.type === UIItemTypes.DROPDOWN)
                 sectionComponents.push(
                     <DropdownLive key={childData.id} componentManager={componentManager} componentId={childData.id} liveData={liveData} updateLiveData={updateLiveData} />
+                );
+            else if (childData.type === UIItemTypes.DATAVIEWER)
+                sectionComponents.push(
+                    <DataViewerLive key={childData.id} appManager={appManager} componentManager={componentManager} componentId={childData.id} liveData={liveData} updateLiveData={updateLiveData} />
+                );
+            else if (childData.type === UIItemTypes.CHART)
+                sectionComponents.push(
+                    <ChartLive key={childData.id} appManager={appManager} componentManager={componentManager} componentId={childData.id} liveData={liveData} updateLiveData={updateLiveData} />
                 );
         });
 

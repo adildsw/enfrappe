@@ -48,7 +48,7 @@ const CustomServerUtils = (appManager, componentManager) => {
         return { apiUrlList, apiMethodList };
     }
 
-    const generateCustomServer = (frontendIp, frontendPort) => {
+    const generateCustomServerZip = (frontendIp, frontendPort) => {
         var zip = new JSZip();
         var backendFolder = zip.folder('backend');
         var frontendFolder = zip.folder('frontend');
@@ -56,7 +56,9 @@ const CustomServerUtils = (appManager, componentManager) => {
         zip.file('launch.bat', launchServerBat);
 
         const { apiUrlList, apiMethodList } = getApiList();
-        backendFolder.file("server.py", generateFlaskBackend(
+
+        generateFlaskBackend(
+            backendFolder,
             appManager.appData['app-id'], 
             appManager.appData['app-version'],
             appManager.appData['app-name'],
@@ -64,24 +66,30 @@ const CustomServerUtils = (appManager, componentManager) => {
             appManager.appData['server-port'], 
             apiUrlList, 
             apiMethodList
-        ));
+        );
 
-        generateReactFrontend(frontendFolder, appManager.appData['server-address'], appManager.appData['server-port'], frontendIp, frontendPort);
+        generateReactFrontend(
+            frontendFolder, 
+            appManager.appData['server-address'], 
+            appManager.appData['server-port'], 
+            frontendIp, 
+            frontendPort
+        );
 
+        return zip;
+    }
+
+    const downloadCustomServer = (frontendIp, frontendPort) => {
+        var zip = generateCustomServerZip(frontendIp, frontendPort);
         zip.generateAsync({type:'blob'}).then(function(content) {
             saveAs(content, appManager.appData['app-id'] + '_' + appManager.appData['app-version'] + '_customserver.zip');
         });
     }
 
-    const countFiles = () => {
-       
-    }
-
-
     return {
         getApiList,
-        generateCustomServer,
-        countFiles
+        generateCustomServerZip,
+        downloadCustomServer
     }
 
 }

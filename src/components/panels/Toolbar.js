@@ -6,7 +6,7 @@ import TextStatic from '../ui-components/ui-static-components/TextStatic';
 import InputStatic from '../ui-components/ui-static-components/InputStatic';
 import CheckboxStatic from '../ui-components/ui-static-components/CheckboxStatic';
 
-import { getUIItemName } from '../../utils/UIItemTypes';
+import { getUIItemName, isComponentBasic } from '../../utils/UIItemTypes';
 import UIItemTypes from '../../utils/UIItemTypes';
 import getComponentCompatibility from '../../utils/ComponentCompatibility';
 
@@ -14,6 +14,7 @@ import './Toolbar.css';
 import RadioStatic from '../ui-components/ui-static-components/RadioStatic';
 import DropdownStatic from '../ui-components/ui-static-components/DropdownStatic';
 import DataViewerStatic from '../ui-components/ui-static-components/DataViewerStatic';
+import ChartStatic from '../ui-components/ui-static-components/ChartStatic';
 
 const Toolbar = (props) => {
 
@@ -37,24 +38,35 @@ const Toolbar = (props) => {
                     </div>
                 );
             else {
-                const toolbarComponents = [];
+                const toolbarBasicComponents = [];
+                const toolbarMiscComponents = [];
+
                 compatibleComponents.forEach(component => {
+                    var componentElement = null;
+                    
                     if (component === UIItemTypes.SECTION)
-                        toolbarComponents.push(<SectionStatic key={component} />);
+                        componentElement = <SectionStatic key={component} />;
                     else if (component === UIItemTypes.BUTTON)
-                        toolbarComponents.push(<ButtonStatic key={component} />);
+                        componentElement = <ButtonStatic key={component} />;
                     else if (component === UIItemTypes.TEXT)
-                        toolbarComponents.push(<TextStatic key={component} />)
+                        componentElement = <TextStatic key={component} />;
                     else if (component === UIItemTypes.INPUT)
-                        toolbarComponents.push(<InputStatic key={component} />)
+                        componentElement = <InputStatic key={component} />;
                     else if (component === UIItemTypes.CHECKBOX)
-                        toolbarComponents.push(<CheckboxStatic key={component} />)
+                        componentElement = <CheckboxStatic key={component} />;
                     else if (component === UIItemTypes.RADIO)
-                        toolbarComponents.push(<RadioStatic key={component} />)
+                        componentElement = <RadioStatic key={component} />;
                     else if (component === UIItemTypes.DROPDOWN)
-                        toolbarComponents.push(<DropdownStatic key={component} />)
+                        componentElement = <DropdownStatic key={component} />;
                     else if (component === UIItemTypes.DATAVIEWER)
-                        toolbarComponents.push(<DataViewerStatic key={component} />)
+                        componentElement = <DataViewerStatic key={component} />;
+                    else if (component === UIItemTypes.CHART)
+                        componentElement = <ChartStatic key={component} />;
+                        
+                    if (isComponentBasic(component) && componentElement !== null)
+                        toolbarBasicComponents.push(componentElement);
+                    else
+                        toolbarMiscComponents.push(componentElement);
                 });
 
                 return (
@@ -65,7 +77,11 @@ const Toolbar = (props) => {
                         </div>
                         <Divider />
                         <div className={'scrollable-section toolbar-component-container'}>
-                            {toolbarComponents}
+                            {toolbarBasicComponents.length > 0 ? <h3 className={'panel-subheading-alt'}>Basic Components</h3> : null}
+                            {toolbarBasicComponents.length > 0 ? toolbarBasicComponents : null}
+                            {toolbarMiscComponents.length > 0 ? <h3 className={'panel-subheading-alt'}>Miscellaneous Components</h3> : null}
+                            {toolbarMiscComponents.length > 0 ? toolbarMiscComponents : null}
+                            {/* {toolbarComponents} */}
                         </div>
                     </div>
                 );

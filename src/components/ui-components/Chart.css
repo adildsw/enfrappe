@@ -1,0 +1,19 @@
+.enfrappe-ui-chart, .enfrappe-ui-chartlive {
+    position: relative;
+    display: grid;
+    place-content: center;
+    border-radius: 5px;
+    border: 2px solid #DDDDDD00 !important;
+}
+
+.enfrappe-ui-chartstatic {
+    cursor: grab !important;
+}
+
+.enfrappe-ui-chart:hover:not(.selected-component) {
+    border-color: #BBBBBB !important;
+}
+
+.enfrappe-ui-chart > h4 {
+    text-align: center;
+}

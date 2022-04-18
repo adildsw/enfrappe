@@ -150,7 +150,7 @@ const ButtonManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
-    const deleteButtonOnPressApiCustomParam = (buttonId, apiParamKey, apiParamValue) => {
+    const deleteButtonOnPressApiCustomParam = (buttonId, apiParamKey) => {
         const newComponentData = {
             ...componentData,
             'last-edited': Date.now()

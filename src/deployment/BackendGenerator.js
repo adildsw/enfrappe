@@ -162,13 +162,14 @@ if __name__ == '__main__':
     app.run(host='${serverIp}', port=${serverPort})
 `);
 
-const generateFlaskBackend = (appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList) => {
+const generateFlaskBackend = (zipContainer, appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList) => {
     var backendCode = backendHeader;
     backendCode += backendUtilityFunctions;
     backendCode += backendAppDetailApiRoutes(appId, appVer, appName, serverIp, serverPort, apiUrlList, apiMethodList);
     backendCode += backendApiRoutes(apiUrlList, apiMethodList);
     backendCode += backendServerLauncher(serverIp, serverPort);
-    return backendCode;
+    zipContainer.file("server.py", backendCode);
+    return zipContainer;
 }
 
 export default generateFlaskBackend;

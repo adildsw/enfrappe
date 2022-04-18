@@ -143,6 +143,42 @@ const DataViewerManager = (componentData, setComponentData) => {
         setComponentData(newComponentData);
     }
 
+    const setDataViewerApiCallType = (dataViewerId, apiCallType) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[dataViewerId]['api-call-type'] = apiCallType;
+        setComponentData(newComponentData);
+    }
+
+    const setDataViewerApiUrl = (dataViewerId, apiUrl) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[dataViewerId]['api-url'] = apiUrl;
+        setComponentData(newComponentData);
+    }
+
+    const addDataViewerApiCustomParam = (dataViewerId, apiParamKey, apiParamValue) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        newComponentData.components[dataViewerId]['api-custom-params'][apiParamKey] = apiParamValue;
+        setComponentData(newComponentData);
+    }
+
+    const deleteDataViewerApiCustomParam = (dataViewerId, apiParamKey) => {
+        const newComponentData = {
+            ...componentData,
+            'last-edited': Date.now()
+        }
+        delete newComponentData.components[dataViewerId]['api-custom-params'][apiParamKey];
+        setComponentData(newComponentData);
+    }
+
     return {
         addDataViewer,
         deleteDataViewer,
@@ -157,7 +193,11 @@ const DataViewerManager = (componentData, setComponentData) => {
         shiftDataViewerDown,
         setDataViewerSize,
         setDataViewerAlign,
-        setDataViewerRefreshInterval
+        setDataViewerRefreshInterval,
+        setDataViewerApiCallType,
+        setDataViewerApiUrl,
+        addDataViewerApiCustomParam,
+        deleteDataViewerApiCustomParam
     }
 
 }

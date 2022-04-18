@@ -14,6 +14,8 @@ const TemplateManager = {
             'notify-user': false,
             'server-address': '127.0.0.1',
             'server-port': '1803',
+            'frontend-address': '127.0.0.1',
+            'frontend-port': '1804',
             'last-edited': Date.now()
         },
         'component-data': {

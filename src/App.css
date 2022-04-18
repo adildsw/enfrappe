@@ -42,6 +42,11 @@
     margin-top: 0;
 }
 
+.panel-subheading-alt {
+    color: rgba(0, 0, 0);
+    opacity: 0.5;
+}
+
 .button-based-input-only > input {
     pointer-events: none;
 }

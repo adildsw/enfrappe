@@ -3,10 +3,11 @@ import { useRef, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
+import JSZip from 'jszip';
+import saveAs from 'file-saver';
 
-import { enfrappifyData, generateAndPrintQRCodePdf, generateQRCode, generateQRCodePdf } from '../../utils/DataUtils';
+import { enfrappifyData, generateAndPrintQRCodePdf, generateQRCodePdf, downloadQRCodePdf } from '../../utils/DataUtils';
 
-import getAppTemplate from '../../utils/TemplateManager';
 import CustomServerUtils from '../../deployment/CustomServerUtils';
 
 import './AppDetails.css';
@@ -24,21 +25,8 @@ const AppDetails = (props) => {
     const appLoadFileRef = useRef();
     const [unsavedModalState, setUnsavedModalState] = useState({'state': false, 'action': 'new'});
     const [customServerModalState, setCustomServerModalState] = useState(false);
+    const [applicationPackageModalState, setApplicationPackageModalState] = useState(false);
     const [customServerDetails, setCustomServerDetails] = useState({'ip': '127.0.0.1', 'port': '1804'});
-
-    // Checks if there exists unsaved changes [NOT WORKING]
-    // const [unsavedBenchmark, setUnsavedBenchmark] = useState(getAppTemplate('EMPTY'));
-    // const areChangesUnsaved = () => {
-    //     const currentProject = getCurrentProjectData();
-    //     delete currentProject['app-data']['last-edited'];
-    //     delete currentProject['component-data']['last-edited'];
-    //     const unsavedBenchmarkNoTimestamp = {...unsavedBenchmark};
-    //     delete unsavedBenchmarkNoTimestamp['app-data']['last-edited'];
-    //     delete unsavedBenchmarkNoTimestamp['component-data']['last-edited'];
-    //     console.log(currentProject, unsavedBenchmarkNoTimestamp);
-    //     console.log(JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp))
-    //     return JSON.stringify(currentProject) !== JSON.stringify(unsavedBenchmarkNoTimestamp);
-    // }
 
     // Loads project from file
     const loadProjectFromFile = (event) => {
@@ -59,7 +47,6 @@ const AppDetails = (props) => {
         resetIdGeneratorToLastMax(data);
         setAppData(data['app-data']);
         setComponentData(data['component-data']);
-        // setUnsavedBenchmark(data);
 
         // Workaround for fixing app-loading bug
         setSimulationState(true);
@@ -90,17 +77,34 @@ const AppDetails = (props) => {
         };
     }
 
+    const generateProjectBlob = () => {
+        const projectData = getCurrentProjectData();
+        const projectBlob = new Blob([JSON.stringify(projectData)], {type: "application/json"});
+        return projectBlob;
+    }
+
     // Saves project to file
     const saveProject = () => {
-        const app = getCurrentProjectData();
-        const blob = new Blob([JSON.stringify(app)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = getAppMetadata('app-id') + '_' + getAppMetadata('app-version') + '.enfrappe';
-        a.click();
-        // setUnsavedBenchmark(app);
+        saveAs(generateProjectBlob(), getAppMetadata('app-id') + '_' + getAppMetadata('app-version') + '.enfrappe');
     };
+
+    const downloadApplicationPackage = () => {
+        var zipPackage = new JSZip();
+        zipPackage.file(getAppMetadata('app-id') + '_' + getAppMetadata('app-version') + '.enfrappe', generateProjectBlob());
+        
+        const enfrappefiedData = enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
+        generateQRCodePdf(appManager.appData['app-id'], appManager.appData['app-name'], appManager.appData['app-version'], enfrappefiedData)
+            .then(blob => {
+                zipPackage.file(appData['app-id'] + '_' + appData['app-version'] + '_qrcode.pdf', blob);
+                const customServerZip = customServerUtils.generateCustomServerZip(customServerDetails.ip, customServerDetails.port);
+                customServerZip.generateAsync({type:'blob'}).then(function(content) {
+                    zipPackage.file(appManager.appData['app-id'] + '_' + appManager.appData['app-version'] + '_customserver.zip', content);
+                    zipPackage.generateAsync({type:'blob'}).then(function(finalContent) {
+                        saveAs(finalContent, appManager.appData['app-id'] + '_' + appManager.appData['app-version'] + '_package.zip');
+                    });
+                });
+            });
+    }
 
     // Controls state for app detail checkboxes
     const getCheckboxState = (key) => {
@@ -121,8 +125,7 @@ const AppDetails = (props) => {
 
     const downloadQRCode = () => {
         const enfrappefiedData = enfrappifyData(appManager.appData['app-id'], getCurrentProjectData());
-        // generateQRCode(appManager.appData['app-id'], appManager.appData['app-version'], enfrappefiedData);
-        generateQRCodePdf(appManager.appData['app-id'], appManager.appData['app-name'], appManager.appData['app-version'], enfrappefiedData);
+        downloadQRCodePdf(appManager.appData['app-id'], appManager.appData['app-name'], appManager.appData['app-version'], enfrappefiedData);
     };
 
     const printQRCode = () => {
@@ -146,10 +149,6 @@ const AppDetails = (props) => {
                             content='New'
                             onClick={() => {
                                 setUnsavedModalState({'state': true, 'action': 'new'});
-                                // if (areChangesUnsaved())
-                                //     setUnsavedModalState({'state': true, 'action': 'new'});
-                                // else
-                                    // loadProject(getAppTemplate('EMPTY'));
                             }}
                             disabled={simulationState}
                         />
@@ -159,10 +158,6 @@ const AppDetails = (props) => {
                             content='Load'
                             onClick={() => {
                                 setUnsavedModalState({'state': true, 'action': 'load'});
-                                // if (areChangesUnsaved())
-                                //     setUnsavedModalState({'state': true, 'action': 'load'});
-                                // else
-                                    // appLoadFileRef.current.click();
                             }}
                             disabled={simulationState}
                         />
@@ -294,7 +289,7 @@ const AppDetails = (props) => {
                     </Form.Group>
                 </Form>
 
-                <Divider horizontal>Deployment</Divider>
+                <Divider horizontal>Testing & Deployment</Divider>
                 <Form>
                     <Form.Field>
                         <Button.Group className={'centered-button-text'} vertical fluid>
@@ -328,29 +323,29 @@ const AppDetails = (props) => {
                                 disabled={simulationState}
                                 onClick={() => { printQRCode(); }}
                             />
+                        </Button.Group>
+                    </Form.Field>
+                    <Form.Field>
+                        <Button.Group className={'centered-button-text'} vertical fluid>
                             <Button 
                                 icon='cogs' 
                                 labelPosition='left'
                                 content='Generate Custom Server'
                                 onClick={() => { 
                                     // Setting custom frontend server ip/port
-                                    // setCustomServerModalState(true); 
-                                    customServerUtils.generateCustomServer(customServerDetails.ip, customServerDetails.port);
+                                    setCustomServerModalState(true); 
+                                    // customServerUtils.generateCustomServer(customServerDetails.ip, customServerDetails.port);
                                 }}
                                 disabled={simulationState}
                             />
-                        </Button.Group>
-                    </Form.Field>
-                    <Form.Field>
-                        <Button.Group className={'centered-button-text'} vertical fluid>
-                        <Button 
-                                icon={'download'}
-                                labelPosition='left'
-                                content={'Download Application Package'}
-                                onClick={() => { 
-                                    // TODO: Download Application Package
-                                }}
-                            />
+                            <Button 
+                                    icon={'download'}
+                                    labelPosition='left'
+                                    content={'Download Application Package'}
+                                    onClick={() => { 
+                                        setApplicationPackageModalState(true);
+                                    }}
+                                />
                         </Button.Group>
                     </Form.Field>
                     <Modal
@@ -390,11 +385,57 @@ const AppDetails = (props) => {
                             />
                             <Button 
                                 icon='check'
-                                content='Create Custom Server'
+                                content='Generate Custom Server'
                                 labelPosition='right' 
                                 onClick={() => { 
                                     setCustomServerModalState(false);
-                                    customServerUtils.generateCustomServer(customServerDetails.ip, customServerDetails.port);
+                                    customServerUtils.downloadCustomServer(customServerDetails.ip, customServerDetails.port);
+                                }} 
+                            />
+                        </Modal.Actions>
+                    </Modal>
+                    <Modal
+                        size={'tiny'}
+                        open={applicationPackageModalState}
+                        onClose={() => { setApplicationPackageModalState(false); }}>
+                        <Header icon='cogs' content='Download Application Package' />
+                        <Modal.Content>
+                            <Form>
+                                <Form.Field>
+                                    <Label className={'tucked-label'}>Frontend IP</Label>
+                                    <Form.Input 
+                                        value={customServerDetails.ip}
+                                        placeholder={'127.0.0.1'}
+                                        fluid
+                                        onChange={(e, data) => { setCustomServerDetails({...customServerDetails, 'ip': data.value}); }}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <Label className={'tucked-label'}>Frontend Port</Label>
+                                    <Form.Input 
+                                        value={customServerDetails.port}
+                                        placeholder={'1804'}
+                                        fluid 
+                                        onChange={(e, data) => { 
+                                            const port = e.target.value.replace(/[^0-9]/g, '');
+                                            setCustomServerDetails({...customServerDetails, 'port': port});
+                                        }}
+                                    />
+                                </Form.Field>
+                            </Form>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button 
+                                icon='cancel' 
+                                onClick={() => { setApplicationPackageModalState(false); }} 
+                            />
+                            <Button 
+                                icon='check'
+                                content='Download Application Package'
+                                labelPosition='right' 
+                                onClick={() => { 
+                                    setApplicationPackageModalState(false);
+                                    downloadApplicationPackage();
                                 }} 
                             />
                         </Modal.Actions>

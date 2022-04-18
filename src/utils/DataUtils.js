@@ -64,7 +64,7 @@ export const generateQRCodePdf = (appId, appName, appVersion, dataPacketArray) =
             b64Images['img_' + (idx + 1)] = url;
         });
     });
-    fetch('http://' + PDF_SERVER_IP + ':' + PDF_SERVER_PORT + '/generate_pdf', {
+    return fetch('http://' + PDF_SERVER_IP + ':' + PDF_SERVER_PORT + '/generate_pdf', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -78,30 +78,19 @@ export const generateQRCodePdf = (appId, appName, appVersion, dataPacketArray) =
         })
         .then(response => response.blob())
         .then(blob => {
+            return blob;
+        });
+}
+
+export const downloadQRCodePdf = (appId, appName, appVersion, dataPacketArray) => {
+    generateQRCodePdf(appId, appName, appVersion, dataPacketArray)
+        .then(blob => {
             saveAs(blob, appId + '_' + appVersion + '_qrcode.pdf');
         });
 }
 
 export const generateAndPrintQRCodePdf = (appId, appName, appVersion, dataPacketArray) => {
-    const b64Images = {};
-    dataPacketArray.forEach((packet, idx) => {
-        QRCode.toDataURL('http://frappe.com/load?data=' + packet, { errorCorrectionLevel: 'L'}, function (err, url) {
-            b64Images['img_' + (idx + 1)] = url;
-        });
-    });
-    fetch('http://' + PDF_SERVER_IP + ':' + PDF_SERVER_PORT + '/generate_pdf', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ...b64Images,
-                'app_id': appId,
-                'app_name': appName,
-                'count': dataPacketArray.length,
-            })
-        })
-        .then(response => response.blob())
+    generateQRCodePdf(appId, appName, appVersion, dataPacketArray)
         .then(blob => {
             const blobUrl = URL.createObjectURL(blob);
             const iframe = document.createElement('iframe');

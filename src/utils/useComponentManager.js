@@ -15,6 +15,7 @@ import { DEFAULT_ACTIVITY_NAME, DEFAULT_ACTIVITY_ID } from './DefaultComponentDa
 
 import UIItemTypes from './UIItemTypes';
 import DataViewerManager from './data-managers/DataViewerManager';
+import ChartManager from './data-managers/ChartManager';
 
 const initActivityData = getDefaultComponentData(UIItemTypes.ACTIVITY);
 initActivityData['id'] = DEFAULT_ACTIVITY_ID;
@@ -39,6 +40,7 @@ const useComponentManager = () => {
     const radioManager = RadioManager(componentData, setComponentData);
     const dropdownManager = DropdownManager(componentData, setComponentData);
     const dataViewerManager = DataViewerManager(componentData, setComponentData);
+    const chartManager = ChartManager(componentData, setComponentData);
 
     const getComponent = (componentId) => {
         return componentData.components[componentId];
@@ -73,6 +75,7 @@ const useComponentManager = () => {
         radioManager,
         dropdownManager,
         dataViewerManager,
+        chartManager,
         getComponent,
         getAllUserInputComponentNames,
         getUserInputIdByName,
