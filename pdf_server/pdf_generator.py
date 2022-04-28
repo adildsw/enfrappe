@@ -34,8 +34,8 @@ def get_pngs(base64_imgs):
 
 def create_page(imgs, img_numbers, page, app_name="Untitled"):
     a4_template = Image.open('frappe_letterhead.png') 
-    font = ImageFont.truetype(r'fonts/Roboto/Roboto-Thin.ttf', 100)
-    num_font = ImageFont.truetype(r'fonts/Roboto/Roboto-Bold.ttf', 40)
+    font = ImageFont.truetype(r'fonts/Roboto-Thin.ttf', 100)
+    num_font = ImageFont.truetype(r'fonts/Roboto-Bold.ttf', 40)
     draw = ImageDraw.Draw(a4_template)
     text_w, text_h = draw.textsize(app_name, font=font)
     num_w, num_h = draw.textsize("1", font=num_font)

@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 __pycache__/
+/pdf_server/temp/
+/pdf_server/output.pdf

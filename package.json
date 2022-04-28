@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "css-select": "^4.2.1",
-    "react-scripts": "5.0.0"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
