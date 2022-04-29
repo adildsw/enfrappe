@@ -128,6 +128,12 @@ const DefaultComponentData = {
         'api-url': '/',
         'api-custom-params': {},
         'parent': '',
+    },
+    [UIItemTypes.IMAGE]: {
+        'type': UIItemTypes.IMAGE,
+        'id': '',
+        'src-url': '',
+        'parent': ''
     }
 }
 

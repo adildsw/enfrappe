@@ -15,6 +15,7 @@ import RadioStatic from '../ui-components/ui-static-components/RadioStatic';
 import DropdownStatic from '../ui-components/ui-static-components/DropdownStatic';
 import DataViewerStatic from '../ui-components/ui-static-components/DataViewerStatic';
 import ChartStatic from '../ui-components/ui-static-components/ChartStatic';
+import ImageStatic from '../ui-components/ui-static-components/ImageStatic';
 
 const Toolbar = (props) => {
 
@@ -62,6 +63,8 @@ const Toolbar = (props) => {
                         componentElement = <DataViewerStatic key={component} />;
                     else if (component === UIItemTypes.CHART)
                         componentElement = <ChartStatic key={component} />;
+                    else if (component === UIItemTypes.IMAGE)
+                        componentElement = <ImageStatic key={component} />;
                         
                     if (isComponentBasic(component) && componentElement !== null)
                         toolbarBasicComponents.push(componentElement);

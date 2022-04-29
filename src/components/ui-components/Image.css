@@ -1,0 +1,13 @@
+.enfrappe-ui-image, .enfrappe-ui-imagelive {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    border: 2px solid #DDDDDD00;
+}
+
+.enfrappe-ui-image:hover {
+    border-color: #BBBBBB;
+}

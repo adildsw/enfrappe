@@ -11,6 +11,7 @@ const UIItemTypes = {
     DROPDOWN: 'enfrappe-ui-dropdown',
     DATAVIEWER: 'enfrappe-ui-dataviewer',
     CHART: 'enfrappe-ui-chart',
+    IMAGE: 'enfrappe-ui-image',
 }
 
 const UIItemNames = {
@@ -24,6 +25,7 @@ const UIItemNames = {
     [UIItemTypes.DROPDOWN]: 'Dropdown',
     [UIItemTypes.DATAVIEWER]: 'Data Viewer',
     [UIItemTypes.CHART]: 'Chart',
+    [UIItemTypes.IMAGE]: 'Image',
 }
 
 const basicComponents = [

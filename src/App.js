@@ -62,6 +62,8 @@ const App = () => {
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.DATAVIEWER});
             else if (selectedClassNames.includes(UIItemTypes.CHART))
                 setSelectedComponent({'id': selectedId, 'type': UIItemTypes.CHART});
+            else if (selectedClassNames.includes(UIItemTypes.IMAGE))
+                setSelectedComponent({'id': selectedId, 'type': UIItemTypes.IMAGE});
             else
                 setSelectedComponent({'id': 'None', 'type': UIItemTypes.NONE});
         }

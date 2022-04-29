@@ -6,7 +6,7 @@ import './DnDSpace.css';
 
 const DnDSpace = (props) => {
     const { id, className, acceptedItems, centered, componentManager } = props;
-    const { sectionManager, buttonManager, textManager, inputManager, checkboxManager, radioManager, dropdownManager, dataViewerManager, chartManager } = componentManager;
+    const { sectionManager, buttonManager, textManager, inputManager, checkboxManager, radioManager, dropdownManager, dataViewerManager, chartManager, imageManager } = componentManager;
 
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
         accept: acceptedItems, 
@@ -29,6 +29,8 @@ const DnDSpace = (props) => {
                 dataViewerManager.addDataViewer(id);
             else if (item.type === UIItemTypes.CHART)
                 chartManager.addChart(id);
+            else if (item.type === UIItemTypes.IMAGE)
+                imageManager.addImage(id);
                 
             return {'droppedOn': id};
         },

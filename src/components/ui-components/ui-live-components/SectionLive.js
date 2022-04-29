@@ -11,6 +11,7 @@ import UIItemTypes from "../../../utils/UIItemTypes";
 import '../Section.css';
 import DataViewerLive from "./DataViewerLive";
 import ChartLive from "./ChartLive";
+import ImageLive from "./ImageLive";
 
 const SectionLive = (props) => {
     const { appManager, componentManager, componentId, liveData, updateLiveData, setCurrentActivity } = props;
@@ -52,6 +53,10 @@ const SectionLive = (props) => {
             else if (childData.type === UIItemTypes.CHART)
                 sectionComponents.push(
                     <ChartLive key={childData.id} appManager={appManager} componentManager={componentManager} componentId={childData.id} liveData={liveData} updateLiveData={updateLiveData} />
+                );
+            else if (childData.type === UIItemTypes.IMAGE)
+                sectionComponents.push(
+                    <ImageLive key={childData.id} appManager={appManager} componentManager={componentManager} componentId={childData.id} />
                 );
         });
 

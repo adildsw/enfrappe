@@ -14,6 +14,7 @@ import DropdownProperties from '../ui-component-properties/DropdownProperties';
 import './Properties.css';
 import DataViewerProperties from '../ui-component-properties/DataViewerProperties';
 import ChartProperties from '../ui-component-properties/ChartProperties';
+import ImageProperties from '../ui-component-properties/ImageProperties';
 
 const Properties = (props) => {
     const { selectedComponent, setSelectedComponent, componentManager, currentActivity, setCurrentActivity } = props;
@@ -109,6 +110,14 @@ const Properties = (props) => {
                     {
                         selectedComponent.type === UIItemTypes.CHART &&
                         <ChartProperties
+                            componentManager={componentManager}
+                            selectedComponent={selectedComponent}
+                            setSelectedComponent={setSelectedComponent}
+                        />
+                    }
+                    {
+                        selectedComponent.type === UIItemTypes.IMAGE &&
+                        <ImageProperties
                             componentManager={componentManager}
                             selectedComponent={selectedComponent}
                             setSelectedComponent={setSelectedComponent}
