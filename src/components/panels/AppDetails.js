@@ -345,6 +345,7 @@ const AppDetails = (props) => {
                                     onClick={() => { 
                                         setApplicationPackageModalState(true);
                                     }}
+                                    disabled={simulationState}
                                 />
                         </Button.Group>
                     </Form.Field>

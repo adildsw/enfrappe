@@ -27,7 +27,10 @@ const ButtonLive = (props) => {
 
             var apiData = {};
             buttonData['on-press-api-params'].forEach(param => {
-                apiData[componentManager.componentData.components[param].name] = String(liveData[param]);
+                // check if component has param key
+                if (componentManager.componentData.components.hasOwnProperty(param)) {
+                    apiData[componentManager.componentData.components[param].name] = String(liveData[param]);
+                }
             });
             Object.keys(buttonData['on-press-api-custom-params']).forEach(param => {
                 apiData[param] = buttonData['on-press-api-custom-params'][param];
