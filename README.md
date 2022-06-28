@@ -38,7 +38,7 @@ python pdf_server/pdf_server.py
 ```
 npm start
 ```
-#### 6. Running ### Building enFrappé
+#### 6. Running enFrappé
 Once the server is hosted successfully, enFrappé should load automatically in your default browser.
 <img src='https://github.com/adildsw/enfrappe/blob/main/src/assets/screenshot_main.png'>
 
