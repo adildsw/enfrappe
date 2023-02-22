@@ -33,10 +33,11 @@ pip install -r pdf_server/requirements.txt
 #### 5. Starting server
 Once all the dependencies are installed, you need to start both the enFrappé server, and the PDF generator server in two different terminals by typing the following commands:
 ```
-python pdf_server/pdf_server.py
-```
-```
 npm start
+```
+```
+cd pdf_server
+python pdf_server/pdf_server.py
 ```
 #### 6. Running enFrappé
 Once the server is hosted successfully, enFrappé should load automatically in your default browser.
