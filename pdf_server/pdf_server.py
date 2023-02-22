@@ -22,7 +22,7 @@ def generate_pdf():
     app_id = data['app_id']
 
     create_pdf(imgs, app_name)
-    return send_file('output.pdf', mimetype='application/pdf', as_attachment=True, attachment_filename='{}_qrcode.pdf'.format(app_id))
+    return send_file('output.pdf', mimetype='application/pdf', as_attachment=True, download_name='{}_qrcode.pdf'.format(app_id))
 
 @app.route('/generate_and_print_pdf', methods=['POST'])
 def generate_and_print_pdf():
