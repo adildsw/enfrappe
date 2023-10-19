@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, send_file
 from flask_cors import CORS
 from pdf_generator import create_pdf
 
@@ -37,4 +37,4 @@ def generate_and_print_pdf():
     return send_file('output.pdf', mimetype='application/pdf')
 
 if __name__ == '__main__':
-    app.run(host=IP, port=PORT, debug=True)
+    app.run(host=IP, port=PORT, debug=False)

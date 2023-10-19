@@ -1,2 +1,4 @@
-flask
-flask_cors
+flask==3.0.0
+flask_cors==3.0.10
+Pillow==9.3.0
+

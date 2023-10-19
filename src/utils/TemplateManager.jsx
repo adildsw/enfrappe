@@ -1,4 +1,4 @@
-import * as deepcopy from 'deepcopy';
+import { cloneDeep } from 'lodash';
 
 import UIItemTypes from './UIItemTypes';
 import { DEFAULT_ACTIVITY_NAME, DEFAULT_ACTIVITY_ID } from './DefaultComponentData';
@@ -35,7 +35,7 @@ const TemplateManager = {
 }
 
 const getAppTemplate = (type) => {
-    return deepcopy(TemplateManager[type]);
+    return cloneDeep(TemplateManager[type]);
 };
 
 export default getAppTemplate;

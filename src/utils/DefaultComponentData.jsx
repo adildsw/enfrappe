@@ -1,4 +1,4 @@
-import * as deepcopy from 'deepcopy';
+import { cloneDeep } from 'lodash';
 import nextId from 'react-id-generator';
 
 import UIItemTypes from './UIItemTypes';
@@ -138,7 +138,7 @@ const DefaultComponentData = {
 }
 
 const getDefaultComponentData = (componentType) => {
-    return deepcopy(DefaultComponentData[componentType]);
+    return cloneDeep(DefaultComponentData[componentType]);
 };
 
 export default getDefaultComponentData;
