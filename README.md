@@ -41,7 +41,7 @@ python pdf_server.py
 ```
 #### 6. Running enFrappé
 Once the server is hosted successfully, enFrappé should load automatically in your default browser.
-<img src='https://github.com/adildsw/enfrappe/blob/main/src/assets/screenshot_main.png'>
+<img src='https://github.com/adildsw/enfrappe/blob/main/src/assets/screenshot_miduse.png'>
 
 ### Launching enFrappé Apps on Mobile
 You can launch enFrappé apps on an Android device using [Frappé](https://github.com/adildsw/frappe).
