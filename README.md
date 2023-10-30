@@ -29,7 +29,7 @@ npm install
 #### 4. Install Python dependencies
 ```
 cd pdf_server
-pip install -r pdf_server/requirements.txt
+pip install -r requirements.txt
 ```
 #### 5. Starting server
 Once all the dependencies are installed, you need to start both the enFrappé server, and the PDF generator server in two different terminals by typing the following commands:
@@ -45,3 +45,23 @@ Once the server is hosted successfully, enFrappé should load automatically in y
 
 ### Launching enFrappé Apps on Mobile
 You can launch enFrappé apps on an Android device using [Frappé](https://github.com/adildsw/frappe).
+
+## Citation
+```
+@article{10.1145/3604258,
+  author = {Rahman, Adil and Heo, Seongkook},
+  title = {Frapp\'{e}: An Ultra Lightweight Mobile UI Framework for Rapid API-Based Prototyping and Environmental Deployment},
+  year = {2023},
+  issue_date = {September 2023},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  volume = {7},
+  number = {MHCI},
+  url = {https://doi.org/10.1145/3604258},
+  doi = {10.1145/3604258},
+  month = {sep},
+  articleno = {211},
+  numpages = {23},
+  keywords = {rapid application prototyping, mobile UI builder, mobile user interface, functional prototyping, lightweight mobile UI framework}
+}
+```
