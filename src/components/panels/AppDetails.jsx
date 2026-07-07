@@ -1,6 +1,7 @@
 import { Image, Divider, Label, Input, Form, Button, Checkbox, Table, Modal, Header, Icon } from 'semantic-ui-react';
 import { useRef, useState } from 'react';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import { resetId } from "react-id-generator";
 import nextId from 'react-id-generator';
 import JSZip from 'jszip';
@@ -141,11 +142,12 @@ const AppDetails = (props) => {
             <div className={'scrollable-section'}>
                 <Divider horizontal>General</Divider>
                 <Form>
-                    <ReactTooltip effect='solid' place='bottom' type='dark'/>
+                    <Tooltip id='app-details-tooltip' place='bottom' />
                     <Button.Group className={'centered-button-text'} fluid>
                         <Button 
-                            icon='file' 
-                            data-tip='Create New Application'
+                            icon='file'
+                            data-tooltip-id='app-details-tooltip'
+                            data-tooltip-content='Create New Application'
                             content='New'
                             onClick={() => {
                                 setUnsavedModalState({'state': true, 'action': 'new'});
@@ -153,8 +155,9 @@ const AppDetails = (props) => {
                             disabled={simulationState}
                         />
                         <Button 
-                            icon='folder open' 
-                            data-tip='Load Application'
+                            icon='folder open'
+                            data-tooltip-id='app-details-tooltip'
+                            data-tooltip-content='Load Application'
                             content='Load'
                             onClick={() => {
                                 setUnsavedModalState({'state': true, 'action': 'load'});
@@ -163,8 +166,9 @@ const AppDetails = (props) => {
                         />
                         <input hidden type='file' accept='.enfrappe' id='file-input' ref={appLoadFileRef} onChange={loadProjectFromFile} />
                         <Button 
-                            icon='save' 
-                            data-tip='Save Application'
+                            icon='save'
+                            data-tooltip-id='app-details-tooltip'
+                            data-tooltip-content='Save Application'
                             content='Save'
                             onClick={saveProject}
                             disabled={simulationState}

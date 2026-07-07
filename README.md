@@ -8,7 +8,6 @@ The following set of instructions will help you get enFrappé up and running on 
 ### Prerequisites
 In order to build and run this application on your device, make sure you meet the following prerequisites:
 ##### 1. Install [Node.js](https://nodejs.org/en/)
-##### 2. Install Python 3.6+ ([Anaconda](https://www.anaconda.com/download/) distribution recommended)
 
 ### Building enFrappé
 Once all the prerequisites are met, follow these instructions to build and execute enFrappé on your device:
@@ -26,20 +25,12 @@ cd enFrappe
 ```
 npm install
 ```
-#### 4. Install Python dependencies
-```
-cd pdf_server
-pip install -r requirements.txt
-```
-#### 5. Starting server
-Once all the dependencies are installed, you need to start both the enFrappé server, and the PDF generator server in two different terminals by typing the following commands:
+#### 4. Starting server
+Once all the dependencies are installed, start enFrappé by typing the following command:
 ```
 npm start
 ```
-```
-python pdf_server.py
-```
-#### 6. Running enFrappé
+#### 5. Running enFrappé
 Once the server is hosted successfully, enFrappé should load automatically in your default browser.
 <img src='https://github.com/adildsw/enfrappe/blob/main/src/assets/screenshot_miduse.png'>
 
